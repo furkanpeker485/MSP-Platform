@@ -1,0 +1,47 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: l1-network-setup
+name: "L1 Network Setup"
+area: "On-Site & Proje Hizmetleri"
+tier: "Proje"
+lane: F
+lanes: [F, D]
+plain: "Bina içi kablolama, kabinet düzeni ve etiketleme işlerinin standartlara uygun yapılması."
+executor: "Saha ekibi kablolama ve kabinet işi; NetBox kablo/port kayıtları, etiket şablonları"
+automation_grade: HUMAN
+secret_stores: ["n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "NetBox kablo kayıtlarının LLDP (komşu cihaz keşfi) komşuluk verisiyle mutabakatı; eşleşmeyen portta alarm"
+gotcha: "Etiketleme standardı NetBox'tan üretilmezse altı ay sonra hiçbir kablo kayıtla eşleşmez."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["n8n-credentials"]}
+  - id: step-01
+    lane: F
+    action: human.work_order
+    description: "Saha keşfi, kabinet yerleşimi ve kablo güzergâh planını çıkar"
+    params: {"queue": "saha"}
+  - id: step-02
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox'ta rack, panel, port ve kablo nesnelerini plan olarak önceden oluştur"
+  - id: step-03
+    lane: F
+    action: human.work_order
+    description: "Etiketleme standardını uygula ve kurulum sonrası fotoğraflı kabul yap"
+    params: {"queue": "saha"}
+  - id: step-04
+    lane: D
+    action: netbox.ensure_device
+    description: "Kurulum sonrası gerçek portları NetBox'a yaz, plan ile farkı kapat"
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

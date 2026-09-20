@@ -1,0 +1,47 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: penetration-test
+name: "Penetration Test"
+area: "Security Services"
+tier: "Proje"
+lane: F
+lanes: [F, B, D]
+plain: "Sistemlerinize izinli bir saldırı düzenlenip açıkların kötü niyetli birinden önce bulunması."
+executor: "Sızma testi ekibi; kapsam ve kanıt ticket sisteminde, bulgular SIEM (güvenlik kayıt merkezi)/ticket'a döner"
+automation_grade: HUMAN
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Her bulgunun bir ticket'ı, SLA saati ve yeniden test kaydı olmalı; açık bulgu yaşı izlenir"
+gotcha: "Yetki mektubu olmadan yapılan test suçtur; kapsam dışı bir sistem vurulursa sorumluluk HR'a (Hisar Research) geçer."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: F
+    action: human.work_order
+    description: "Kapsamı, kural setini ve test penceresini imzalı yetki mektubuyla belirle"
+    params: {"queue": "saha"}
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Test kaynağı IP'lerini (ağ adresi) firewall'da izin listesine al, IPS (saldırı engelleme) bastırma penceresi tanımla"
+  - id: step-03
+    lane: D
+    action: ticketing.ensure_queue
+    description: "Bulgu ticket türünü, CVSS (açık tehlike puanı)→SLA (hizmet seviyesi taahhüdü) eşlemesini ve yeniden test kuyruğunu oluştur"
+  - id: step-04
+    lane: F
+    action: human.work_order
+    description: "Test sonrası brifingi ve düzeltme sonrası yeniden test randevusunu planla"
+    params: {"queue": "saha"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

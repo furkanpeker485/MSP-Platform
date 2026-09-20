@@ -1,0 +1,46 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: server-installation
+name: "Server Installation"
+area: "On-Site & Proje Hizmetleri"
+tier: "Proje"
+lane: F
+lanes: [F, A, B, D]
+plain: "Yeni sunucunun donanımından işletim sistemine kadar anahtar teslim kurulumu."
+executor: "Saha/uzak kurulum ekibi; sonrasında HR (Hisar Research) agent + relay'den ansible rol yapılandırması"
+automation_grade: HUMAN
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Agent heartbeat + Zabbix donanım (RAID/PSU) trigger'ları teslimden itibaren yeşil"
+gotcha: "BMC varsayılan parolası değiştirilip vault'a yazılmazsa sunucu ilk günden sahipsiz bir arka kapı taşır."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: F
+    action: human.work_order
+    description: "Donanımı rack'e al, RAID (yedekli disk dizisi)/BIOS/BMC ayarlarını yap, işletim sistemini kur"
+    params: {"queue": "saha"}
+  - id: step-02
+    lane: A
+    action: agent.converge
+    description: "HR agent'ı kur ve kontrol düzlemine kaydet, baseline'ı yakınsat"
+  - id: step-03
+    lane: B
+    action: awx.launch
+    description: "Sunucunun işlevine göre rol yapılandırmasını relay'den uygula"
+  - id: step-04
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox kaydını ve Zabbix host'unu oluştur, kabul testini kanıtla"
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

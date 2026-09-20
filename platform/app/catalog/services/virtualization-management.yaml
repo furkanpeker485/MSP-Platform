@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: virtualization-management
+name: "Virtualization Management"
+area: "Server Management"
+tier: "Enterprise"
+lane: C
+lanes: [C, B, D, E]
+plain: "Tek bir fiziksel sunucu üzerinde birden çok sanal sunucu çalıştıran altyapının yönetimi. Daha az donanımla daha çok iş demek."
+executor: "pyVmomi/vSphere REST (web tabanlı arayüz) + relay'den Ansible community.vmware ve Hyper-V için ansible.windows"
+automation_grade: ASSISTED
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix VMware şablonu vCenter SDK'sını (geliştirici kütüphanesi) sorgular: cluster HA, datastore boş %, host donanımı"
+gotcha: "Backup'tan artakalan snapshot'lar kota alarmı çalmadan datastore'ları doldurur; tek vCenter SDK oturumu sorgulamayı yavaşlatır."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: C
+    action: cloud.configure
+    description: "En az yetkili vCenter/SCVMM servis hesabını oluştur; pyVmomi ile tam envanter çek"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Ansible host baseline'ı: NTP (saat eşitleme), syslog→SIEM (güvenlik kayıt merkezi), SNMPv3 (cihaz izleme protokolünün şifreli sürümü), HA (yedekli çalışma)/DRS, snapshot + VMFS (VMware dosya sistemi) alarm politikası"
+  - id: step-03
+    lane: D
+    action: netbox.ensure_device
+    description: "Cluster/host/VM'leri NetBox'a kaydet; Zabbix VMware şablonları + datastore trigger'ları"
+  - id: step-04
+    lane: B
+    action: awx.launch
+    description: "Host'ları Lifecycle Manager baseline'ına kaydet ve patch'leri relay cache'ine hazırla"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n gecelik tarama: snapshot yaşı, sahipsiz VMDK'lar (sanal disk dosyası), thin provision aşımı, CBT (değişen blok takibi) hataları"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

@@ -1,0 +1,49 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: mfa-security
+name: "MFA Security"
+area: "Security Services"
+tier: "Professional"
+lane: B
+lanes: [A, B, C, D, F]
+plain: "Şifreye ek ikinci bir doğrulama adımı kurulması (telefona gelen onay gibi). Şifreniz çalınsa bile hesaba girilemez."
+executor: "Relay'de Duo/privacyIDEA proxy; fortinet.fortios + ansible.windows NPS (Windows giriş doğrulama sunucusu); agent MSI (Windows kurulum paketi)"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Relay'den 5 dakikada bir sentetik RADIUS probu + Zabbix'te kayıtlı/lisanslı oranı"
+gotcha: "Tek bir hatalı NPS/RADIUS politikası VPN'i (şifreli uzaktan bağlantı) ve adminleri aynı anda dışarıda bırakır; bypass gruplarını ve eski MFP (çok fonksiyonlu yazıcı) bağlarını önce hazırlayın."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "RADIUS (merkezî giriş doğrulama)/MFA proxy container'ını site relay'e kur, AD'ye (Active Directory kullanıcı sistemi) LDAPS (şifreli dizin sorgulama) ile bağla"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "FortiGate SSL (şifreli bağlantı)-VPN, NPS ve RD (uzak masaüstü) Gateway'i ona yönlendir (fortinet.fortios, ansible.windows)"
+  - id: step-03
+    lane: C
+    action: cloud.configure
+    description: "MFA (çok adımlı doğrulama) tenant'ını oluştur, kullanıcıları ve kayıt politikalarını üretici API'siyle (uygulama arayüzü) senkronla"
+  - id: step-04
+    lane: A
+    action: agent.converge
+    description: "Windows oturum açma credential-provider MSI'ını bas, önce pilot grup, bypass listesi hazır"
+  - id: step-05
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix proxy sağlık kontrolleri + push yorgunluğu ve ret artışı için SIEM (güvenlik kayıt merkezi) kuralları ekle"
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

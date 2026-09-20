@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: firewall-management
+name: "Firewall Management"
+area: "Firewall & Network Security"
+tier: "Professional"
+lane: B
+lanes: [B, C, D, E]
+plain: "Şirketi internetten gelen saldırılara karşı koruyan güvenlik duvarının işletilmesi ve hangi trafiğe izin verileceğinin yönetimi."
+executor: "Relay'den ansible fortinet.fortios/paloaltonetworks.panos REST (web tabanlı arayüz); FortiManager API (uygulama arayüzü)"
+automation_grade: ASSISTED
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "SNMP (cihaz izleme protokolü) ile Zabbix oturum/CPU/HA-senkron takibi + SIEM log kaynağı heartbeat'i (sessizlik = alarm)"
+gotcha: "HA VIP'ine (sanal adres) basılan config failover'da kaybolabilir; birincil düğümün gerçek yönetim IP'sini (ağ adresi) hedefleyin ve önce yedek alın."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox cihazı + HA (yedekli çalışma) çifti kaydı; süper-admin API anahtarını HR (Hisar Research) vault'una koy"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Baseline'ı sıkılaştır: admin MFA (çok adımlı doğrulama), yönetim ACL'i (erişim izin listesi) yalnız relay'e, NTP (saat eşitleme), oturum zaman aşımları"
+  - id: step-03
+    lane: B
+    action: awx.launch
+    description: "Syslog/NetFlow'u site relay'e gönder ve tam politika loglamasını aç"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix host'u (CPU (işlemci), oturum, HA senkronu) artı SIEM (güvenlik kayıt merkezi) log kaynağı ve üretici parser'ı"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n gecelik tam config dışa aktarımını git'e al, fark alarmı kur"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

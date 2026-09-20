@@ -1,0 +1,23 @@
+# Sırlar — asla depoya girmez
+.env
+*.env
+!.env.example
+*.pem
+*.key
+*.crt
+vault-pass
+/relay/receptor/tls/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Araçlar
+.DS_Store
+node_modules/

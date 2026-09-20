@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: immutable-backup
+name: "Immutable Backup"
+area: "Backup & Business Continuity"
+tier: "Enterprise"
+lane: B
+lanes: [B, C, D, E]
+plain: "Fidye yazılımı bulaşsa bile silinemeyen, değiştirilemeyen yedek. Saldırgan diğer yedekleri de şifrelese bu kopya sağlam kalır."
+executor: "Ansible sertleştirilmiş repo rolü (XFS (Linux dosya sistemi) reflink, tek kullanımlık kimlik) + API (uygulama arayüzü) ile S3 Object Lock"
+automation_grade: ASSISTED
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Haftalık n8n silme probu kilitli bir nesnede çalışır — silme başarılı olursa Zabbix alarm verir"
+gotcha: "Compliance modundaki Object Lock kısaltılamaz: yanlış bir saklama süresi o veriyi ve maliyetini yıllarca sabitler."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Ansible sertleştirilmiş Linux repo kurar: XFS reflink, immutable bayrağı, kayıttan sonra SSH (şifreli uzaktan bağlantı) kapalı"
+  - id: step-02
+    lane: C
+    action: cloud.configure
+    description: "HRC (Hisar Research'ün kendi bulutu)/S3 API: kapasite katmanında Object Lock compliance modunu ve saklama süresini aç"
+  - id: step-03
+    lane: C
+    action: veeam.configure
+    description: "Veeam REST (web tabanlı arayüz): repo ve GFS (uzun vadeli yedek saklama düzeni) copy işinde değişmezlik süresini ayarla, silmeleri engelle"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Repo kimlik doğrulama/değişmezlik olayları için SIEM (güvenlik kayıt merkezi) log kaynağı; bayrak kaybında Zabbix trigger'ı"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n haftalık silme probu: kilitli bir nesneyi silmeye çalış — başarısızlık geçme koşuludur"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

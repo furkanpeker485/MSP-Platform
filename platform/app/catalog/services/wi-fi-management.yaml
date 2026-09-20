@@ -1,0 +1,51 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: wi-fi-management
+name: "Wi-Fi Management"
+area: "Network Management"
+tier: "Essential"
+lane: C
+lanes: [B, C, D, E, F]
+plain: "Kablosuz ağın kurulması; şifrelerin, kapsama alanının ve misafir ağının yönetimi."
+executor: "UniFi/Meraki/Aruba Central REST (web tabanlı arayüz) API (uygulama arayüzü); yalnız CLI'lı (komut satırı) WLC'ler (kablosuz ağ kontrolcüsü) için ansible community.network"
+automation_grade: ASSISTED
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix controller API'sini sorgular: AP benimseme durumu, istemci sayısı, kanal doluluğu >%70"
+gotcha: "PSK değişimi her yazıcıyı, el terminalini ve IoT (internete bağlı cihazlar) cihazını sessizce dışarı atar — PSK'ye bağlı cihazların envanteri kimsede yoktur."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: C
+    action: cloud.configure
+    description: "Controller API ile saha/org oluştur; SSID (kablosuz ağ adı), VLAN (sanal ağ bölmesi) haritası, PSK (ortak kablosuz şifre) veya 802.1X profilini bas"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Erişim switch'inde AP (kablosuz erişim noktası) yönetim VLAN'ını, PoE (kablodan elektrik besleme) bütçesini ve uplink trunk'ını ayarla"
+  - id: step-03
+    lane: D
+    action: netbox.ensure_device
+    description: "AP'leri NetBox'a kaydet, Zabbix host'ları + AP şablonları, rogue/istemci sayısı trigger'ları"
+  - id: step-04
+    lane: E
+    action: n8n.schedule
+    description: "n8n haftalık kanal doluluk, sahte AP ve firmware drift raporunu devreye al"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-05
+    lane: F
+    action: human.work_order
+    description: "Yerinde RF (radyo frekansı) ölçümü / AP konumlandırma iş emrini ticket kuyruğunda planla"
+    params: {"queue": "saha"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

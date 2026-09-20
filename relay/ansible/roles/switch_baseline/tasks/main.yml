@@ -1,0 +1,36 @@
+---
+# Switch temel ayarı. Hatalı bir basım relay'in kendi yolunu keser; IOS'ta
+# commit-confirm yoktur, bu yüzden geri sayımlı yeniden başlatma ile korunuruz.
+- name: Geri alma ağı kur (5 dakika içinde onaylanmazsa cihaz eski config ile açılır)
+  cisco.ios.ios_command:
+    commands:
+      - command: "reload in 5"
+        prompt: "Proceed with reload"
+        answer: "y"
+  changed_when: false
+
+- name: Çalışan yapılandırmayı yedekle
+  cisco.ios.ios_config:
+    backup: true
+    backup_options:
+      dir_path: /var/lib/receptor/config-backups
+      filename: "{{ inventory_hostname }}-{{ ansible_date_time.iso8601_basic_short }}.cfg"
+
+- name: Temel ayarları uygula
+  cisco.ios.ios_config:
+    lines:
+      - "ntp server {{ ntp_servers[0] }}"
+      - "logging host {{ syslog_target }}"
+      - "snmp-server group hr v3 priv"
+      - "spanning-tree portfast bpduguard default"
+      - "spanning-tree loopguard default"
+  notify: onayla ve geri alma iptal
+
+- name: SNMPv3 kullanıcısı (parola kasadan gelir)
+  cisco.ios.ios_config:
+    lines:
+      - >-
+        snmp-server user {{ snmpv3_user }} hr v3 auth sha {{ snmpv3_auth_pass }}
+        priv aes 128 {{ snmpv3_priv_pass }}
+  no_log: true          # parola hiçbir günlüğe düşmez
+  notify: onayla ve geri alma iptal

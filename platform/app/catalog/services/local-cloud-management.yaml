@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: local-cloud-management
+name: "Local Cloud Management"
+area: "Cloud Management"
+tier: "Enterprise"
+lane: B
+lanes: [B, C, A, D, E]
+plain: "Şirketin kendi binasındaki özel bulut altyapısının yönetimi. Veriler dışarı çıkmadan bulutun esnekliği."
+executor: "Site relay'den Ansible: ansible.windows/AzSHCI, openstack.cloud, SSH (şifreli uzaktan bağlantı) ile Proxmox+Ceph"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Relay'deki Zabbix proxy: cluster quorum'u, depolama havuzu yeniden yapılanma durumu, Redfish düğüm sağlığı"
+gotcha: "SaaS (hizmet olarak yazılım) yedeği yok: relay veya cluster quorum'u düşerse kontrol yolu ve telemetri birlikte kaybolur."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Ansible kontrol düğümlerini baseline'lar: firmware, NTP (saat eşitleme), S2D/Ceph havuzları, witness, syslog→SIEM (güvenlik kayıt merkezi)"
+  - id: step-02
+    lane: C
+    action: cloud.configure
+    description: "Yerel kontrol düzleminde (AzSHCI (Microsoft'un yerel bulut ürünü)/Keystone/PVE) HR (Hisar Research) tenant'ı + servis hesabı oluştur"
+  - id: step-03
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox rack, düğüm, cluster, IPAM (ağ adres yönetimi) kayıtları; relay proxy üzerinden Zabbix + Redfish/IPMI host'ları"
+  - id: step-04
+    lane: A
+    action: agent.converge
+    description: "Her hipervizör düğümüne ve yönetim VM'ine (sanal makine) pull yakınsaması için HR agent kur"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n haftalık cluster farkındalıklı güncelleme koşusu + aylık kapasite tahminini Grafana'ya bas"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

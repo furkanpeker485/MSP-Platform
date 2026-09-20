@@ -1,0 +1,49 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: database-backup
+name: "Database Backup"
+area: "Backup & Business Continuity"
+tier: "Professional"
+lane: C
+lanes: [A, B, C, D]
+plain: "Veritabanlarının düzenli yedeklenmesi ve bir sorun anında kayıpsız geri yüklenebilmesi."
+executor: "Veeam REST (web tabanlı arayüz) ile uygulama farkındalıklı iş; hazırlık için ansible community.postgresql/mysql"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Log yedeği boşluğu 15 dk'yı aşarsa veya tam geri dönüş noktası RPO'dan (kabul edilebilir veri kaybı) eskiyse Zabbix alarm verir"
+gotcha: "İki ayrı log truncate edici (yerel SQL (veritabanı sorgu dili) Agent işi + Veeam) LSN (veritabanı kayıt sırası) zincirini kırar — veritabanı başına tek sahip olmalı."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Ansible backup servis hesabını açar, db_backupoperator / pg REPLICATION (çoğaltma yetkisi) yetkisi verir"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Pre-freeze/post-thaw script'lerini dağıt, archive_mode / FULL recovery modelini ayarla"
+  - id: step-03
+    lane: A
+    action: agent.converge
+    description: "DB (veritabanı) motorunun gerektirdiği yerde Oracle RMAN (Oracle yedekleme aracı) / SAP (kurumsal yazılım) HANA (SAP veritabanı) için Veeam eklentisini kur"
+  - id: step-04
+    lane: C
+    action: veeam.configure
+    description: "Veeam REST: uygulama farkındalıklı işlemeyi 15 dakikalık transaction log yedeğiyle aç"
+  - id: step-05
+    lane: D
+    action: zabbix.ensure_host
+    description: "Log zinciri boşluğu ve dump boyut trendi için Zabbix item'ları; DB denetimi için SIEM (güvenlik kayıt merkezi) kaynağı"
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

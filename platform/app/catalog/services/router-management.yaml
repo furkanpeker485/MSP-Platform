@@ -1,0 +1,51 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: router-management
+name: "Router Management"
+area: "Network Management"
+tier: "Professional"
+lane: B
+lanes: [B, D, E, F]
+plain: "İnterneti şirkete taşıyan yönlendiricinin (modem) ayarlarının, hattın hızının ve kesintilerinin yönetimi."
+executor: "Site relay'den SSH (şifreli uzaktan bağlantı) ile Ansible cisco.ios/community.routeros/vyos.vyos"
+automation_grade: ASSISTED
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix ICMP+SNMP uptime, ayrıca relay'den 60 saniyede bir iki dış referansa prob"
+gotcha: "ISP genelde kendi CPE'sinde (operatörün müşterideki cihazı) admin'i elinde tutar — HR (Hisar Research) yönetemediği bir kutu için faturalandırılır. Erişimi 0. günde kanıtlayın."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox'ta cihazı, WAN (internet hattı) devresini, prefix'leri ve ISP (internet servis sağlayıcısı) iletişim kaydını oluştur"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Baseline'ı bas: routing, NAT (adres dönüştürme), NTP (saat eşitleme), SNMPv3 (cihaz izleme protokolünün şifreli sürümü), syslog→relay, admin AAA (kimlik doğrulama ve yetkilendirme), yönetim ACL'i (erişim izin listesi)"
+  - id: step-03
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix host'u: ICMP (ping protokolü)+SNMP (cihaz izleme protokolü), WAN gecikme/jitter/kayıp, BGP (yönlendirme protokolü) veya varsayılan rota trigger'ları"
+  - id: step-04
+    lane: E
+    action: n8n.schedule
+    description: "n8n gecelik config yedeğini git'e al, ayrıca aylık ISP kesinti/SLA raporu üret"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-05
+    lane: F
+    action: human.work_order
+    description: "Sahada bant dışı LTE (mobil internet) modem kurulumu için yerinde iş emri aç"
+    params: {"queue": "saha"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

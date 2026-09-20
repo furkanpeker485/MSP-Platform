@@ -1,0 +1,12 @@
+[project]
+name = "hragent"
+version = "0.1.0"
+description = "Hisar uç nokta ajanı — durum bildirir, olması gereken ayarları çeker, uygular"
+requires-python = ">=3.9"
+dependencies = ["httpx>=0.27", "python-dotenv>=1.0", "structlog>=24.4"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "pytest-asyncio>=0.24", "ruff>=0.7"]
+
+[project.scripts]
+hragent = "hragent.__main__:main"

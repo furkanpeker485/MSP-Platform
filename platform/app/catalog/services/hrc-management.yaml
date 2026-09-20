@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: hrc-management
+name: "HRC Management"
+area: "Cloud Management"
+tier: "Professional"
+lane: C
+lanes: [C, A, D, E]
+plain: "Hisar Research'ün kendi bulut platformu HRC (Hisar Research'ün kendi bulutu) üzerinde duran sistemlerinizin yönetimi."
+executor: "n8n → HRC API (REST (web tabanlı arayüz)) + cloud-init ile agent tohumlama; platform nesneleri için NetBox/Zabbix API"
+automation_grade: ASSISTED
+secret_stores: [".env", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix tenant başına HRC API'sini sorgular: kota payı, NetBox kaydına göre VM güç durumu drift'i"
+gotcha: "Otomatik snapshot'lar tenant'ın depolama kotasından düşer — budanmazsa haftalar sonra yeni VM kurulumlarını bloke eder."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "n8n-credentials"]}
+  - id: step-01
+    lane: C
+    action: cloud.configure
+    description: "HRC API: tenant, proje, kota, VPC (bulut özel ağı) + HR (Hisar Research) kapsamlı API servis hesabı oluştur"
+  - id: step-02
+    lane: C
+    action: cloud.configure
+    description: "Baseline envanterin anlık görüntüsünü al: VM'ler (sanal makine), birimler, floating IP'ler (ağ adresi), imajlar, güvenlik grupları"
+  - id: step-03
+    lane: D
+    action: netbox.ensure_device
+    description: "VM'leri NetBox sanal makinelerine yaz; Zabbix host'ları + HRC tenant şablonu oluştur"
+  - id: step-04
+    lane: A
+    action: agent.converge
+    description: "HR agent'ı HRC cloud-init/userdata ve altın imajlarla her misafire tohumla"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n 15 dk'lık HRC→NetBox mutabakatını + gecelik kota/kapasite raporunu devreye al"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

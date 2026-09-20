@@ -1,0 +1,19 @@
+---
+# Ön kontrol: bir hizmet başlatılmadan önce ön koşulları doğrular.
+# Kasada olmayan bir yetkiyle hiçbir şey çalıştırılmaz.
+- name: Ön koşullar
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Kasa anahtarı var mı
+      ansible.builtin.assert:
+        that:
+          - vault_snmpv3_auth_pass is defined
+          - vault_snmpv3_priv_pass is defined
+        fail_msg: "Kasada erişim bilgisi yok — devreye alma durdu"
+        success_msg: "Kasa hazır"
+
+    - name: Envanter kaydı var mı
+      ansible.builtin.assert:
+        that: inventory_hostname in groups['tenants_' ~ lookup('env', 'RELAY_TENANT')]
+        fail_msg: "Cihaz envanterde yok; önce Envanter Yönetim Sistemi kurulmalı"

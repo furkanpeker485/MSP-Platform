@@ -1,0 +1,49 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: file-server-management
+name: "File Server Management"
+area: "Server Management"
+tier: "Essential"
+lane: B
+lanes: [B, A, C, D, E]
+plain: "Şirketin ortak dosyalarının durduğu sunucunun yönetimi: kimin hangi klasöre girebileceği, alanın dolup dolmadığı ve dosyaların yedeği."
+executor: "ansible.windows win_share/win_acl + FSRM (dosya sunucusu kota yöneticisi); dosya seviyesi backup işleri için Veeam REST (web tabanlı arayüz) API (uygulama arayüzü)"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Relay'den SMB sentetik bağlama+okuma, VSS snapshot yaşı, API'den son sağlam Veeam geri dönüş noktası"
+gotcha: "NTFS ACL baseline'ını kalıtımın üzerine yeniden uygulamak canlı erişimi keser — ACL'leri denetleyin, asla sabitlemeyin."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Paylaşımları, NTFS (Windows dosya izinleri) ACL'lerini (erişim izin listesi) ve DFS (dağıtık dosya paylaşımı) isim alanlarını NetBox'a envanterle, salt-okunur baseline olarak dondur"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "FSRM kota + dosya tarama şablonlarını uygula ve VSS (Windows anlık kopya) gölge kopyalarını günde iki kez aç"
+  - id: step-03
+    lane: A
+    action: agent.converge
+    description: "Agent SMBv1'i (eski dosya paylaşım sürümü) kapatır, SMB (Windows dosya paylaşımı) imzalama/şifrelemeyi zorunlu kılar, veri birimlerinde dedup açar"
+  - id: step-04
+    lane: C
+    action: veeam.configure
+    description: "Veeam REST API ile paylaşım birimlerine bağlı dosya seviyesi işi oluştur, RPO'yu (kabul edilebilir veri kaybı) pakete göre kur"
+  - id: step-05
+    lane: D
+    action: zabbix.ensure_host
+    description: "Birim boş %, VSS snapshot yaşı, SMB oturum sayısı üzerine Zabbix trigger'ları; Grafana kutucuğu"
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

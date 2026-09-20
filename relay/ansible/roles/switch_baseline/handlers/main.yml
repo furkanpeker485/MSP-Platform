@@ -1,0 +1,5 @@
+---
+- name: onayla ve geri alma iptal
+  cisco.ios.ios_command:
+    commands: ["reload cancel"]
+  changed_when: false

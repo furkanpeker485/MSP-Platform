@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: print-server
+name: "Print Server"
+area: "Server Management"
+tier: "Professional"
+lane: B
+lanes: [B, A, D, E]
+plain: "Şirketteki yazıcıların tek merkezden tanımlanması, sürücülerinin dağıtılması ve baskı sıralarının yönetimi."
+executor: "ansible win_shell + PrintManagement PS modülü; endpoint'lerde kuyrukları HR (Hisar Research) agent eşler"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix spooler + kuyruk derinliği trigger'ları ve saha başına planlı relay test baskısı"
+gotcha: "PrintNightmare sonrası Point-and-Print sıkılaştırması admin olmayan sürücü kurulumunu engeller; kuyruklar sessizce düşer."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Kuyrukları, sürücüleri ve portları (Get-Printer) NetBox'a cihaz + yapılandırma olarak aktar"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Point-and-Print kısıtlarını ve paket farkındalıklı v4 sürücüleri zorunlu kıl (PrintNightmare (yazıcı sürücüsü güvenlik açığı))"
+  - id: step-03
+    lane: A
+    action: agent.converge
+    description: "Agent kuyrukları NetBox sahasına / AD (Active Directory kullanıcı sistemi) grubuna göre eşler — logon script yok, GPP (grup ilkesi tercihleri) tercihi yok"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix: spooler servisi, kuyruk derinliği, iş hata oranı, SNMP (cihaz izleme protokolü) toner ve sayfa sayacı"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n aylık baskı hacmi ve toner-az raporu, saha başına sarf için otomatik ticket"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

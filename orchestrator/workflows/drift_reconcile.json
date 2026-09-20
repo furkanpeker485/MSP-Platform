@@ -1,0 +1,205 @@
+{
+  "name": "drift_reconcile",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "drift"
+    },
+    {
+      "name": "lane:E"
+    }
+  ],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "her-15-dakikada",
+      "name": "Her 15 dakikada",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.HR_PLATFORM_URL}}/tenants",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "kiracıları-getir",
+      "name": "Kiracıları getir",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        220,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hr-platform",
+          "name": "HR Platform API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1
+      },
+      "id": "her-kiracı-için",
+      "name": "Her kiracı için",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.HR_PLATFORM_URL}}/specs/apply",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({tenant: $json.slug, entitlements: $json.entitlements, dry_run: false}) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "uzlaştır",
+      "name": "Uzlaştır",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        660,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hr-platform",
+          "name": "HR Platform API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.error || '' }}",
+              "rightValue": "BlastRadius",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ]
+        }
+      },
+      "id": "etki-sınırı-aşıldıysa-dur",
+      "name": "Etki sınırı aşıldıysa dur",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        880,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.HR_PLATFORM_URL}}/specs/rollback",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "son-sağlam-sürüme-dön",
+      "name": "Son sağlam sürüme dön",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        220
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hr-platform",
+          "name": "HR Platform API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Her 15 dakikada": {
+      "main": [
+        [
+          {
+            "node": "Kiracıları getir",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kiracıları getir": {
+      "main": [
+        [
+          {
+            "node": "Her kiracı için",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Her kiracı için": {
+      "main": [
+        [
+          {
+            "node": "Uzlaştır",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Uzlaştır": {
+      "main": [
+        [
+          {
+            "node": "Etki sınırı aşıldıysa dur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Etki sınırı aşıldıysa dur": {
+      "main": [
+        [
+          {
+            "node": "Son sağlam sürüme dön",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  }
+}

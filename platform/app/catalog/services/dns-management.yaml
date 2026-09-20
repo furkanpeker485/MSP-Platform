@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: dns-management
+name: "DNS Management"
+area: "Server Management"
+tier: "Essential"
+lane: B
+lanes: [B, C, D, E]
+plain: "İnternet adreslerini (örneğin sirketiniz.com) bilgisayarların anladığı numaralara çeviren sistemin yönetimi. Bozulursa siteler ve e-posta anında çalışmaz olur."
+executor: "Relay'den ansible win_dns_record / nsupdate; genel zone'lar için Cloudflare + Route53 API (uygulama arayüzü)"
+automation_grade: ASSISTED
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Relay'den apex/MX/autodiscover sentetik çözümlemesi + tüm NS'lerde SOA seri eşleşmesi"
+gotcha: "Elle açılmış kayıtları içe aktarmamış bir NetBox→DNS mutabakatı ilk koşuda canlı kayıtları siler."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Her zone'u dışa aktar (dnscmd /zoneexport, named-checkzone) ve NetBox DNS'e (alan adı çözümleme) içe aktar"
+  - id: step-02
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox'ı DNS doğruluk kaynağı işaretle, kayıt sahipliğini ve n8n'e değişiklik webhook'unu aç"
+  - id: step-03
+    lane: C
+    action: cloud.configure
+    description: "Registrar/Cloudflare/Route53 API token'larını devral; apex, MX (e-posta yönlendirme kaydı), SPF (e-posta gönderici doğrulama), DKIM (e-posta imzası), DMARC (e-posta sahtecilik koruması) kayıtlarını çek"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix item'ları: relay'den zone bazlı çözümleme, NS'ler (alan adı sunucusu kaydı) arası SOA (alan adı ana kaydı) seri drift'i, NXDOMAIN (bulunamayan alan adı) oranı"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n gecelik NetBox→DNS mutabakatını kuru modda + 30/14/7 günde alan adı/sertifika bitiş alarmı"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

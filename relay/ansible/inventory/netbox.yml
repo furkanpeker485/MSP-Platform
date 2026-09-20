@@ -1,0 +1,16 @@
+# Envanter doğruluk kaynağıdır: makine listesi elle tutulmaz, NetBox'tan gelir.
+# Böylece bir cihaz envantere girmeden hiçbir playbook onu göremez.
+plugin: netbox.netbox.nb_inventory
+api_endpoint: "{{ lookup('env', 'NETBOX_URL') }}"
+token: "{{ lookup('env', 'NETBOX_TOKEN') }}"        # değer kasadan gelir
+validate_certs: true
+config_context: false
+group_by:
+  - device_roles
+  - tenants
+  - sites
+query_filters:
+  - status: active
+  - tenant: "{{ lookup('env', 'RELAY_TENANT') }}"   # yalnız bu müşterinin cihazları
+compose:
+  ansible_host: primary_ip4.address | default(name)

@@ -1,0 +1,47 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: it-audit
+name: "IT Audit"
+area: "IT Consulting & Audit"
+tier: "Proje"
+lane: F
+lanes: [F, D, E, A, B]
+plain: "Bilgi teknolojileri altyapısının baştan sona denetlenmesi ve risklerin raporlanması."
+executor: "Danışman yürütür; kanıtı NetBox/Zabbix/SIEM/agent duruşundan n8n toplar"
+automation_grade: HUMAN
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Kanıt kapsamı: NetBox varlıklarının kaçından otomatik kanıt toplandığı; %90 altında rapor bloke"
+gotcha: "Kanıtı elle toplanan bir denetim ertesi yıl tekrarlanamaz; bulgular karşılaştırılamayınca denetim rapor olmaktan çıkar."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: ticketing.ensure_queue
+    description: "Denetim çerçevesini (CIS (güvenlik sıkılaştırma standardı) / ISO (uluslararası standart) 27001 / KVKK (Kişisel Verileri Koruma Kanunu)) HR (Hisar Research) kataloğundan müşteriye örnekle"
+  - id: step-02
+    lane: E
+    action: n8n.schedule
+    description: "n8n kanıt toplama koşusunu kur: envanter, patch, yedek, log ve yetki dökümleri"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-03
+    lane: A
+    action: agent.converge
+    description: "Agent duruş raporlamasını aç, kapsam dışı kalan cihazları listele"
+  - id: step-04
+    lane: F
+    action: human.work_order
+    description: "Danışman bulguları puanlar, riskleri önceliklendirir ve yol haritasına bağlar"
+    params: {"queue": "saha"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

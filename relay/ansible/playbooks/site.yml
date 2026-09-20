@@ -1,0 +1,19 @@
+---
+# Ana giriş noktası. AWX iş şablonu bunu çağırır; hangi rolün koşacağını
+# NetBox'taki cihaz rolü belirler — elle host listesi tutulmaz.
+- name: Ağ anahtarları
+  hosts: device_roles_switch
+  gather_facts: false
+  connection: network_cli
+  roles: [switch_baseline]
+
+- name: Güvenlik duvarları
+  hosts: device_roles_firewall
+  gather_facts: false
+  connection: httpapi
+  roles: [firewall_baseline]
+
+- name: Etki alanı denetleyicileri
+  hosts: device_roles_domain_controller
+  gather_facts: true
+  roles: [ad_baseline]

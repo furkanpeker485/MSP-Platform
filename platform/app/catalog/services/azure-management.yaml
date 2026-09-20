@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: azure-management
+name: "Azure Management"
+area: "Cloud Management"
+tier: "Professional"
+lane: C
+lanes: [C, A, D, E]
+plain: "Microsoft'un bulut platformundaki sunucularınızın, güvenlik ayarlarınızın ve harcamanızın yönetimi."
+executor: "n8n → Lighthouse ile yetkilendirilmiş SPN (Azure uygulama hesabı) üzerinden Azure ARM (Azure kaynak yönetimi) REST (web tabanlı arayüz)/az CLI (komut satırı); baseline için Bicep"
+automation_grade: ASSISTED
+secret_stores: [".env", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix 'Azure by HTTP' + n8n kanarya token çağrısı Lighthouse yetkisinin hâlâ yaşadığını kanıtlar"
+gotcha: "Lighthouse tenant kapsamını devredemez — Entra, faturalama, abonelik açma ve Owner erişim dışında kalır."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "n8n-credentials"]}
+  - id: step-01
+    lane: C
+    action: cloud.configure
+    description: "Her aboneliği Azure Lighthouse ARM şablonuyla devral; HR (Hisar Research) SPN rollerini bağla"
+  - id: step-02
+    lane: C
+    action: cloud.configure
+    description: "Baseline Bicep'i dağıt: Policy initiative, diagnostic settings, Defender planı, etiketler"
+  - id: step-03
+    lane: A
+    action: agent.converge
+    description: "IaaS (hizmet olarak altyapı) VM'lerine (sanal makine) HR agent'ı Azure VM extension / Arc customScript ile kur"
+  - id: step-04
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox tenant+prefix'leri, Zabbix 'Azure by HTTP (web protokolü)' host'ları, ticket kuyruğu, Grafana"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n saatlik Resource Graph drift taraması + aylık Advisor/Service Health özeti"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

@@ -1,0 +1,52 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: cloud-cost-optimization
+name: "Cloud Cost Optimization"
+area: "Cloud Management"
+tier: "Professional"
+lane: E
+lanes: [E, C, D, F]
+plain: "Bulut faturasının incelenip boşa giden kaynakların kapatılması. Aynı işin daha ucuza yapılması."
+executor: "n8n cron → Athena'da AWS (Amazon'un bulut platformu) CUR (AWS maliyet raporu), Azure Cost Mgmt dışa aktarımı, HRC (Hisar Research'ün kendi bulutu) faturalama API'si (uygulama arayüzü) → Grafana"
+automation_grade: ASSISTED
+secret_stores: ["n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "n8n her maliyet dışa aktarımının 36 saatten yeni olduğunu doğrular; bayat akış Zabbix trigger'ı ateşler"
+gotcha: "Öneri tasarruf değildir — rightsizing onay ister ve RI (AWS rezerve kapasitesi)/Savings Plan harcamayı 1-3 yıl kilitler."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["n8n-credentials"]}
+  - id: step-01
+    lane: C
+    action: cloud.configure
+    description: "AWS CUR→S3/Athena'yı, Azure Cost Management planlı dışa aktarımını ve HRC faturalama kapsamını aç"
+  - id: step-02
+    lane: E
+    action: n8n.schedule
+    description: "n8n günlük harcama farkı işini ve aylık rightsizing/taahhüt analizi koşusunu oluştur"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-03
+    lane: E
+    action: n8n.schedule
+    description: "Atıl kaynak taramasını planla: bağlanmamış diskler, boşta EIP'ler (AWS sabit adresi), durdurulmuş ama faturalanan VM'ler (sanal makine)"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-04
+    lane: D
+    action: ticketing.ensure_queue
+    description: "Tenant başına Grafana maliyet panosu + bütçe aşımı alarmını ticket sistemine yönlendir"
+  - id: step-05
+    lane: F
+    action: human.work_order
+    description: "Aylık tekrar eden FinOps (bulut maliyet yönetimi) incelemesini sabit bir toplantı olarak nöbet takvimine yaz"
+    params: {"queue": "saha"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

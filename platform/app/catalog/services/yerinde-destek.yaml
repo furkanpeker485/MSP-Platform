@@ -1,0 +1,47 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: yerinde-destek
+name: "Yerinde Destek"
+area: "On-Site & Proje Hizmetleri"
+tier: "Proje"
+lane: F
+lanes: [F, D, E]
+plain: "Uzaktan çözülemeyen arızalar ve donanım işleri için teknik ekibin ofisinize gelmesi."
+executor: "Saha mühendisi nöbeti; ticket sisteminden iş emri, NetBox varlık bağlamı"
+automation_grade: HUMAN
+secret_stores: ["n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Kapanan her iş emrinde imza + fotoğraf kanıtı zorunlu; SLA (hizmet seviyesi taahhüdü) saati ticket'ta izlenir"
+gotcha: "Bina giriş izni ve kart erişimi 0. günde alınmazsa mühendis kapıda bekler ve SLA yanar."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: ticketing.ensure_queue
+    description: "Saha iş emri türünü, bölge/SLA matrisini ve müşteri lokasyon kayıtlarını oluştur"
+  - id: step-02
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox'tan saha, rack ve cihaz bağlamını iş emrine otomatik iliştir"
+  - id: step-03
+    lane: F
+    action: human.work_order
+    description: "Bölgeye göre saha mühendisi nöbetini ve yedek kaynağı ata"
+    params: {"queue": "saha"}
+  - id: step-04
+    lane: E
+    action: n8n.schedule
+    description: "n8n haftalık rapor: saha ziyareti sayısı, yol süresi, ilk ziyarette çözüm oranı"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

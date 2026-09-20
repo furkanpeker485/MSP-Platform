@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: active-directory
+name: "Active Directory"
+area: "Server Management"
+tier: "Essential"
+lane: B
+lanes: [B, A, D, E]
+plain: "Çalışanların kullanıcı hesaplarının, şifrelerinin ve kimin hangi dosyaya erişebileceğinin tutulduğu merkezî sistem. İşe giren çalışanın hesabı burada açılır, ayrılanınki burada kapanır."
+executor: "Site relay'den WinRM (Windows uzaktan yönetim) ile Ansible microsoft.ad + PowerShell GPO (merkezî Windows kuralı) modülleri"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix'te repadmin replsum + SYSVOL/DFSR durumu, ayrıca LDAP/Kerberos sentetik kimlik doğrulaması"
+gotcha: "Site relay'de önbelleğe alınan tier-0 bilgileri o relay'i tek kutuluk domain ele geçirme hedefine çevirir."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "ansible microsoft.ad denetimi: FSMO (Active Directory özel rolleri), site/subnet, repadmin /replsum, GPO dışa aktarımı"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "OU (kullanıcı klasörü)/parola/kilitleme/Kerberos baseline'ını uygula ve HR (Hisar Research) servis hesabını yalnız tier-0 yetkilendir"
+  - id: step-03
+    lane: A
+    action: agent.converge
+    description: "Her DC'ye (etki alanı denetleyicisi) role=dc etiketli agent kur; patch ring'i asla iki DC'yi aynı anda yeniden başlatmasın"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "DC başına AD (Active Directory kullanıcı sistemi) şablonlu Zabbix host'u: replikasyon hatası, lsass, SYSVOL (etki alanı ortak klasörü), LDAP (dizin sorgulama) yanıt süresi"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n haftalık tarama: atıl hesaplar, ayrıcalıklı grup drift'i, baseline'a göre GPO farkı"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

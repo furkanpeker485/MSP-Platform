@@ -1,0 +1,51 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: capacity-report
+name: "Capacity Report"
+area: "IT Consulting & Audit"
+tier: "Professional"
+lane: E
+lanes: [C, D, E, F]
+plain: "Diskin, belleğin ve internet hattının ne zaman dolacağının önceden raporlanması. Yatırımı sıkışmadan planlamanızı sağlar."
+executor: "n8n cron → Zabbix trends API (uygulama arayüzü), pyVmomi vCenter perf, HRC (Hisar Research'ün kendi bulutu)/Azure Monitor; Grafana"
+automation_grade: ASSISTED
+secret_stores: ["n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Host'ların en az %80'inde 90 günlük Zabbix trend geçmişi yoksa iş rapor yayınlamayı reddeder"
+gotcha: "Thin provisioning ve dedup misafirdeki boş alanı yalan söyletir; tahmini VM (sanal makine) içinde değil datastore/array katmanında yapın."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix kapasite şablonlarını (CPU (işlemci), RAM (bellek), disk, IOPS (saniyedeki disk işlemi), WAN (internet hattı)) her host'a bağla"
+  - id: step-02
+    lane: C
+    action: cloud.configure
+    description: "vCenter'ı pyVmomi ile, HRC API'sini ve Azure Monitor'ü salt-okunur rollerle bağla"
+  - id: step-03
+    lane: E
+    action: n8n.schedule
+    description: "Çeyreklik işi planla: p95 trendi + eşiğe Holt tahmini, doluluğa kalan gün"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-04
+    lane: D
+    action: netbox.ensure_tenant
+    description: "Grafana kapasite panosunu ve doluluğa kalan gün alarm eşiklerini yayınla"
+  - id: step-05
+    lane: F
+    action: human.work_order
+    description: "Öneriyi onaylayacak çeyreklik danışman inceleme randevusunu takvime al"
+    params: {"queue": "saha"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

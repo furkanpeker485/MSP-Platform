@@ -1,0 +1,10 @@
+---
+# Parola İÇERMEZ. Yalnız kasadaki anahtara referans verir.
+snmpv3_user: hr-monitor
+snmpv3_auth_pass: "{{ vault_snmpv3_auth_pass }}"
+snmpv3_priv_pass: "{{ vault_snmpv3_priv_pass }}"
+syslog_target: "{{ ansible_env.RELAY_HOST | default('relay.local') }}"
+ntp_servers:
+  - tr.pool.ntp.org
+  - time.cloudflare.com
+maintenance_window: "{{ hostvars[inventory_hostname].maintenance_window | default('02:00-05:00') }}"

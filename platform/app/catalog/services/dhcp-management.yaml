@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: dhcp-management
+name: "DHCP Management"
+area: "Server Management"
+tier: "Essential"
+lane: B
+lanes: [B, A, D, E]
+plain: "Ağa bağlanan her cihaza otomatik adres veren sistemin yönetimi. Bu olmazsa yeni bağlanan bilgisayar ağı göremez."
+executor: "Site relay'den ansible win_shell + DhcpServer PS modülü (ISC (açık kaynak DHCP yazılımı) için community.general)"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix scope başına failover durumu ve boş lease sorgular; VLAN başına relay'den DHCPDISCOVER (adres isteği paketi) probu"
+gotcha: "Option 43/66 ile telefon/AP rezervasyonları NetBox'ta yoktur — IPAM'den scope yeniden kurmak VoIP'i (internet üzerinden telefon) çökertir."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Scope'ları, rezervasyonları ve option'ları (Get-DhcpServerv4Scope) NetBox IPAM'e (ağ adres yönetimi) aktar"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "DHCP (otomatik adres dağıtımı) failover çiftini 50/50 yük dengeli kur/doğrula ve sunucuyu AD'de (Active Directory kullanıcı sistemi) yetkilendir"
+  - id: step-03
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox prefix'lerini otoriter işaretle; prefix veya rezervasyon değişiminde n8n webhook'u tetikle"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Scope başına Zabbix item'ları: boş lease %, failover durumu, servis durumu, %15'te trigger"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n saatlik scope kullanım taraması + VLAN (sanal ağ bölmesi) başına haftalık sahte DHCP probu"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

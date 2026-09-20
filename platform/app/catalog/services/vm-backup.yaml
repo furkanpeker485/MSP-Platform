@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: vm-backup
+name: "VM Backup"
+area: "Backup & Business Continuity"
+tier: "Professional"
+lane: C
+lanes: [B, C, D, E]
+plain: "Sanal sunucuların bütün hâlde yedeklenmesi ve gerektiğinde dakikalar içinde geri getirilmesi."
+executor: "vCenter/Hyper-V/HRC'ye karşı Veeam B&R REST (web tabanlı arayüz) + pyVmomi; proxy VM'i (sanal makine) Ansible kurar"
+automation_grade: FULL
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "NetBox VM envanteri ile Veeam korunan-VM listesinin gecelik farkı; boşluklarda alarm"
+gotcha: "Yeni VM'ler ancak iş etiket veya klasör kapsamlıysa korunur; sabit VM listeleri onları sessizce ıskalar."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: C
+    action: veeam.configure
+    description: "vCenter/Hyper-V/HRC'yi Veeam B&R'a REST ile kaydet, host keşfini çalıştır"
+  - id: step-02
+    lane: C
+    action: cloud.configure
+    description: "Etiket kapsamlı backup işi oluştur, uygulama farkındalıklı kimlik bilgilerini ve misafir erişimini ayarla"
+  - id: step-03
+    lane: B
+    action: awx.launch
+    description: "Ansible site relay'in yanına Veeam proxy/transport VM'ini kurar"
+  - id: step-04
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox VM senkronu + Zabbix VMware keşfi; cluster başına Grafana kapsam kutucuğu"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n gecelik kapsam taraması: NetBox VM listesi / Veeam'de korunan nesneler"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

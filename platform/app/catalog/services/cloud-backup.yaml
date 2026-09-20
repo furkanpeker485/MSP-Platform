@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: cloud-backup
+name: "Cloud Backup"
+area: "Cloud Management"
+tier: "Professional"
+lane: C
+lanes: [C, D, E]
+plain: "Yedeklerin buluta şifreli olarak alınması ve gerektiğinde oradan geri yüklenmesi."
+executor: "Veeam Backup for Azure/AWS REST (web tabanlı arayüz) API (uygulama arayüzü) + HRC (Hisar Research'ün kendi bulutu) nesne depolama API'si (S3 uyumlu)"
+automation_grade: FULL
+secret_stores: ["n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix müşteri tenant'ı başına SOBR offload gecikmesini ve kotaya göre bucket kullanımını izler"
+gotcha: "Bulut repo maliyeti yedeklemede değil GERİ YÜKLEMEDE oluşur (egress + istek başına) — fiyatlanmazsa kârı yer."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["n8n-credentials"]}
+  - id: step-01
+    lane: C
+    action: cloud.configure
+    description: "HRC API: müşteri başına kota ve yaşam döngüsü politikalı S3 bucket/tenant oluştur"
+  - id: step-02
+    lane: C
+    action: veeam.configure
+    description: "Veeam Backup for Azure/AWS appliance'ını kur, aboneliği kaydet, etiket politikasını uygula"
+  - id: step-03
+    lane: C
+    action: veeam.configure
+    description: "Bucket'ı REST ile Veeam nesne deposu / SOBR (Veeam birleşik deposu) kapasite katmanı olarak ekle"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix offload gecikme item'ları + bulut tenant'ı başına Grafana tüketim paneli"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n aylık depolama + egress tüketim raporunu faturalama ve ticket sistemine bas"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: aws-management
+name: "AWS Management"
+area: "Cloud Management"
+tier: "Professional"
+lane: C
+lanes: [C, A, D, E]
+plain: "Amazon'un bulut sunucularında duran sistemlerinizin yönetimi, güvenliği ve maliyet kontrolü."
+executor: "n8n → hesaplar arası AssumeRole ile boto3; baseline'lar için CloudFormation StackSets"
+automation_grade: ASSISTED
+secret_stores: [".env", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "n8n 15 dakikada bir AssumeRole kanaryası; Zabbix CloudTrail gecikmesini ve Config kaydediciyi izler"
+gotcha: "Bölge körlüğü: trail, Config ve izleme yalnız kayıtlı bölgeleri kapsar; gölge kaynaklar görünmez kalır."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "n8n-credentials"]}
+  - id: step-01
+    lane: C
+    action: cloud.configure
+    description: "HR (Hisar Research) hesaplar arası rolünü ExternalId ile StackSet olarak dağıt; ARN (AWS kaynak kimliği) + ID'yi (kimlik numarası) vault'a koy"
+  - id: step-02
+    lane: C
+    action: cloud.configure
+    description: "Org CloudTrail, AWS (Amazon'un bulut platformu) Config kaydedici, Cost Explorer API (uygulama arayüzü) ve GuardDuty dışa aktarımını aç"
+  - id: step-03
+    lane: A
+    action: agent.converge
+    description: "EC2 (AWS sanal sunucusu) filosuna HR agent'ı SSM (AWS sistem yöneticisi) Distributor/RunCommand ilişkilendirmesiyle kur"
+  - id: step-04
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox hesap/VPC'leri, Zabbix 'AWS by HTTP (web protokolü)' host'ları, CloudTrail için SIEM (güvenlik kayıt merkezi) kaynağı"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n saatlik Config envanter senkronu + haftalık Trusted Advisor ve Health olay özeti"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

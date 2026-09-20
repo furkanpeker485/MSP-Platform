@@ -1,0 +1,46 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: switch-management
+name: "Switch Management"
+area: "Network Management"
+tier: "Essential"
+lane: B
+lanes: [B, C, D, E]
+plain: "Ofisteki bilgisayarları, yazıcıları ve telefonları birbirine bağlayan ağ anahtarlarının ayarlanması ve izlenmesi."
+executor: "Site relay'den SSH (şifreli uzaktan bağlantı) ile Ansible cisco.ios/arista.eos/community.network"
+automation_grade: ASSISTED
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Zabbix SNMP erişilebilirliği, port bazlı LLD ifOperStatus, gecelik config-fark işi yeşil"
+gotcha: "Hatalı trunk/VLAN basımı relay'in kendi yolunu keser; IOS'ta commit-confirm yoktur, play'leri 'reload in 5' ile sarın."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox API (uygulama arayüzü) ile cihazı, arayüzleri ve yönetim IP'sini (ağ adresi) oluştur"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Baseline'ı bas: SNMPv3 (cihaz izleme protokolünün şifreli sürümü), syslog→relay, NTP (saat eşitleme), AAA (kimlik doğrulama ve yetkilendirme), port-security, STP (ağ döngü koruması) koruyucuları"
+  - id: step-03
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix host'u + Cisco IOS (Cisco cihaz işletim sistemi) by SNMP (cihaz izleme protokolü) şablonu, arayüz LLD'si (otomatik bileşen keşfi), uplink trigger'ları"
+  - id: step-04
+    lane: E
+    action: n8n.schedule
+    description: "n8n gecelik config çekimini git'e al, onaysız değişiklikte fark alarmı ver"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

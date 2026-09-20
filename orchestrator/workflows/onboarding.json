@@ -1,0 +1,215 @@
+{
+  "name": "onboarding",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "onboarding"
+    },
+    {
+      "name": "lane:D"
+    }
+  ],
+  "nodes": [
+    {
+      "parameters": {
+        "path": "contract-signed",
+        "httpMethod": "POST",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "id": "sözleşme-imzalandı",
+      "name": "Sözleşme imzalandı",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.HR_PLATFORM_URL}}/specs/compile",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({tenant: $json.tenant, entitlements: $json.entitlements, dry_run: true}) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "erişim-listesi-üret",
+      "name": "Erişim listesi üret",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        220,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hr-platform",
+          "name": "HR Platform API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.summary.tasks }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ]
+        }
+      },
+      "id": "kasa-girişi-bekleniyor-mu",
+      "name": "Kasa girişi bekleniyor mu",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.HR_TICKETING_URL}}/tickets",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({tenant: $json.spec.tenant, title: '0. gün erişim paketi', queue: 'onboarding', acceptance_criteria: 'Tüm erişimler kasaya yazıldı ve kanarya testi yeşil'}) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "müşteri-erişim-formu",
+      "name": "Müşteri erişim formu",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        660,
+        200
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hr-platform",
+          "name": "HR Platform API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.HR_PLATFORM_URL}}/specs/apply",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({tenant: $json.tenant, entitlements: $json.entitlements, dry_run: false}) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "kanarya-testi",
+      "name": "Kanarya testi",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        880,
+        200
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hr-platform",
+          "name": "HR Platform API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.HR_TICKETING_URL}}/tickets",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({tenant: $json.tenant, title: 'Devreye alma durdu: kasa eksik', queue: 'onboarding', priority: 'P2'}) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "başarısızsa-destek-kaydı",
+      "name": "Başarısızsa destek kaydı",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        660,
+        420
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hr-platform",
+          "name": "HR Platform API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Sözleşme imzalandı": {
+      "main": [
+        [
+          {
+            "node": "Erişim listesi üret",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Erişim listesi üret": {
+      "main": [
+        [
+          {
+            "node": "Kasa girişi bekleniyor mu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kasa girişi bekleniyor mu": {
+      "main": [
+        [
+          {
+            "node": "Müşteri erişim formu",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Başarısızsa destek kaydı",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Müşteri erişim formu": {
+      "main": [
+        [
+          {
+            "node": "Kanarya testi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

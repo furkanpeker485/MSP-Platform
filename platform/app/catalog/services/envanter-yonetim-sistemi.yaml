@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: envanter-yonetim-sistemi
+name: "Envanter Yönetim Sistemi"
+area: "IT Consulting & Audit"
+tier: "Essential"
+lane: D
+lanes: [A, B, D, E]
+plain: "Şirketteki bütün cihazların ve yazılımların kayıt altına alındığı merkezî liste. Neyin nerede olduğunun tek doğru kaynağı."
+executor: "NetBox API (uygulama arayüzü) + HR (Hisar Research) agent SMBIOS (donanım kimlik bilgisi) envanteri + relay'den SNMP (cihaz izleme protokolü) keşfi; n8n mutabakat işi"
+automation_grade: FULL
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: []
+health_check: "n8n günlük: NetBox kaydı eşleşen Zabbix host'larının yüzdesi; 48 saatten bayatsa alarm"
+gotcha: "Klonlanmış VM'ler (sanal makine) hostname ve MAC (ağ kartı kimliği) paylaşır; seri no+UUID (benzersiz kimlik) ile tekilleştirin yoksa NetBox hayalet kayıtlarla dolar."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox tenant'ı, sahaları, cihaz rollerini + özel alanları (seri no, sahip, garanti) oluştur"
+  - id: step-02
+    lane: A
+    action: agent.converge
+    description: "SMBIOS/dmidecode donanım envanteri modüllü HR agent'ı tüm endpoint'lere bas"
+  - id: step-03
+    lane: B
+    action: awx.launch
+    description: "Switch, router, AP (kablosuz erişim noktası) ve UPS'leri (kesintisiz güç kaynağı) tohumlamak için site relay'den SNMPv3 (cihaz izleme protokolünün şifreli sürümü)/LLDP keşfi çalıştır"
+  - id: step-04
+    lane: E
+    action: n8n.schedule
+    description: "Gecelik NetBox mutabakatını planla: agent + Zabbix LLD (otomatik bileşen keşfi) / CMDB (merkezî envanter veritabanı), hayalet ve sahipsizleri işaretle"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-05
+    lane: D
+    action: netbox.ensure_device
+    description: "API senkronuyla NetBox cihaz rollerinden Zabbix host gruplarını otomatik oluştur"
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

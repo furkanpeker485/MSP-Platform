@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: db-server-management
+name: "DB Server Management"
+area: "Server Management"
+tier: "Professional"
+lane: B
+lanes: [B, A, C, D, E]
+plain: "Şirketin verilerinin saklandığı veritabanı sunucularının bakımı, hızlı çalışması ve ayakta kalması."
+executor: "ansible community.postgresql/mysql + win_shell ile T-SQL; uygulama farkındalıklı backup için Veeam REST (web tabanlı arayüz)"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "ODBC oturum+sorgu probu, replikasyon gecikmesi ve pakete göre RPO'ya (kabul edilebilir veri kaybı) karşı son sağlam geri dönüş noktası yaşı"
+gotcha: "DB yapılandırması bedelsiz sabitlenemez: max memory/tempdb restart ister, saf bir döngü prod'u sürekli yeniden başlatır."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Instance'ları, sürümleri ve edition'ları keşfet; NetBox'a yaz ve yapılandırma baseline'ını dondur"
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: "Motor baseline'ını uygula: max memory, tempdb dosyaları, autogrowth, Ola/pg_cron bakımı"
+  - id: step-03
+    lane: C
+    action: veeam.configure
+    description: "REST API (uygulama arayüzü) ile DB (veritabanı) VM'i (sanal makine) başına Veeam uygulama farkındalıklı işlemeyi ve log truncate'i aç"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Ayrı düşük yetkili izleme hesabıyla MSSQL (Microsoft SQL (veritabanı sorgu dili) Server)/PostgreSQL ODBC (veritabanı bağlantı arayüzü) şablonlu Zabbix host'u"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n gecelik: backup zincirini doğrula ve boş instance'a geri dönüş testi, DBCC (SQL Server bakım komutu)/vacuum raporu"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

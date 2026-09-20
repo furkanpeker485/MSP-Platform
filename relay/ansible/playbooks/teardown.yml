@@ -1,0 +1,20 @@
+---
+# Çıkış hattı: giriş hattının aynadaki hâli. Sözleşme bitince koşar.
+- name: Erişimleri geri al
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: HR yönetim erişimini kaldır
+      ansible.builtin.include_role:
+        name: "{{ device_role }}_baseline"
+        tasks_from: teardown
+      when: device_role is defined
+
+    - name: Kasa anahtarını iptal et
+      ansible.builtin.uri:
+        url: "{{ lookup('env', 'VAULT_ADDR') }}/v1/secret/metadata/tenants/{{ tenant }}/{{ inventory_hostname }}"
+        method: DELETE
+        headers:
+          X-Vault-Token: "{{ lookup('env', 'VAULT_TOKEN') }}"
+      delegate_to: localhost
+      no_log: true

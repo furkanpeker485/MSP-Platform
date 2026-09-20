@@ -1,0 +1,6 @@
+---
+galaxy_info:
+  author: Hisar Research
+  description: Ağ anahtarı temel ayarı — izleme, kayıt, saat ve döngü koruması
+  license: proprietary
+dependencies: []

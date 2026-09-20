@@ -1,0 +1,46 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: network-installation
+name: "Network Installation"
+area: "On-Site & Proje Hizmetleri"
+tier: "Proje"
+lane: F
+lanes: [F, B, D]
+plain: "Kablolu ve kablosuz ağın, cihazlarıyla birlikte sıfırdan kurulup çalışır hâlde teslim edilmesi."
+executor: "Saha kurulum ekibi + relay'den Ansible ile cihaz baseline'ı; NetBox niyet kayıtları"
+automation_grade: HUMAN
+secret_stores: ["ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Kabul testi: her portun LLDP (komşu cihaz keşfi) komşusu NetBox planıyla eşleşmeli"
+gotcha: "Fiziksel kurulum bitip config basılmadan ağ 'hazır' sayılırsa müşteri yarım bir sistem devralır."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: netbox.ensure_device
+    description: "NetBox'ta hedef topolojiyi, VLAN (sanal ağ bölmesi) planını ve IP (ağ adresi) adreslemesini önceden tanımla"
+  - id: step-02
+    lane: F
+    action: human.work_order
+    description: "Cihazları fiziksel olarak kur, kablola ve ilk yönetim erişimini aç"
+    params: {"queue": "saha"}
+  - id: step-03
+    lane: B
+    action: awx.launch
+    description: "Relay'den baseline config'i bas: SNMPv3 (cihaz izleme protokolünün şifreli sürümü), syslog, NTP (saat eşitleme), AAA (kimlik doğrulama ve yetkilendirme), yönetim ACL'i (erişim izin listesi)"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix host'larını ve izlemeyi devreye al, kabul testini kanıtla"
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

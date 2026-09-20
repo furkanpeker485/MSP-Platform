@@ -1,0 +1,54 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: linux-server-yonetimi
+name: "Linux Server Yönetimi"
+area: "Server Management"
+tier: "Professional"
+lane: A
+lanes: [A, B, D, E]
+plain: "Linux işletim sistemiyle çalışan sunucuların güncellemeleri, güvenlik ayarları ve kesintisiz çalışması."
+executor: "HR (Hisar Research) agent (apt/dnf, systemd, sysctl) + relay'den servis yapılandırması için ansible rolleri"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "agent2 heartbeat + Zabbix systemd/disk/inode trigger'ları ve restart-gerekli bayrağı item'ı"
+gotcha: "Dağıtım çeşitliliği: tek bir agent derlemesi RHEL7 (eski bir Linux sürümü) glibc'yi ıskalar ve eski çekirdekler canlı yamayı sessizce atlar."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: A
+    action: agent.converge
+    description: "Agent'ı cloud-init veya tek seferlik kurucu ile başlat, site relay CA'sına (sertifika otoritesi) karşı kaydet"
+  - id: step-02
+    lane: A
+    action: agent.converge
+    description: "CIS (güvenlik sıkılaştırma standardı)-lite baseline'ı sabitle: sshd sıkılaştırma, sudoers, auditd, zaman senkronu, patch ring"
+  - id: step-03
+    lane: B
+    action: awx.launch
+    description: "Sunucunun işlevine göre ansible rol yapılandırması (nginx, postfix, docker, HAProxy (yük dağıtıcı))"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "'Linux by Zabbix agent2' şablonlu host + systemd unit, inode ve OOM (bellek yetersizliği) trigger'ları"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n aylık rapor: bekleyen CVE'ler (dnf updateinfo / apt), restart gereksinimi, EOL (kullanım ömrü sonu) dağıtımlar"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: agent-remove
+    lane: A
+    action: agent.converge
+    description: "Kurulan bileşenleri kaldır, kaydı iptal et."
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

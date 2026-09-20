@@ -1,0 +1,27 @@
+---
+# Active Directory temel ayarı. Yama turu iki etki alanı denetleyicisini aynı anda
+# yeniden başlatmasın diye her denetleyici role=dc etiketiyle işaretlenir.
+- name: Çoğaltma sağlığını topla
+  ansible.windows.win_command: repadmin /replsum
+  register: replsum
+  changed_when: false
+
+- name: Çoğaltma hatalıysa dur
+  ansible.builtin.fail:
+    msg: "Çoğaltma hatalı; temel ayar uygulanmadan önce düzeltilmeli"
+  when: "'fail' in replsum.stdout | lower"
+
+- name: Parola ilkesi
+  microsoft.ad.domain_password_policy:
+    min_password_length: 14
+    password_history: 24
+    lockout_threshold: 10
+    lockout_duration: 900
+
+- name: HR servis hesabı yalnız devredilen birimde yetkili
+  microsoft.ad.user:
+    identity: "{{ hr_service_account }}"
+    password: "{{ vault_ad_service_account_password }}"
+    path: "{{ hr_service_ou }}"
+    state: present
+  no_log: true

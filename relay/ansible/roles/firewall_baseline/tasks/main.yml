@@ -1,0 +1,34 @@
+---
+# Güvenlik duvarı temel ayarı. Yapılandırma HA sanal adresine değil, birincil düğümün
+# gerçek yönetim adresine basılır; aksi hâlde devir anında fark kaybolabilir.
+- name: Birincil düğümü doğrula
+  fortinet.fortios.fortios_monitor_fact:
+    selector: system_ha-peer
+  register: ha
+  failed_when: ha.meta.results is undefined
+
+- name: Yapılandırmayı yedekle
+  fortinet.fortios.fortios_monitor:
+    selector: system.config.backup
+    params: {scope: global}
+
+- name: Yönetim erişimini yalnız relay'e sınırla
+  fortinet.fortios.fortios_system_interface:
+    system_interface:
+      name: "{{ mgmt_interface | default('mgmt') }}"
+      allowaccess: "ping https ssh"
+      trusthost1: "{{ relay_cidr }}"
+
+- name: Yönetici çok adımlı doğrulaması
+  fortinet.fortios.fortios_system_admin:
+    system_admin:
+      name: "{{ hr_admin_user }}"
+      two_factor: "fortitoken"
+  no_log: true
+
+- name: Kayıtları relay toplayıcısına gönder
+  fortinet.fortios.fortios_log_syslogd_setting:
+    log_syslogd_setting:
+      status: "enable"
+      server: "{{ syslog_target }}"
+      mode: "reliable"

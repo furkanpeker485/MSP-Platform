@@ -1,0 +1,52 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: migration-projects
+name: "Migration Projects"
+area: "On-Site & Proje Hizmetleri"
+tier: "Proje"
+lane: F
+lanes: [F, C, D, E]
+plain: "Veri, e-posta ve sunucuların eski sistemden yenisine güvenli şekilde taşınması."
+executor: "Proje ekibi + taşıma aracı (Veeam/robocopy/DMS); kesim penceresi koşusu n8n ile"
+automation_grade: HUMAN
+secret_stores: ["n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Taşıma sonrası nesne sayısı, checksum ve uygulama seviyesinde kabul testi karşılaştırması"
+gotcha: "Geri dönüş planı olmayan kesim penceresi tek yönlü bir kapıdır — kaynağı en az bir yedek döngüsü ayakta tutun."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["n8n-credentials"]}
+  - id: step-01
+    lane: F
+    action: human.work_order
+    description: "Kapsamı, kesim penceresini ve geri dönüş kriterlerini yazılı planla"
+    params: {"queue": "saha"}
+  - id: step-02
+    lane: D
+    action: netbox.ensure_device
+    description: "Kaynak ve hedef envanterini NetBox'ta eşle, taşınacak nesne listesini dondur"
+  - id: step-03
+    lane: C
+    action: veeam.configure
+    description: "Taşıma işlerini ilgili API'lerle (uygulama arayüzü) kur (Veeam, hipervizör, bulut, DMS (veri taşıma servisi))"
+  - id: step-04
+    lane: E
+    action: n8n.schedule
+    description: "n8n ile ön senkronları ve kesim gecesi kontrol listesini koştur"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-05
+    lane: F
+    action: human.work_order
+    description: "Kabul testini ve müşteri onayını kayıt altına al"
+    params: {"queue": "saha"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

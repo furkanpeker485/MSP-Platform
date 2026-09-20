@@ -1,0 +1,51 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: 7-24-monitoring
+name: "7/24 Monitoring"
+area: "Monitoring & NOC"
+tier: "Enterprise"
+lane: F
+lanes: [F, D, E, C]
+plain: "Sistemlerin gece gündüz izlenmesi. Bir arıza olduğunda siz fark etmeden ekibin haberi olur ve müdahale başlar."
+executor: "NOC (7/24 izleme merkezi) nöbeti + ticket/Grafana OnCall duvar panosu; n8n devir ve SLA (hizmet seviyesi taahhüdü) ihlal işleri"
+automation_grade: HUMAN
+secret_stores: ["n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Vardiya başına insan onayı gerektiren ölü-adam kanaryası; ticket başına ilk yanıt SLA başarımı"
+gotcha: "Önceden yetkilendirilmiş aksiyon listesi olmayan 15 dakikalık SLA, her gece P1'i 'müşteriye ulaşıldı'da dondurur."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": ["n8n-credentials"]}
+  - id: step-01
+    lane: D
+    action: ticketing.ensure_queue
+    description: "Müşteriyi 7x24 önem matrisine ve ilk yanıt SLA'sına ekle (P1 15 dk)"
+  - id: step-02
+    lane: D
+    action: netbox.ensure_tenant
+    description: "Müşteri kutucuklarını NOC duvar panosuna ekle ve hizmet bazlı runbook'ları bağla"
+  - id: step-03
+    lane: F
+    action: human.work_order
+    description: "Müşteriyi vardiya devir kontrol listesine ve nöbet rotasyonuna yerleştir"
+    params: {"queue": "saha"}
+  - id: step-04
+    lane: E
+    action: n8n.schedule
+    description: "Saatlik onaylanmamış P1 taraması ve otomatik vardiya devir raporu"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+  - id: step-05
+    lane: D
+    action: netbox.ensure_tenant
+    description: "Mesai dışı çağrı yolunu ve müşteriye giden eskalasyon merdivenini aç"
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

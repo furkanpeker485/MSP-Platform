@@ -1,0 +1,53 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: windows-server-yonetimi
+name: "Windows Server Yönetimi"
+area: "Server Management"
+tier: "Essential"
+lane: A
+lanes: [A, B, D, E]
+plain: "Windows işletim sistemiyle çalışan sunucuların güncellemeleri, güvenlik ayarları ve kesintisiz çalışması."
+executor: "Makinede HR (Hisar Research) agent + PowerShell DSC (Windows ayar yönetimi)/winget; rol yapılandırması için relay'den ansible.windows"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "90 sn altı agent heartbeat + Zabbix servis/disk/uptime trigger'ları; host başına patch uyum item'ı"
+gotcha: "Agent 7/24 sabitleme yapar — host bazlı bakım penceresi yoksa saat 14:00'te patch için DC'yi (etki alanı denetleyicisi) yeniden başlatır."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: A
+    action: agent.converge
+    description: "hr-agent MSI'ını (Windows kurulum paketi) relay'den GPO (merkezî Windows kuralı)/PsExec ile bas, saha sertifikasıyla kontrol düzlemine kaydet"
+  - id: step-02
+    lane: A
+    action: agent.converge
+    description: "Windows baseline'ını sabitle: servisler, firewall profili, NTP (saat eşitleme), RDP (uzak masaüstü protokolü)/NLA, local admin"
+  - id: step-03
+    lane: B
+    action: awx.launch
+    description: "ansible.windows ile rol yapılandırması (IIS (Windows web sunucusu)/RDS/roller) + pakete göre host bazlı bakım penceresi"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Zabbix host'u oluştur, 'Windows by Zabbix agent' şablonunu bağla, site relay proxy'sine ata"
+  - id: step-05
+    lane: D
+    action: netbox.ensure_device
+    description: "Agent verilerinden sunucuyu NetBox'a yaz (seri no, OS (işletim sistemi) build, vCPU/RAM, cluster)"
+teardown:
+  - id: agent-remove
+    lane: A
+    action: agent.converge
+    description: "Kurulan bileşenleri kaldır, kaydı iptal et."
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."

@@ -1,0 +1,160 @@
+{
+  "name": "scheduled_monthly_report",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "scheduled"
+    },
+    {
+      "name": "lane:E"
+    }
+  ],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 1 * *"
+            }
+          ]
+        },
+        "timezone": "Europe/Istanbul"
+      },
+      "id": "ayın-1'i-06:00",
+      "name": "Ayın 1'i 06:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.HR_ZABBIX_URL}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "zabbix-erişilebilirlik",
+      "name": "Zabbix erişilebilirlik",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        220,
+        200
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "zabbix",
+          "name": "Zabbix API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.HR_NETBOX_URL}}/api/dcim/devices/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "netbox-envanter",
+      "name": "NetBox envanter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        220,
+        400
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "netbox",
+          "name": "NetBox API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Saat dilimi sorgularda sabitlenir: Europe/Istanbul ay sınırı ile\n// merkezin evrensel saat geçmişi ilk günü düşürebilir veya iki kez sayabilir.\nconst tz = 'Europe/Istanbul';\nreturn [{ json: { tz, availability: $('Zabbix erişilebilirlik').all(), inventory: $('NetBox envanter').all() } }];"
+      },
+      "id": "raporu-derle",
+      "name": "Raporu derle",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.HR_REPORT_RENDER_URL}}/render"
+      },
+      "id": "pdf-üret-ve-gönder",
+      "name": "PDF üret ve gönder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        660,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Ayın 1'i 06:00": {
+      "main": [
+        [
+          {
+            "node": "Zabbix erişilebilirlik",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "NetBox envanter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zabbix erişilebilirlik": {
+      "main": [
+        [
+          {
+            "node": "Raporu derle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NetBox envanter": {
+      "main": [
+        [
+          {
+            "node": "Raporu derle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Raporu derle": {
+      "main": [
+        [
+          {
+            "node": "PDF üret ve gönder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

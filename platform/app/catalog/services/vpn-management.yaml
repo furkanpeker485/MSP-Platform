@@ -1,0 +1,50 @@
+# Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: vpn-management
+name: "VPN Management"
+area: "Network Management"
+tier: "Professional"
+lane: B
+lanes: [A, B, C, D, E]
+plain: "Evden çalışanların ve şubelerin şirket ağına güvenli bağlanmasını sağlayan şifreli tünellerin yönetimi."
+executor: "ansible fortinet.fortios/cisco.ios IPsec (şifreli tünel protokolü) + istemci profili/sertifikasını basan HR (Hisar Research) agent"
+automation_grade: ASSISTED
+secret_stores: [".env", "ansible-vault", "n8n-credentials"]
+requires: [envanter-yonetim-sistemi]
+health_check: "Her tünelde 60 saniyede bir relay'den karşı uçtaki bir host'a prob — sadece phase2 SA durumuna bakmaz"
+gotcha: "Tünel 'up' görünürken trafik karanlığa gidebilir: uyuşmayan p2 selector'ları veya TCP (bağlantı protokolü)-MSS clamp yokluğu. Uçtan uca prob atın."
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: "Erişim bilgilerini kasaya yaz; parola koda gömülmez."
+    params: {"store": [".env", "ansible-vault", "n8n-credentials"]}
+  - id: step-01
+    lane: B
+    action: awx.launch
+    description: "Saha şablonundan IKEv2 (tünel kurulum protokolü)/IPsec p1+p2, rota tabanlı tünel ve selector'ları kur"
+  - id: step-02
+    lane: A
+    action: agent.converge
+    description: "Agent VPN (şifreli uzaktan bağlantı) istemcisini, SCEP (otomatik sertifika dağıtımı) ile makine sertifikasını ve kilitli profili kurar"
+  - id: step-03
+    lane: C
+    action: cloud.configure
+    description: "Karşı uç bulutta ise Azure ARM (Azure kaynak yönetimi) / HRC (Hisar Research'ün kendi bulutu) API (uygulama arayüzü) ile uzak gateway'i oluştur"
+  - id: step-04
+    lane: D
+    action: zabbix.ensure_host
+    description: "Tünel başına Zabbix host'u: phase2 SA (tünel güvenlik ilişkisi) OID'si (izleme değeri numarası) artı karşı uçtaki bir host'a sentetik prob"
+  - id: step-05
+    lane: E
+    action: n8n.schedule
+    description: "n8n aylık PSK (ortak kablosuz şifre)/sertifika bitiş ve sahipsiz VPN hesabı taraması"
+    params: {"workflow": "scheduled_generic", "cron": "0 6 1 * *"}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: "Kasa anahtarlarını iptal et ve değiştir."
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: "Envanter kaydını hizmetten çıkarıldı olarak işaretle."
