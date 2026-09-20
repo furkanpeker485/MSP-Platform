@@ -58,4 +58,11 @@ python -m hragent --once
 cd relay && cp .env.example .env && docker compose up -d
 ```
 
-Ayrıntı: [`docs/architecture.md`](docs/architecture.md)
+## Belgeler
+
+| Belge | İçerik |
+|-------|--------|
+| [`docs/architecture.md`](docs/architecture.md) | Kontrol düzlemi / yürütme düzlemi, relay'in neden n8n worker'ı olmadığı |
+| [`docs/secrets.md`](docs/secrets.md) | Kasa kullanımı ve sürekli tümleştirme korumaları |
+| [`docs/hizmet-seritleri/`](docs/hizmet-seritleri/) | Teslim mimarisi: 39 hizmetin altı şeride eşlenmesi (etkileşimli + PDF) |
+| [`docs/kod-haritasi/`](docs/kod-haritasi/) | Bu deponun kod topolojisi; `build.py` ile yeniden üretilir |

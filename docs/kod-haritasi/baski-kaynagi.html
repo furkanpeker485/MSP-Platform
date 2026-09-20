@@ -1,0 +1,3049 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Hisar Kod Haritası</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+@page{size:A4;margin:14mm 12mm}
+*{box-sizing:border-box}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:9pt;line-height:1.5;color:#12191A;margin:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1,h2,h3{font-family:Archivo,sans-serif;margin:0;letter-spacing:-.015em;line-height:1.15}
+.cover{height:252mm;display:flex;flex-direction:column;justify-content:space-between;page-break-after:always}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:7.6pt;letter-spacing:.16em;text-transform:uppercase;color:#0B6970}
+.cover h1{font-size:34pt;font-weight:700;margin:9mm 0 5mm;max-width:16cm}
+.lead{font-size:10.5pt;color:#37474A;max-width:15cm}
+.facts{display:flex;gap:12mm;border-top:1px solid #D3DCDC;padding-top:5mm;margin-top:6mm}
+.facts div b{font-family:Archivo;font-size:19pt;font-weight:700;display:block;line-height:1}
+.facts div span{font-family:'IBM Plex Mono',monospace;font-size:7pt;letter-spacing:.09em;text-transform:uppercase;color:#5E7075}
+h2{font-size:15pt;font-weight:600;margin:0 0 2mm;padding-top:3mm;border-top:2.5pt solid #0B6970;page-break-before:always}
+.sub{color:#5E7075;font-size:9pt;margin:0 0 5mm;max-width:15.5cm}
+table{width:100%;border-collapse:collapse;font-size:8pt}
+th{font-family:'IBM Plex Mono',monospace;font-size:7pt;letter-spacing:.09em;text-transform:uppercase;color:#5E7075;text-align:left;padding:2mm 1.5mm;border-bottom:1px solid #C2CFCF}
+td{padding:1.4mm 1.5mm;border-bottom:1px solid #EDF1F1;vertical-align:top}
+td.p{font-family:'IBM Plex Mono',monospace;font-size:7.4pt;color:#0A585D;word-break:break-all;width:52mm}
+td.c{text-align:center;white-space:nowrap}
+td.n{font-variant-numeric:tabular-nums;color:#5E7075}
+tr.grp td{background:#F2F5F5;font-family:Archivo;font-weight:600;font-size:9.5pt;padding:2.5mm 3mm}
+.lp{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:6.6pt;font-weight:600;color:#fff;padding:.3mm 1.3mm;border-radius:1mm;margin-right:.6mm}
+.file{page-break-inside:avoid;margin-bottom:5mm}
+.file h3{font-family:'IBM Plex Mono',monospace;font-size:9.5pt;font-weight:600;color:#0A585D;word-break:break-all;margin-top:4mm}
+.role{margin:1mm 0 0;font-size:8.6pt;color:#12191A}
+.meta{margin:.8mm 0 1.5mm;font-family:'IBM Plex Mono',monospace;font-size:7pt;color:#5E7075}
+pre{margin:0;padding:2.5mm 3mm;background:#F7F9F9;border:1px solid #E3EAEA;border-left:2.5pt solid #0B6970;border-radius:1mm;font-family:'IBM Plex Mono',monospace;font-size:6.9pt;line-height:1.45;white-space:pre-wrap;word-break:break-word;color:#243033}
+.foot{margin-top:6mm;border-top:1px solid #D3DCDC;padding-top:3mm;font-size:7.4pt;color:#5E7075}
+.callout{background:#DAEDED;border:1px solid #9CC9C9;border-radius:2mm;padding:4mm 5mm;margin-top:4mm}
+.callout h3{font-size:11pt;color:#0A585D;margin-bottom:2mm}
+.callout p{margin:0;font-size:9pt;color:#37474A}
+.dia{display:block;width:100%;max-width:170mm;height:auto;margin:5mm 0}
+</style></head><body>
+<div class="cover">
+ <div>
+  <p class="eyebrow">Hisar Delivery Platform · kod topolojisi</p>
+  <h1>Hangi kod, hangi bileşende, hangi şeritte.</h1>
+  <p class="lead">Beş bileşenin kaynak kodu tek belgede. Önce topoloji, sonra dosya envanteri, ardından
+  haritadaki her dosyanın kodunun tamamı. Bu belgedeki kod örnek değildir — deponun <code>main</code>
+  dalındaki gerçek içeriktir (374fbbc).</p>
+  <div class="facts">
+   <div><b>129</b><span>depodaki dosya</span></div>
+   <div><b>49</b><span>belgede tam kod</span></div>
+   <div><b>2,979</b><span>satır</span></div>
+   <div><b>5</b><span>bileşen</span></div>
+   <div><b>6</b><span>şerit</span></div>
+  </div>
+ </div>
+ <div>
+  <svg class="dia" viewBox="0 0 900 470" color="#37474A">
+<defs><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5E7075"/></marker></defs>
+<line x1="330" y1="14" x2="330" y2="456" stroke="#8A9A9E" stroke-width="1.2" stroke-dasharray="6 5"/>
+<text transform="translate(322,235) rotate(-90)" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075" letter-spacing="1.4">MÜŞTERİ AĞI SINIRI</text>
+<rect x="14" y="20" width="286" height="96" rx="7" fill="#FCF6F9" stroke="#B93B74" stroke-width="1.5"/>
+<text x="30" y="46" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">1 · Orkestratör (n8n)</text>
+<text x="30" y="66" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">orchestrator/ — 4 dosya</text>
+<text x="30" y="84" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">devreye alma · sapma · takvim</text>
+<line x1="157" y1="118" x2="157" y2="144" stroke="#5E7075" stroke-width="1.3" marker-end="url(#pa)"/>
+<text x="168" y="136" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">görev listesi derlet</text>
+<rect x="14" y="146" width="286" height="150" rx="7" fill="#FDF8F0" stroke="#AD6A0C" stroke-width="1.5"/>
+<text x="30" y="172" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">2 · HR Platformu</text>
+<text x="30" y="192" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">platform/ — 22 dosya</text>
+<text x="30" y="212" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">katalog · tanım derleyici</text>
+<text x="30" y="230" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">şerit dağıtıcısı · kasa</text>
+<text x="30" y="254" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">Zabbix · NetBox · SIEM · ticket</text>
+<text x="30" y="276" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">39 katalog kaydı</text>
+<rect x="14" y="326" width="286" height="96" rx="7" fill="#F5F6F7" stroke="#657279" stroke-width="1.5"/>
+<text x="30" y="352" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">4 · İnsan</text>
+<text x="30" y="372" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">human/ — 4 şablon</text>
+<text x="30" y="392" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">iş emri · yetki · kabul formu</text>
+<line x1="157" y1="298" x2="157" y2="324" stroke="#5E7075" stroke-width="1.3" marker-end="url(#pa)"/>
+<text x="168" y="316" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">iş emri</text>
+<rect x="360" y="80" width="250" height="180" rx="7" fill="#FAF7FE" stroke="#7A4CD0" stroke-width="1.5"/>
+<text x="376" y="106" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">3 · Site Relay</text>
+<text x="376" y="126" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">relay/ — 11 dosya</text>
+<text x="376" y="148" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">iş kuyruğu (Redis)</text>
+<text x="376" y="166" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">AWX yürütme düğümü</text>
+<text x="376" y="184" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">Zabbix vekili</text>
+<text x="376" y="202" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">paket önbelleği</text>
+<text x="376" y="228" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#7A4CD0">gelen bağlantı dinlemez</text>
+<path d="M358,140 L306,196" fill="none" stroke="#0B6970" stroke-width="1.8" marker-end="url(#pa)"/>
+<text x="150" y="112" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#0B6970">giden 443 · bağlantıyı relay kurar</text>
+<rect x="660" y="80" width="226" height="126" rx="7" fill="#F6F9FE" stroke="#2F6FED" stroke-width="1.5"/>
+<text x="676" y="106" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">5 · Uç Nokta Ajanı</text>
+<text x="676" y="126" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">agent/ — 8 dosya</text>
+<text x="676" y="146" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">durum bildir · tanımı çek</text>
+<text x="676" y="164" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">uygula · raporla</text>
+<text x="676" y="188" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#2F6FED">kendi kararı yok</text>
+<path d="M658,140 L614,140" fill="none" stroke="#0B6970" stroke-width="1.8" marker-end="url(#pa)"/>
+<text x="620" y="128" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#0B6970">yoklama · giden 443</text>
+<rect x="660" y="250" width="226" height="86" rx="7" fill="#FFFFFF" stroke="#8A9A9E" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="676" y="276" font-family="Archivo" font-size="11.5" font-weight="600" fill="#12191A">Agent çalıştıramayan cihazlar</text>
+<text x="676" y="296" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#5E7075">ağ anahtarı · güvenlik duvarı</text>
+<text x="676" y="313" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#5E7075">hipervizör · erişim noktası</text>
+<path d="M612,230 C650,240 655,265 658,285" fill="none" stroke="#5E7075" stroke-width="1.4" marker-end="url(#pa)"/>
+<text x="500" y="268" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#5E7075">Ansible · uzaktan ayar</text>
+</svg>
+  <div class="callout"><h3>Bağlantı yönü tasarımın tamamıdır</h3>
+  <p>Müşteri ağına giren her bağlantı içeriden başlatılır. Relay, AWX automation mesh'te
+  <b>listener_port: null</b> ve <b>peers_from_control_nodes: false</b> ile yapılandırılmış bir yürütme
+  düğümüdür; gelen bağlantı dinlemez. Ajan da aynı şekilde yalnız dışarı arar. Müşterinin güvenlik
+  duvarında hizmet sağlayıcı için tek bir gelen kural açılmaz.</p></div>
+ </div>
+ <p class="foot">Sır yönetimi: makinede koşan script'ler <b>.env</b>, Ansible adımları <b>ansible-vault</b>,
+ n8n iş akışları ve arayüz çağrıları <b>n8n credentials</b> kullanır. Hiçbir dosyada açık metin parola yoktur;
+ sürekli tümleştirme hattı şifresiz kasa dosyasını, depoya girmiş .env'i ve açık metin sır kalıplarını reddeder.</p>
+</div>
+
+<h2 style="border-top-color:#0B6970;page-break-before:auto">Dosya envanteri</h2>
+<p class="sub">Her dosyanın hangi bileşende olduğu, ne işe yaradığı ve hangi şeritlere hizmet ettiği.</p>
+<table><thead><tr><th>Dosya</th><th>Rol</th><th style="text-align:center">Şerit</th><th style="text-align:center">Satır</th></tr></thead>
+<tbody><tr class="grp"><td colspan="4" style="border-left:3mm solid #B93B74">1 · Orkestratör (n8n) — 4 dosya</td></tr><tr><td class="p">orchestrator/workflows/onboarding.json</td><td>Sözleşme imzalanınca erişim listesini üretir, formu açar, kanarya testini koşar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">215</td></tr><tr><td class="p">orchestrator/workflows/drift_reconcile.json</td><td>15 dakikada bir sapmaları uzlaştırır; etki sınırı aşılırsa geri alır</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">205</td></tr><tr><td class="p">orchestrator/workflows/scheduled_monthly_report.json</td><td>Ayın 1&#x27;i 06:00&#x27;da aylık raporu üretir</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">160</td></tr><tr><td class="p">orchestrator/README.md</td><td>Akışların nasıl sürümlendiği ve sırların neden akışta durmadığı</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">21</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #AD6A0C">2 · HR Platformu — 22 dosya</td></tr><tr><td class="p">platform/app/main.py</td><td>Giriş noktası; katalog tutarsızsa açılışta patlar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">29</td></tr><tr><td class="p">platform/app/config.py</td><td>Tüm sırlar ortam değişkeninden; kodda sabit değer yok</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">35</td></tr><tr><td class="p">platform/app/models.py</td><td>Kiracı, hak seti, cihaz, sürümlü tanım, görev koşusu, denetim kaydı</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">107</td></tr><tr><td class="p">platform/app/catalog/loader.py</td><td>Katalog yükleyici; &#x27;ilk görev kasa olmalı&#x27; kuralını zorunlu kılar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">143</td></tr><tr><td class="p">platform/app/services/task_graph.py</td><td>Ön koşullara göre sıralama; envanter her şeyden önce gelir</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">52</td></tr><tr><td class="p">platform/app/services/spec_compiler.py</td><td>Hak seti + cihaz rolü → arzu edilen durum; çıkarmalı çalışır</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">120</td></tr><tr><td class="p">platform/app/services/dispatcher.py</td><td>Her görevi kendi şeridinin yürütücüsüne yollar — altı şeridin buluştuğu yer</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span><span class="lp" style="background:#B93B74">E</span><span class="lp" style="background:#657279">F</span></td><td class="c n">119</td></tr><tr><td class="p">platform/app/services/agent_queue.py</td><td>A şeridi: görev relay kuyruğuna yazılır, ajan çeker</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">36</td></tr><tr><td class="p">platform/app/services/drift.py</td><td>Sapma uzlaştırma ve etki sınırı koruması</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">64</td></tr><tr><td class="p">platform/app/security.py</td><td>Ajan kimliği ve kiracı sınırı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">59</td></tr><tr><td class="p">platform/app/integrations/awx.py</td><td>B şeridinin yürütücüsü; relay&#x27;i dışa doğru eşleşen yürütme düğümü olarak kaydeder</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">53</td></tr><tr><td class="p">platform/app/integrations/vault.py</td><td>Kasa; kiracı ayrışması yol düzeyinde zorunlu</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">58</td></tr><tr><td class="p">platform/app/integrations/netbox.py</td><td>Envanter; kimlik anahtarı ajan kimliği + seri no</td><td class="c"><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">62</td></tr><tr><td class="p">platform/app/integrations/zabbix.py</td><td>İzleme; satılan şey host kaydı ve uyarı kuralıdır</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">55</td></tr><tr><td class="p">platform/app/integrations/ticketing.py</td><td>F şeridinin arayüzü; kabul kriteri olmadan iş emri kapanmaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">58</td></tr><tr><td class="p">platform/app/api/routers/agents.py</td><td>Ajan uçları; bağlantıyı her zaman ajan kurar</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">63</td></tr><tr><td class="p">platform/app/api/routers/specs.py</td><td>Tanım derleme, kuru çalıştırma ve dağıtım</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">60</td></tr><tr><td class="p">platform/app/catalog/services/switch-management.yaml</td><td>Örnek katalog kaydı — 39 hizmetin her biri böyle tanımlı</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">47</td></tr><tr><td class="p">platform/tests/test_catalog.py</td><td>Tasarım kurallarını koda bağlayan testler</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">68</td></tr><tr><td class="p">platform/tests/test_spec_compiler.py</td><td>Ön koşul, söküm ve kasa kuralının testleri</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">64</td></tr><tr><td class="p">.github/workflows/ci.yml</td><td>Şifresiz kasa, depoya girmiş .env ve açık metin sır kalıbını reddeder</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">72</td></tr><tr><td class="p">README.md</td><td>Beş bileşen, şerit karşılıkları ve kasa tablosu</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">60</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #7A4CD0">3 · Site Relay — 11 dosya</td></tr><tr><td class="p">relay/docker-compose.yml</td><td>Relay yığını; hiçbiri internete açılmaz</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span></td><td class="c n">57</td></tr><tr><td class="p">relay/receptor/receptor.conf</td><td>Yürütme düğümü: gelen bağlantı dinlemez, kendisi dışarı bağlanır</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">34</td></tr><tr><td class="p">relay/relay_api/main.py</td><td>Ajanların tek muhatabı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">61</td></tr><tr><td class="p">relay/relay_api/queue.py</td><td>İş kuyruğu; cihaz kimliğine göre bölümlenir</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">67</td></tr><tr><td class="p">relay/ansible/ansible.cfg</td><td>Parolalar playbook&#x27;ta değil kasada</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">17</td></tr><tr><td class="p">relay/ansible/inventory/netbox.yml</td><td>Makine listesi elle tutulmaz; envanterden gelir</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">17</td></tr><tr><td class="p">relay/ansible/roles/switch_baseline/tasks/main.yml</td><td>Geri sayımlı yeniden başlatma ile korunan switch ayarı</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">37</td></tr><tr><td class="p">relay/ansible/roles/firewall_baseline/tasks/main.yml</td><td>HA sanal adresine değil birincil düğüme basar</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">35</td></tr><tr><td class="p">relay/ansible/playbooks/site.yml</td><td>Hangi rolün koşacağını envanterdeki cihaz rolü belirler</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">20</td></tr><tr><td class="p">relay/ansible/playbooks/teardown.yml</td><td>Çıkış hattı: giriş hattının aynadaki hâli</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">21</td></tr><tr><td class="p">relay/ansible/group_vars/all/vault.yml</td><td>ansible-vault ile şifreli; şifresiz hâli CI tarafından reddedilir</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">15</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #657279">4 · İnsan — 4 dosya</td></tr><tr><td class="p">human/templates/access_pack.md</td><td>0. gün erişim paketi; liste paketten otomatik üretilir</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">26</td></tr><tr><td class="p">human/templates/acceptance.md</td><td>Proje → yönetilen devri; sağlık yeşil olmadan kapanmaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">21</td></tr><tr><td class="p">human/templates/pentest_authorization.md</td><td>İmzasız test başlamaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">20</td></tr><tr><td class="p">human/runbooks/dr_failover.md</td><td>Failover&#x27;ı kimin ilan edeceği isimle yazılı</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">22</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #2F6FED">5 · Uç Nokta Ajanı — 8 dosya</td></tr><tr><td class="p">agent/hragent/__main__.py</td><td>Ajan döngüsü; ilk gün ile 400. gün aynı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">73</td></tr><tr><td class="p">agent/hragent/client.py</td><td>Bağlantıyı her zaman ajan kurar: giden 443</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">50</td></tr><tr><td class="p">agent/hragent/runner.py</td><td>Yalnız A şeridini yürütür; Ansible işini reddeder</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">41</td></tr><tr><td class="p">agent/hragent/secrets.py</td><td>`.env` okur; fazla açık izinli dosyayı reddeder</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">60</td></tr><tr><td class="p">agent/hragent/inventory.py</td><td>Kimlik anahtarı kalıcı ajan kimliği — klon makineler için</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">79</td></tr><tr><td class="p">agent/hragent/apply/packages.py</td><td>Paketler relay önbelleğinden; kurulu ise dokunmaz</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">55</td></tr><tr><td class="p">agent/hragent/apply/files.py</td><td>Sır dosyaları daima 0600</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">37</td></tr><tr><td class="p">agent/tests/test_runner.py</td><td>Ajanın kendi şeridi dışına çıkmadığının testi</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">29</td></tr></tbody></table>
+
+<h2 style="border-top-color:#B93B74">1 · Orkestratör (n8n)</h2><p class="sub">Sözleşmeden sonra ne olacağını sıraya koyan iş akışları</p><section class="file"><h3>orchestrator/workflows/onboarding.json</h3><p class="role">Sözleşme imzalanınca erişim listesini üretir, formu açar, kanarya testini koşar</p><p class="meta">şerit: D — Platform kurulumu · 215 satır · json</p><pre>{
+  &quot;name&quot;: &quot;onboarding&quot;,
+  &quot;active&quot;: false,
+  &quot;settings&quot;: {
+    &quot;executionOrder&quot;: &quot;v1&quot;
+  },
+  &quot;tags&quot;: [
+    {
+      &quot;name&quot;: &quot;onboarding&quot;
+    },
+    {
+      &quot;name&quot;: &quot;lane:D&quot;
+    }
+  ],
+  &quot;nodes&quot;: [
+    {
+      &quot;parameters&quot;: {
+        &quot;path&quot;: &quot;contract-signed&quot;,
+        &quot;httpMethod&quot;: &quot;POST&quot;,
+        &quot;options&quot;: {
+          &quot;rawBody&quot;: false
+        }
+      },
+      &quot;id&quot;: &quot;sözleşme-imzalandı&quot;,
+      &quot;name&quot;: &quot;Sözleşme imzalandı&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.webhook&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        0,
+        300
+      ]
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_PLATFORM_URL}}/specs/compile&quot;,
+        &quot;sendBody&quot;: true,
+        &quot;specifyBody&quot;: &quot;json&quot;,
+        &quot;jsonBody&quot;: &quot;={{ JSON.stringify({tenant: $json.tenant, entitlements: $json.entitlements, dry_run: true}) }}&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;erişim-listesi-üret&quot;,
+      &quot;name&quot;: &quot;Erişim listesi üret&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        220,
+        300
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;hr-platform&quot;,
+          &quot;name&quot;: &quot;HR Platform API&quot;
+        }
+      }
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;conditions&quot;: {
+          &quot;options&quot;: {
+            &quot;caseSensitive&quot;: true
+          },
+          &quot;combinator&quot;: &quot;and&quot;,
+          &quot;conditions&quot;: [
+            {
+              &quot;leftValue&quot;: &quot;={{ $json.summary.tasks }}&quot;,
+              &quot;rightValue&quot;: 0,
+              &quot;operator&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;operation&quot;: &quot;gt&quot;
+              }
+            }
+          ]
+        }
+      },
+      &quot;id&quot;: &quot;kasa-girişi-bekleniyor-mu&quot;,
+      &quot;name&quot;: &quot;Kasa girişi bekleniyor mu&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.if&quot;,
+      &quot;typeVersion&quot;: 2,
+      &quot;position&quot;: [
+        440,
+        300
+      ]
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_TICKETING_URL}}/tickets&quot;,
+        &quot;sendBody&quot;: true,
+        &quot;specifyBody&quot;: &quot;json&quot;,
+        &quot;jsonBody&quot;: &quot;={{ JSON.stringify({tenant: $json.spec.tenant, title: &#x27;0. gün erişim paketi&#x27;, queue: &#x27;onboarding&#x27;, acceptance_criteria: &#x27;Tüm erişimler kasaya yazıldı ve kanarya testi yeşil&#x27;}) }}&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;müşteri-erişim-formu&quot;,
+      &quot;name&quot;: &quot;Müşteri erişim formu&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        660,
+        200
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;hr-platform&quot;,
+          &quot;name&quot;: &quot;HR Platform API&quot;
+        }
+      }
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_PLATFORM_URL}}/specs/apply&quot;,
+        &quot;sendBody&quot;: true,
+        &quot;specifyBody&quot;: &quot;json&quot;,
+        &quot;jsonBody&quot;: &quot;={{ JSON.stringify({tenant: $json.tenant, entitlements: $json.entitlements, dry_run: false}) }}&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;kanarya-testi&quot;,
+      &quot;name&quot;: &quot;Kanarya testi&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        880,
+        200
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;hr-platform&quot;,
+          &quot;name&quot;: &quot;HR Platform API&quot;
+        }
+      }
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_TICKETING_URL}}/tickets&quot;,
+        &quot;sendBody&quot;: true,
+        &quot;specifyBody&quot;: &quot;json&quot;,
+        &quot;jsonBody&quot;: &quot;={{ JSON.stringify({tenant: $json.tenant, title: &#x27;Devreye alma durdu: kasa eksik&#x27;, queue: &#x27;onboarding&#x27;, priority: &#x27;P2&#x27;}) }}&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;başarısızsa-destek-kaydı&quot;,
+      &quot;name&quot;: &quot;Başarısızsa destek kaydı&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        660,
+        420
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;hr-platform&quot;,
+          &quot;name&quot;: &quot;HR Platform API&quot;
+        }
+      }
+    }
+  ],
+  &quot;connections&quot;: {
+    &quot;Sözleşme imzalandı&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Erişim listesi üret&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Erişim listesi üret&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Kasa girişi bekleniyor mu&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Kasa girişi bekleniyor mu&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Müşteri erişim formu&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ],
+        [
+          {
+            &quot;node&quot;: &quot;Başarısızsa destek kaydı&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Müşteri erişim formu&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Kanarya testi&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    }
+  }
+}</pre></section><section class="file"><h3>orchestrator/workflows/drift_reconcile.json</h3><p class="role">15 dakikada bir sapmaları uzlaştırır; etki sınırı aşılırsa geri alır</p><p class="meta">şerit: E — Takvimli iş · 205 satır · json</p><pre>{
+  &quot;name&quot;: &quot;drift_reconcile&quot;,
+  &quot;active&quot;: false,
+  &quot;settings&quot;: {
+    &quot;executionOrder&quot;: &quot;v1&quot;
+  },
+  &quot;tags&quot;: [
+    {
+      &quot;name&quot;: &quot;drift&quot;
+    },
+    {
+      &quot;name&quot;: &quot;lane:E&quot;
+    }
+  ],
+  &quot;nodes&quot;: [
+    {
+      &quot;parameters&quot;: {
+        &quot;rule&quot;: {
+          &quot;interval&quot;: [
+            {
+              &quot;field&quot;: &quot;minutes&quot;,
+              &quot;minutesInterval&quot;: 15
+            }
+          ]
+        }
+      },
+      &quot;id&quot;: &quot;her-15-dakikada&quot;,
+      &quot;name&quot;: &quot;Her 15 dakikada&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.scheduleTrigger&quot;,
+      &quot;typeVersion&quot;: 1.2,
+      &quot;position&quot;: [
+        0,
+        300
+      ]
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;GET&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_PLATFORM_URL}}/tenants&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;kiracıları-getir&quot;,
+      &quot;name&quot;: &quot;Kiracıları getir&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        220,
+        300
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;hr-platform&quot;,
+          &quot;name&quot;: &quot;HR Platform API&quot;
+        }
+      }
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;batchSize&quot;: 1
+      },
+      &quot;id&quot;: &quot;her-kiracı-için&quot;,
+      &quot;name&quot;: &quot;Her kiracı için&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.splitInBatches&quot;,
+      &quot;typeVersion&quot;: 3,
+      &quot;position&quot;: [
+        440,
+        300
+      ]
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_PLATFORM_URL}}/specs/apply&quot;,
+        &quot;sendBody&quot;: true,
+        &quot;specifyBody&quot;: &quot;json&quot;,
+        &quot;jsonBody&quot;: &quot;={{ JSON.stringify({tenant: $json.slug, entitlements: $json.entitlements, dry_run: false}) }}&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;uzlaştır&quot;,
+      &quot;name&quot;: &quot;Uzlaştır&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        660,
+        300
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;hr-platform&quot;,
+          &quot;name&quot;: &quot;HR Platform API&quot;
+        }
+      }
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;conditions&quot;: {
+          &quot;options&quot;: {
+            &quot;caseSensitive&quot;: true
+          },
+          &quot;combinator&quot;: &quot;and&quot;,
+          &quot;conditions&quot;: [
+            {
+              &quot;leftValue&quot;: &quot;={{ $json.error || &#x27;&#x27; }}&quot;,
+              &quot;rightValue&quot;: &quot;BlastRadius&quot;,
+              &quot;operator&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;operation&quot;: &quot;contains&quot;
+              }
+            }
+          ]
+        }
+      },
+      &quot;id&quot;: &quot;etki-sınırı-aşıldıysa-dur&quot;,
+      &quot;name&quot;: &quot;Etki sınırı aşıldıysa dur&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.if&quot;,
+      &quot;typeVersion&quot;: 2,
+      &quot;position&quot;: [
+        880,
+        300
+      ]
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_PLATFORM_URL}}/specs/rollback&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;son-sağlam-sürüme-dön&quot;,
+      &quot;name&quot;: &quot;Son sağlam sürüme dön&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        1100,
+        220
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;hr-platform&quot;,
+          &quot;name&quot;: &quot;HR Platform API&quot;
+        }
+      }
+    }
+  ],
+  &quot;connections&quot;: {
+    &quot;Her 15 dakikada&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Kiracıları getir&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Kiracıları getir&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Her kiracı için&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Her kiracı için&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Uzlaştır&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Uzlaştır&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Etki sınırı aşıldıysa dur&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Etki sınırı aşıldıysa dur&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Son sağlam sürüme dön&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ],
+        []
+      ]
+    }
+  }
+}</pre></section><section class="file"><h3>orchestrator/workflows/scheduled_monthly_report.json</h3><p class="role">Ayın 1&#x27;i 06:00&#x27;da aylık raporu üretir</p><p class="meta">şerit: E — Takvimli iş · 160 satır · json</p><pre>{
+  &quot;name&quot;: &quot;scheduled_monthly_report&quot;,
+  &quot;active&quot;: false,
+  &quot;settings&quot;: {
+    &quot;executionOrder&quot;: &quot;v1&quot;
+  },
+  &quot;tags&quot;: [
+    {
+      &quot;name&quot;: &quot;scheduled&quot;
+    },
+    {
+      &quot;name&quot;: &quot;lane:E&quot;
+    }
+  ],
+  &quot;nodes&quot;: [
+    {
+      &quot;parameters&quot;: {
+        &quot;rule&quot;: {
+          &quot;interval&quot;: [
+            {
+              &quot;field&quot;: &quot;cronExpression&quot;,
+              &quot;expression&quot;: &quot;0 6 1 * *&quot;
+            }
+          ]
+        },
+        &quot;timezone&quot;: &quot;Europe/Istanbul&quot;
+      },
+      &quot;id&quot;: &quot;ayın-1&#x27;i-06:00&quot;,
+      &quot;name&quot;: &quot;Ayın 1&#x27;i 06:00&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.scheduleTrigger&quot;,
+      &quot;typeVersion&quot;: 1.2,
+      &quot;position&quot;: [
+        0,
+        300
+      ]
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_ZABBIX_URL}}&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;zabbix-erişilebilirlik&quot;,
+      &quot;name&quot;: &quot;Zabbix erişilebilirlik&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        220,
+        200
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;zabbix&quot;,
+          &quot;name&quot;: &quot;Zabbix API&quot;
+        }
+      }
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;GET&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_NETBOX_URL}}/api/dcim/devices/&quot;,
+        &quot;authentication&quot;: &quot;genericCredentialType&quot;,
+        &quot;genericAuthType&quot;: &quot;httpHeaderAuth&quot;
+      },
+      &quot;id&quot;: &quot;netbox-envanter&quot;,
+      &quot;name&quot;: &quot;NetBox envanter&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        220,
+        400
+      ],
+      &quot;credentials&quot;: {
+        &quot;httpHeaderAuth&quot;: {
+          &quot;id&quot;: &quot;netbox&quot;,
+          &quot;name&quot;: &quot;NetBox API&quot;
+        }
+      }
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;jsCode&quot;: &quot;// Saat dilimi sorgularda sabitlenir: Europe/Istanbul ay sınırı ile\n// merkezin evrensel saat geçmişi ilk günü düşürebilir veya iki kez sayabilir.\nconst tz = &#x27;Europe/Istanbul&#x27;;\nreturn [{ json: { tz, availability: $(&#x27;Zabbix erişilebilirlik&#x27;).all(), inventory: $(&#x27;NetBox envanter&#x27;).all() } }];&quot;
+      },
+      &quot;id&quot;: &quot;raporu-derle&quot;,
+      &quot;name&quot;: &quot;Raporu derle&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.code&quot;,
+      &quot;typeVersion&quot;: 2,
+      &quot;position&quot;: [
+        440,
+        300
+      ]
+    },
+    {
+      &quot;parameters&quot;: {
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;url&quot;: &quot;={{$env.HR_REPORT_RENDER_URL}}/render&quot;
+      },
+      &quot;id&quot;: &quot;pdf-üret-ve-gönder&quot;,
+      &quot;name&quot;: &quot;PDF üret ve gönder&quot;,
+      &quot;type&quot;: &quot;n8n-nodes-base.httpRequest&quot;,
+      &quot;typeVersion&quot;: 1,
+      &quot;position&quot;: [
+        660,
+        300
+      ]
+    }
+  ],
+  &quot;connections&quot;: {
+    &quot;Ayın 1&#x27;i 06:00&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Zabbix erişilebilirlik&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          },
+          {
+            &quot;node&quot;: &quot;NetBox envanter&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Zabbix erişilebilirlik&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Raporu derle&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;NetBox envanter&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;Raporu derle&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    },
+    &quot;Raporu derle&quot;: {
+      &quot;main&quot;: [
+        [
+          {
+            &quot;node&quot;: &quot;PDF üret ve gönder&quot;,
+            &quot;type&quot;: &quot;main&quot;,
+            &quot;index&quot;: 0
+          }
+        ]
+      ]
+    }
+  }
+}</pre></section><section class="file"><h3>orchestrator/README.md</h3><p class="role">Akışların nasıl sürümlendiği ve sırların neden akışta durmadığı</p><p class="meta">şerit: E — Takvimli iş · 21 satır · markdown</p><pre># Orkestratör — n8n
+
+İş akışları burada sürümlenir; n8n arayüzünden değil depodan yüklenir.
+
+| Akış | Şerit | Ne yapar |
+|------|-------|----------|
+| `onboarding.json` | D | Sözleşme imzalanınca erişim listesini üretir, formu açar, kanarya testini koşar |
+| `drift_reconcile.json` | E | 15 dakikada bir sapmaları uzlaştırır; etki sınırı aşılırsa geri alır |
+| `scheduled_monthly_report.json` | E | Ayın 1&#x27;i 06:00 (Europe/Istanbul) aylık raporu üretir |
+
+## Sırlar
+
+Hiçbir akışta açık metin parola bulunmaz. Her düğüm **n8n credentials** kaydına
+referans verir (`credentials` alanı). Dışa aktarırken bu alan yalnız kimlik ve ad taşır;
+değerin kendisi n8n&#x27;in şifreli deposunda kalır.
+
+```bash
+# İçe aktarma
+n8n import:workflow --separate --input=workflows/
+```
+</pre></section><h2 style="border-top-color:#AD6A0C">2 · HR Platformu</h2><p class="sub">Beyin: katalog, tanım derleyici, şerit dağıtıcısı, entegrasyonlar</p><section class="file"><h3>platform/app/main.py</h3><p class="role">Giriş noktası; katalog tutarsızsa açılışta patlar</p><p class="meta">şerit: D — Platform kurulumu · 29 satır · python</p><pre>&quot;&quot;&quot;HR Platformu — giriş noktası.&quot;&quot;&quot;
+from __future__ import annotations
+
+import structlog
+from fastapi import FastAPI
+
+from app.api.routers import agents, catalog, health, specs
+from app.catalog import load_catalog
+from app.config import settings
+
+log = structlog.get_logger(__name__)
+
+app = FastAPI(
+    title=&quot;Hisar Delivery Platform&quot;,
+    version=&quot;0.1.0&quot;,
+    description=&quot;Katalog, hak seti, tanım derleyici ve şerit dağıtıcısı&quot;,
+)
+
+app.include_router(health.router)
+app.include_router(catalog.router)
+app.include_router(specs.router)
+app.include_router(agents.router)
+
+
+@app.on_event(&quot;startup&quot;)
+async def startup() -&gt; None:
+    cat = load_catalog(settings().catalog_dir)   # tutarsızlık varsa açılışta patlar
+    log.info(&quot;katalog_yuklendi&quot;, hizmet=len(cat))
+</pre></section><section class="file"><h3>platform/app/config.py</h3><p class="role">Tüm sırlar ortam değişkeninden; kodda sabit değer yok</p><p class="meta">şerit: D — Platform kurulumu · 35 satır · python</p><pre>&quot;&quot;&quot;Yapılandırma. Tüm sırlar ortam değişkeninden gelir; kodda sabit değer bulunmaz.&quot;&quot;&quot;
+from functools import lru_cache
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix=&quot;HR_&quot;, env_file=&quot;.env&quot;, extra=&quot;ignore&quot;)
+
+    database_url: str = &quot;postgresql+asyncpg://hisar:hisar@localhost:5432/hisar&quot;
+
+    netbox_url: str = &quot;&quot;
+    netbox_token: str = Field(default=&quot;&quot;, repr=False)
+    zabbix_url: str = &quot;&quot;
+    zabbix_token: str = Field(default=&quot;&quot;, repr=False)
+    awx_url: str = &quot;&quot;
+    awx_token: str = Field(default=&quot;&quot;, repr=False)
+    siem_url: str = &quot;&quot;
+    siem_token: str = Field(default=&quot;&quot;, repr=False)
+    ticketing_url: str = &quot;&quot;
+    ticketing_token: str = Field(default=&quot;&quot;, repr=False)
+    vault_addr: str = &quot;&quot;
+    vault_token: str = Field(default=&quot;&quot;, repr=False)
+
+    agent_enroll_secret: str = Field(default=&quot;&quot;, repr=False)
+    agent_checkin_seconds: int = 45
+    drift_interval_seconds: int = 900
+
+    catalog_dir: str = &quot;app/catalog/services&quot;
+
+
+@lru_cache
+def settings() -&gt; Settings:
+    return Settings()
+</pre></section><section class="file"><h3>platform/app/models.py</h3><p class="role">Kiracı, hak seti, cihaz, sürümlü tanım, görev koşusu, denetim kaydı</p><p class="meta">şerit: D — Platform kurulumu · 107 satır · python</p><pre>&quot;&quot;&quot;Kalıcı veri modeli.&quot;&quot;&quot;
+from __future__ import annotations
+
+import enum
+from datetime import datetime
+from typing import List, Optional
+
+from sqlalchemy import JSON, DateTime, Enum, ForeignKey, Integer, String, UniqueConstraint, func
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class Lane(str, enum.Enum):
+    A = &quot;A&quot;  # uç cihaz ajanı
+    B = &quot;B&quot;  # Ansible ile uzaktan ayar
+    C = &quot;C&quot;  # sağlayıcı arayüzü
+    D = &quot;D&quot;  # HR platform kurulumu
+    E = &quot;E&quot;  # takvimli iş
+    F = &quot;F&quot;  # insan iş emri
+
+
+class TaskState(str, enum.Enum):
+    PENDING = &quot;pending&quot;
+    BLOCKED = &quot;blocked&quot;      # ön koşulu tamamlanmadı
+    RUNNING = &quot;running&quot;
+    DONE = &quot;done&quot;
+    FAILED = &quot;failed&quot;
+    SKIPPED = &quot;skipped&quot;
+
+
+class Tenant(Base):
+    __tablename__ = &quot;tenants&quot;
+    id: Mapped[int] = mapped_column(primary_key=True)
+    slug: Mapped[str] = mapped_column(String(64), unique=True)
+    name: Mapped[str] = mapped_column(String(200))
+    package: Mapped[str] = mapped_column(String(32))  # Essential | Professional | Enterprise
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    entitlements: Mapped[List[&quot;Entitlement&quot;]] = relationship(back_populates=&quot;tenant&quot;)
+    devices: Mapped[List[&quot;Device&quot;]] = relationship(back_populates=&quot;tenant&quot;)
+
+
+class Entitlement(Base):
+    &quot;&quot;&quot;Müşterinin satın aldığı hizmetlerin listesi. Sitedeki hizmet kimliğiyle aynıdır.&quot;&quot;&quot;
+    __tablename__ = &quot;entitlements&quot;
+    __table_args__ = (UniqueConstraint(&quot;tenant_id&quot;, &quot;service_id&quot;),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[int] = mapped_column(ForeignKey(&quot;tenants.id&quot;))
+    service_id: Mapped[str] = mapped_column(String(80))
+    active: Mapped[bool] = mapped_column(default=True)
+
+    tenant: Mapped[Tenant] = relationship(back_populates=&quot;entitlements&quot;)
+
+
+class Device(Base):
+    __tablename__ = &quot;devices&quot;
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[int] = mapped_column(ForeignKey(&quot;tenants.id&quot;))
+    uuid: Mapped[str] = mapped_column(String(64), unique=True)   # agent kimliği
+    serial: Mapped[Optional[str]] = mapped_column(String(120), default=None)
+    hostname: Mapped[str] = mapped_column(String(200))
+    role: Mapped[str] = mapped_column(String(64))                # windows-server, switch, ...
+    os_family: Mapped[Optional[str]] = mapped_column(String(32), default=None)
+    agent_capable: Mapped[bool] = mapped_column(default=True)
+    last_seen: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), default=None)
+
+    tenant: Mapped[Tenant] = relationship(back_populates=&quot;devices&quot;)
+
+
+class SpecVersion(Base):
+    &quot;&quot;&quot;Derlenmiş arzu edilen durum. Sürümlüdür; geri alma buna dayanır.&quot;&quot;&quot;
+    __tablename__ = &quot;spec_versions&quot;
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[int] = mapped_column(ForeignKey(&quot;tenants.id&quot;))
+    version: Mapped[int] = mapped_column(Integer)
+    payload: Mapped[dict] = mapped_column(JSON)
+    known_good: Mapped[bool] = mapped_column(default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class TaskRun(Base):
+    __tablename__ = &quot;task_runs&quot;
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[int] = mapped_column(ForeignKey(&quot;tenants.id&quot;))
+    spec_version: Mapped[int] = mapped_column(Integer)
+    service_id: Mapped[str] = mapped_column(String(80))
+    task_id: Mapped[str] = mapped_column(String(120))
+    lane: Mapped[Lane] = mapped_column(Enum(Lane))
+    state: Mapped[TaskState] = mapped_column(Enum(TaskState), default=TaskState.PENDING)
+    detail: Mapped[Optional[dict]] = mapped_column(JSON, default=None)
+    started_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), default=None)
+    finished_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), default=None)
+
+
+class AuditEvent(Base):
+    __tablename__ = &quot;audit_events&quot;
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[Optional[int]] = mapped_column(ForeignKey(&quot;tenants.id&quot;), default=None)
+    actor: Mapped[str] = mapped_column(String(120))
+    action: Mapped[str] = mapped_column(String(120))
+    payload: Mapped[Optional[dict]] = mapped_column(JSON, default=None)
+    at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+</pre></section><section class="file"><h3>platform/app/catalog/loader.py</h3><p class="role">Katalog yükleyici; &#x27;ilk görev kasa olmalı&#x27; kuralını zorunlu kılar</p><p class="meta">şerit: D — Platform kurulumu · 143 satır · python</p><pre>&quot;&quot;&quot;Katalog yükleyici.
+
+Tek katalog, iki yüz: pre-sales.hisarresearch.com&#x27;daki hizmet kimliği ile buradaki
+`id` aynı olmak zorundadır. Farklılaşırsa satılan ile teslim edilen ayrışır.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from pathlib import Path
+
+import yaml
+
+from app.models import Lane
+
+VALID_GRADES = {&quot;FULL&quot;, &quot;ASSISTED&quot;, &quot;HUMAN&quot;}
+VALID_STORES = {&quot;.env&quot;, &quot;ansible-vault&quot;, &quot;n8n-credentials&quot;}
+
+
+class CatalogError(Exception):
+    &quot;&quot;&quot;Katalog tutarsızlığı — açılışta patlar, çalışma anında değil.&quot;&quot;&quot;
+
+
+@dataclass(frozen=True)
+class Task:
+    id: str
+    lane: Lane
+    action: str
+    description: str
+    params: dict = field(default_factory=dict)
+    requires_secret: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class CatalogService:
+    id: str
+    name: str
+    area: str
+    tier: str
+    lane: Lane
+    lanes: tuple[Lane, ...]
+    plain: str
+    executor: str
+    automation_grade: str
+    secret_stores: tuple[str, ...]
+    requires: tuple[str, ...]
+    tasks: tuple[Task, ...]
+    health_check: str
+    gotcha: str
+    teardown: tuple[Task, ...]
+
+    @property
+    def first_task_is_vault(self) -&gt; bool:
+        &quot;&quot;&quot;Her hizmetin ilk adımı erişim bilgilerinin kasaya yazılmasıdır.&quot;&quot;&quot;
+        return bool(self.tasks) and self.tasks[0].action == &quot;vault.store_access&quot;
+
+
+@dataclass
+class Catalog:
+    services: dict[str, CatalogService]
+
+    def __iter__(self):
+        return iter(self.services.values())
+
+    def __len__(self) -&gt; int:
+        return len(self.services)
+
+    def get(self, service_id: str) -&gt; CatalogService:
+        try:
+            return self.services[service_id]
+        except KeyError as exc:
+            raise CatalogError(f&quot;katalogda yok: {service_id}&quot;) from exc
+
+    def by_lane(self, lane: Lane) -&gt; list[CatalogService]:
+        return [s for s in self.services.values() if s.lane is lane]
+
+
+def _task(raw: dict, where: str) -&gt; Task:
+    for key in (&quot;id&quot;, &quot;lane&quot;, &quot;action&quot;):
+        if key not in raw:
+            raise CatalogError(f&quot;{where}: görevde &#x27;{key}&#x27; eksik&quot;)
+    return Task(
+        id=raw[&quot;id&quot;],
+        lane=Lane(raw[&quot;lane&quot;]),
+        action=raw[&quot;action&quot;],
+        description=raw.get(&quot;description&quot;, &quot;&quot;),
+        params=raw.get(&quot;params&quot;, {}) or {},
+        requires_secret=list(raw.get(&quot;requires_secret&quot;, []) or []),
+    )
+
+
+def load_catalog(directory: str | Path) -&gt; Catalog:
+    path = Path(directory)
+    if not path.is_dir():
+        raise CatalogError(f&quot;katalog klasörü yok: {path}&quot;)
+
+    services: dict[str, CatalogService] = {}
+    for file in sorted(path.glob(&quot;*.yaml&quot;)):
+        raw = yaml.safe_load(file.read_text(encoding=&quot;utf-8&quot;))
+        sid = raw.get(&quot;id&quot;)
+        if not sid:
+            raise CatalogError(f&quot;{file.name}: &#x27;id&#x27; eksik&quot;)
+        if sid in services:
+            raise CatalogError(f&quot;{file.name}: yinelenen kimlik {sid}&quot;)
+        if raw.get(&quot;automation_grade&quot;) not in VALID_GRADES:
+            raise CatalogError(f&quot;{sid}: geçersiz automation_grade&quot;)
+
+        stores = tuple(raw.get(&quot;secret_stores&quot;, []) or [])
+        unknown = set(stores) - VALID_STORES
+        if unknown:
+            raise CatalogError(f&quot;{sid}: bilinmeyen kasa {unknown}&quot;)
+
+        tasks = tuple(_task(t, sid) for t in raw.get(&quot;tasks&quot;, []))
+        service = CatalogService(
+            id=sid,
+            name=raw[&quot;name&quot;],
+            area=raw.get(&quot;area&quot;, &quot;&quot;),
+            tier=raw.get(&quot;tier&quot;, &quot;Proje&quot;),
+            lane=Lane(raw[&quot;lane&quot;]),
+            lanes=tuple(Lane(x) for x in raw.get(&quot;lanes&quot;, [raw[&quot;lane&quot;]])),
+            plain=raw.get(&quot;plain&quot;, &quot;&quot;),
+            executor=raw.get(&quot;executor&quot;, &quot;&quot;),
+            automation_grade=raw[&quot;automation_grade&quot;],
+            secret_stores=stores,
+            requires=tuple(raw.get(&quot;requires&quot;, []) or []),
+            tasks=tasks,
+            health_check=raw.get(&quot;health_check&quot;, &quot;&quot;),
+            gotcha=raw.get(&quot;gotcha&quot;, &quot;&quot;),
+            teardown=tuple(_task(t, sid) for t in raw.get(&quot;teardown&quot;, []) or []),
+        )
+        if not service.first_task_is_vault:
+            raise CatalogError(
+                f&quot;{sid}: ilk görev &#x27;vault.store_access&#x27; olmalı — &quot;
+                &quot;kasaya yazılmamış yetkiyle hizmet başlatılmaz&quot;
+            )
+        services[sid] = service
+
+    # ön koşullar katalogda var mı
+    for svc in services.values():
+        for dep in svc.requires:
+            if dep not in services:
+                raise CatalogError(f&quot;{svc.id}: tanımsız ön koşul {dep}&quot;)
+    return Catalog(services=services)
+</pre></section><section class="file"><h3>platform/app/services/task_graph.py</h3><p class="role">Ön koşullara göre sıralama; envanter her şeyden önce gelir</p><p class="meta">şerit: D — Platform kurulumu · 52 satır · python</p><pre>&quot;&quot;&quot;Görev grafiği: hizmetleri ön koşullarına göre sıralar.
+
+Bir hizmetin görevleri, bağlı olduğu hizmetlerin görevleri bittikten sonra sıraya girer.
+Böylece Zabbix host&#x27;u, türetildiği NetBox kaydından önce oluşturulamaz.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+from collections import deque
+
+from app.catalog import Catalog, CatalogService
+
+
+class DependencyCycle(Exception):
+    pass
+
+
+def topological_order(catalog: Catalog, service_ids: list[str]) -&gt; list[CatalogService]:
+    &quot;&quot;&quot;Verilen hizmetleri bağımlılık sırasına dizer (kararlı: alfabetik ikincil sıra).&quot;&quot;&quot;
+    wanted = set(service_ids)
+
+    # kapanış: ön koşullar hak setinde olmasa bile kurulmalıdır
+    queue = deque(wanted)
+    while queue:
+        sid = queue.popleft()
+        for dep in catalog.get(sid).requires:
+            if dep not in wanted:
+                wanted.add(dep)
+                queue.append(dep)
+
+    indegree = {sid: 0 for sid in wanted}
+    dependents: dict[str, list[str]] = {sid: [] for sid in wanted}
+    for sid in wanted:
+        for dep in catalog.get(sid).requires:
+            indegree[sid] += 1
+            dependents[dep].append(sid)
+
+    ready = sorted([sid for sid, deg in indegree.items() if deg == 0])
+    order: list[str] = []
+    while ready:
+        sid = ready.pop(0)
+        order.append(sid)
+        for nxt in sorted(dependents[sid]):
+            indegree[nxt] -= 1
+            if indegree[nxt] == 0:
+                ready.append(nxt)
+                ready.sort()
+
+    if len(order) != len(wanted):
+        stuck = sorted(set(wanted) - set(order))
+        raise DependencyCycle(f&quot;ön koşul döngüsü: {stuck}&quot;)
+    return [catalog.get(sid) for sid in order]
+</pre></section><section class="file"><h3>platform/app/services/spec_compiler.py</h3><p class="role">Hak seti + cihaz rolü → arzu edilen durum; çıkarmalı çalışır</p><p class="meta">şerit: D — Platform kurulumu · 120 satır · python</p><pre>&quot;&quot;&quot;Tanım derleyici: hak seti + cihaz rolleri → arzu edilen durum.
+
+Çıktı sürümlüdür ve **çıkarmalıdır**: paket düşünce kaldırılması gereken hizmetler
+söküm görevleriyle sıraya girer. Böylece paket düşürme ayrı bir proje olmaktan çıkar.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, field
+
+from app.catalog import Catalog, CatalogService, Task
+from app.models import Lane
+from app.services.task_graph import topological_order
+
+
+class MissingSecret(Exception):
+    &quot;&quot;&quot;Kasaya yazılmamış bir yetkiyle hizmet başlatılamaz.&quot;&quot;&quot;
+
+
+@dataclass
+class CompiledTask:
+    service_id: str
+    task_id: str
+    lane: str
+    action: str
+    description: str
+    params: dict = field(default_factory=dict)
+    teardown: bool = False
+
+
+@dataclass
+class CompiledSpec:
+    tenant: str
+    version: int
+    tasks: list[CompiledTask]
+    services: list[str]
+    removed: list[str]
+
+    def to_json(self) -&gt; dict:
+        return {
+            &quot;tenant&quot;: self.tenant,
+            &quot;version&quot;: self.version,
+            &quot;services&quot;: self.services,
+            &quot;removed&quot;: self.removed,
+            &quot;tasks&quot;: [asdict(t) for t in self.tasks],
+        }
+
+    def by_lane(self, lane: Lane) -&gt; list[CompiledTask]:
+        return [t for t in self.tasks if t.lane == lane.value]
+
+
+def _expand(svc: CatalogService, device_roles: set[str]) -&gt; list[Task]:
+    &quot;&quot;&quot;Cihaz rolüne göre geçerli olmayan görevleri eler.&quot;&quot;&quot;
+    out = []
+    for task in svc.tasks:
+        only = task.params.get(&quot;only_roles&quot;)
+        if only and not (set(only) &amp; device_roles):
+            continue
+        out.append(task)
+    return out
+
+
+def compile_spec(
+    *,
+    catalog: Catalog,
+    tenant: str,
+    entitlements: list[str],
+    previous_services: list[str] | None = None,
+    device_roles: set[str] | None = None,
+    version: int = 1,
+    vault_has: set[str] | None = None,
+) -&gt; CompiledSpec:
+    device_roles = device_roles or set()
+    previous = set(previous_services or [])
+    vault_has = vault_has if vault_has is not None else None
+
+    ordered = topological_order(catalog, entitlements)
+    tasks: list[CompiledTask] = []
+
+    for svc in ordered:
+        for task in _expand(svc, device_roles):
+            if vault_has is not None:
+                missing = [s for s in task.requires_secret if s not in vault_has]
+                if missing:
+                    raise MissingSecret(f&quot;{svc.id}/{task.id}: kasada yok → {missing}&quot;)
+            tasks.append(
+                CompiledTask(
+                    service_id=svc.id,
+                    task_id=task.id,
+                    lane=task.lane.value,
+                    action=task.action,
+                    description=task.description,
+                    params=task.params,
+                )
+            )
+
+    # çıkarmalı taraf: artık hak edilmeyen hizmetlerin sökümü
+    current = {s.id for s in ordered}
+    removed = sorted(previous - current)
+    for sid in removed:
+        for task in catalog.get(sid).teardown:
+            tasks.append(
+                CompiledTask(
+                    service_id=sid,
+                    task_id=task.id,
+                    lane=task.lane.value,
+                    action=task.action,
+                    description=task.description,
+                    params=task.params,
+                    teardown=True,
+                )
+            )
+
+    return CompiledSpec(
+        tenant=tenant,
+        version=version,
+        tasks=tasks,
+        services=[s.id for s in ordered],
+        removed=removed,
+    )
+</pre></section><section class="file"><h3>platform/app/services/dispatcher.py</h3><p class="role">Her görevi kendi şeridinin yürütücüsüne yollar — altı şeridin buluştuğu yer</p><p class="meta">şerit: A — Aracı yazılım B — Uzaktan ayar C — Sağlayıcı arayüzü D — Platform kurulumu E — Takvimli iş F — İnsan işi · 119 satır · python</p><pre>&quot;&quot;&quot;Dağıtıcı: her görevi kendi şeridinin yürütücüsüne yollar.
+
+Şerit → yürütücü eşlemesi tek yerde durur. Yeni bir şerit eklenirse burası genişler,
+katalog dosyalarının hiçbiri değişmez.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import structlog
+
+from app.integrations import awx, netbox, siem, ticketing, vault, zabbix
+from app.models import Lane
+from app.services.spec_compiler import CompiledSpec, CompiledTask
+
+log = structlog.get_logger(__name__)
+
+
+class LaneNotImplemented(Exception):
+    pass
+
+
+async def _lane_a(task: CompiledTask, tenant: str) -&gt; dict:
+    &quot;&quot;&quot;Uç cihaz ajanı: görev kuyruğa yazılır, ajan bir sonraki yoklamasında çeker.&quot;&quot;&quot;
+    from app.services import agent_queue
+
+    return await agent_queue.enqueue(tenant=tenant, task=task)
+
+
+async def _lane_b(task: CompiledTask, tenant: str) -&gt; dict:
+    &quot;&quot;&quot;Ansible: AWX iş şablonu, müşterinin yürütme düğümünde koşar.&quot;&quot;&quot;
+    return await awx.launch_job(
+        job_template=task.params.get(&quot;job_template&quot;, task.action.split(&quot;.&quot;)[-1]),
+        instance_group=f&quot;relay-{tenant}&quot;,
+        extra_vars={&quot;tenant&quot;: tenant, **task.params.get(&quot;extra_vars&quot;, {})},
+    )
+
+
+async def _lane_c(task: CompiledTask, tenant: str) -&gt; dict:
+    &quot;&quot;&quot;Sağlayıcı arayüzü: ayar müşteride değil, sağlayıcının sisteminde.&quot;&quot;&quot;
+    provider, _, op = task.action.partition(&quot;.&quot;)
+    handler = {
+        &quot;netbox&quot;: netbox.call,
+        &quot;zabbix&quot;: zabbix.call,
+        &quot;veeam&quot;: awx.call_via_relay,   # Veeam API&#x27;si müşteri ağında → relay üzerinden
+        &quot;cloud&quot;: awx.call_via_relay,
+    }.get(provider)
+    if handler is None:
+        raise LaneNotImplemented(f&quot;C şeridinde bilinmeyen sağlayıcı: {provider}&quot;)
+    return await handler(op, tenant=tenant, **task.params)
+
+
+async def _lane_d(task: CompiledTask, tenant: str) -&gt; dict:
+    &quot;&quot;&quot;HR platform kurulumu: iş bizim tarafımızda.&quot;&quot;&quot;
+    target, _, op = task.action.partition(&quot;.&quot;)
+    handler = {
+        &quot;netbox&quot;: netbox.call,
+        &quot;zabbix&quot;: zabbix.call,
+        &quot;siem&quot;: siem.call,
+        &quot;ticketing&quot;: ticketing.call,
+        &quot;vault&quot;: vault.call,
+    }.get(target)
+    if handler is None:
+        raise LaneNotImplemented(f&quot;D şeridinde bilinmeyen hedef: {target}&quot;)
+    return await handler(op, tenant=tenant, **task.params)
+
+
+async def _lane_e(task: CompiledTask, tenant: str) -&gt; dict:
+    &quot;&quot;&quot;Takvimli iş: n8n&#x27;de zamanlama kurulur, sonra kendi takviminde koşar.&quot;&quot;&quot;
+    from app.integrations import n8n
+
+    return await n8n.ensure_schedule(
+        workflow=task.params[&quot;workflow&quot;], tenant=tenant, cron=task.params.get(&quot;cron&quot;, &quot;0 6 1 * *&quot;)
+    )
+
+
+async def _lane_f(task: CompiledTask, tenant: str) -&gt; dict:
+    &quot;&quot;&quot;İnsan iş emri: otomasyon hakkı kurar, teslimi insan yapar.&quot;&quot;&quot;
+    return await ticketing.create_work_order(
+        tenant=tenant,
+        title=task.description or task.task_id,
+        queue=task.params.get(&quot;queue&quot;, &quot;saha&quot;),
+        sla=task.params.get(&quot;sla&quot;),
+        acceptance=task.params.get(&quot;acceptance&quot;),
+    )
+
+
+LANES = {
+    Lane.A: _lane_a,
+    Lane.B: _lane_b,
+    Lane.C: _lane_c,
+    Lane.D: _lane_d,
+    Lane.E: _lane_e,
+    Lane.F: _lane_f,
+}
+
+
+async def dispatch(spec: CompiledSpec, *, dry_run: bool = False) -&gt; list[dict]:
+    &quot;&quot;&quot;Derlenmiş tanımı sırayla yürütür. Sıra zaten görev grafiğinden gelir.&quot;&quot;&quot;
+    results: list[dict] = []
+    for task in spec.tasks:
+        lane = Lane(task.lane)
+        entry = {
+            &quot;service&quot;: task.service_id,
+            &quot;task&quot;: task.task_id,
+            &quot;lane&quot;: task.lane,
+            &quot;teardown&quot;: task.teardown,
+        }
+        if dry_run:
+            results.append({**entry, &quot;state&quot;: &quot;dry-run&quot;})
+            continue
+        try:
+            entry[&quot;result&quot;] = await LANES[lane](task, spec.tenant)
+            entry[&quot;state&quot;] = &quot;done&quot;
+        except Exception as exc:  # noqa: BLE001 — tek görev hatası tüm tanımı düşürmez
+            log.error(&quot;gorev_hatasi&quot;, service=task.service_id, task=task.task_id, error=str(exc))
+            entry[&quot;state&quot;] = &quot;failed&quot;
+            entry[&quot;error&quot;] = str(exc)
+        results.append(entry)
+    return results
+</pre></section><section class="file"><h3>platform/app/services/agent_queue.py</h3><p class="role">A şeridi: görev relay kuyruğuna yazılır, ajan çeker</p><p class="meta">şerit: A — Aracı yazılım · 36 satır · python</p><pre>&quot;&quot;&quot;A şeridi kuyruğu.
+
+Platform ajanı hiçbir zaman aramaz. Görev, müşterinin site relay&#x27;indeki kuyruğa yazılır;
+ajan bir sonraki dışa doğru yoklamasında onu çeker. Yön her zaman içeriden dışarıdır.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import httpx
+import structlog
+
+from app.config import settings
+from app.services.spec_compiler import CompiledTask
+
+log = structlog.get_logger(__name__)
+
+
+async def enqueue(*, tenant: str, task: CompiledTask, device_uuid: str | None = None) -&gt; dict:
+    &quot;&quot;&quot;Relay&#x27;in iş kuyruğuna görev bırakır.&quot;&quot;&quot;
+    payload = {
+        &quot;service_id&quot;: task.service_id,
+        &quot;task_id&quot;: task.task_id,
+        &quot;action&quot;: task.action,
+        &quot;params&quot;: task.params,
+        &quot;device_uuid&quot;: device_uuid,
+        &quot;teardown&quot;: task.teardown,
+    }
+    url = f&quot;{settings().awx_url}/relay/{tenant}/queue&quot;  # AWX mesh üzerinden relay&#x27;e
+    async with httpx.AsyncClient(timeout=20) as client:
+        resp = await client.post(url, json=payload, headers=_auth())
+        resp.raise_for_status()
+        return resp.json()
+
+
+def _auth() -&gt; dict[str, str]:
+    return {&quot;Authorization&quot;: f&quot;Bearer {settings().awx_token}&quot;}
+</pre></section><section class="file"><h3>platform/app/services/drift.py</h3><p class="role">Sapma uzlaştırma ve etki sınırı koruması</p><p class="meta">şerit: A — Aracı yazılım B — Uzaktan ayar C — Sağlayıcı arayüzü D — Platform kurulumu · 64 satır · python</p><pre>&quot;&quot;&quot;Sapma uzlaştırması.
+
+Devreye alma ile günlük işletme aynı döngüdür: ilk gün ne koşuyorsa 400. gün de o koşar.
+Fark yalnızca şudur — ilk gün her şey eksiktir, sonra yalnız sapanlar uygulanır.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import structlog
+
+from app.services.dispatcher import dispatch
+from app.services.spec_compiler import CompiledSpec, CompiledTask
+
+log = structlog.get_logger(__name__)
+
+# hatalı bir tanımın tek seferde dokunabileceği en fazla cihaz oranı
+BLAST_RADIUS = 0.25
+
+
+class BlastRadiusExceeded(Exception):
+    &quot;&quot;&quot;Bir uygulama tüm sahayı değil, en fazla belirlenen dilimi etkileyebilir.&quot;&quot;&quot;
+
+
+def diff(spec: CompiledSpec, observed: dict[str, str]) -&gt; list[CompiledTask]:
+    &quot;&quot;&quot;Arzu edilen durum ile bildirilen durumu karşılaştırır, sapan görevleri döndürür.&quot;&quot;&quot;
+    out = []
+    for task in spec.tasks:
+        key = f&quot;{task.service_id}/{task.task_id}&quot;
+        if observed.get(key) != &quot;ok&quot;:
+            out.append(task)
+    return out
+
+
+async def reconcile(
+    spec: CompiledSpec,
+    observed: dict[str, str],
+    *,
+    device_count: int = 1,
+    dry_run: bool = False,
+) -&gt; dict:
+    drifted = diff(spec, observed)
+    if not drifted:
+        return {&quot;drifted&quot;: 0, &quot;applied&quot;: [], &quot;state&quot;: &quot;in-sync&quot;}
+
+    if device_count and len(drifted) / max(device_count, 1) &gt; BLAST_RADIUS and not dry_run:
+        raise BlastRadiusExceeded(
+            f&quot;{len(drifted)} görev {device_count} cihazın %{BLAST_RADIUS:.0%} sınırını aşıyor&quot;
+        )
+
+    subset = CompiledSpec(
+        tenant=spec.tenant,
+        version=spec.version,
+        tasks=drifted,
+        services=spec.services,
+        removed=spec.removed,
+    )
+    applied = await dispatch(subset, dry_run=dry_run)
+    failed = [a for a in applied if a.get(&quot;state&quot;) == &quot;failed&quot;]
+    return {
+        &quot;drifted&quot;: len(drifted),
+        &quot;applied&quot;: applied,
+        &quot;state&quot;: &quot;repaired&quot; if not failed else &quot;partial&quot;,
+        &quot;rollback_hint&quot;: &quot;son sağlam sürüme dön&quot; if failed else None,
+    }
+</pre></section><section class="file"><h3>platform/app/security.py</h3><p class="role">Ajan kimliği ve kiracı sınırı</p><p class="meta">şerit: A — Aracı yazılım · 59 satır · python</p><pre>&quot;&quot;&quot;Ajan kimliği ve kiracı sınırı.
+
+Kasa, her müşterinin sırlarını tutar. Acme&#x27;nin ajanı, Contoso&#x27;nun tanımını isteyememelidir;
+bu yüzden her istek cihaz kimliğine bağlı bir belirteçle imzalanır ve kiracı sunucuda çözülür.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import hashlib
+import hmac
+import secrets
+from datetime import datetime, timedelta, timezone
+
+from fastapi import Header, HTTPException
+
+from app.config import settings
+
+TOKEN_TTL = timedelta(hours=12)
+
+
+SEP = &quot;|&quot;  # ISO zaman damgası iki nokta içerdiği için ayraç olarak &#x27;:&#x27; kullanılamaz
+
+
+def issue_agent_token(*, tenant: str, device_uuid: str) -&gt; str:
+    &quot;&quot;&quot;Kayıt sırasında cihaza özel belirteç üretir.&quot;&quot;&quot;
+    if SEP in tenant or SEP in device_uuid:
+        raise ValueError(f&quot;kiracı veya cihaz kimliğinde ayraç karakteri: {SEP}&quot;)
+    issued = datetime.now(timezone.utc).isoformat()
+    body = SEP.join((tenant, device_uuid, issued))
+    mac = hmac.new(settings().agent_enroll_secret.encode(), body.encode(), hashlib.sha256)
+    return SEP.join((body, mac.hexdigest()))
+
+
+def verify_agent_token(token: str) -&gt; tuple[str, str]:
+    &quot;&quot;&quot;(tenant, device_uuid) döndürür; geçersizse 401.&quot;&quot;&quot;
+    try:
+        tenant, device_uuid, issued, mac = token.split(SEP)
+    except ValueError:
+        raise HTTPException(401, &quot;bozuk belirteç&quot;) from None
+
+    body = SEP.join((tenant, device_uuid, issued))
+    expected = hmac.new(
+        settings().agent_enroll_secret.encode(), body.encode(), hashlib.sha256
+    ).hexdigest()
+    if not hmac.compare_digest(mac, expected):
+        raise HTTPException(401, &quot;imza doğrulanamadı&quot;)
+    if datetime.fromisoformat(issued) + TOKEN_TTL &lt; datetime.now(timezone.utc):
+        raise HTTPException(401, &quot;belirteç süresi doldu&quot;)
+    return tenant, device_uuid
+
+
+async def agent_identity(authorization: str = Header(default=&quot;&quot;)) -&gt; tuple[str, str]:
+    if not authorization.startswith(&quot;Bearer &quot;):
+        raise HTTPException(401, &quot;yetki başlığı yok&quot;)
+    return verify_agent_token(authorization.removeprefix(&quot;Bearer &quot;).strip())
+
+
+def new_enrollment_code() -&gt; str:
+    return secrets.token_urlsafe(24)
+</pre></section><section class="file"><h3>platform/app/integrations/awx.py</h3><p class="role">B şeridinin yürütücüsü; relay&#x27;i dışa doğru eşleşen yürütme düğümü olarak kaydeder</p><p class="meta">şerit: B — Uzaktan ayar · 53 satır · python</p><pre>&quot;&quot;&quot;AWX — B şeridinin yürütücüsü.
+
+Relay, n8n worker&#x27;ı DEĞİLDİR. AWX automation mesh&#x27;te bir **yürütme düğümüdür**:
+`listener_port: null` ve `peers_from_control_nodes: false` ile yapılandırılır, yani
+bağlantıyı kendisi dışarı doğru kurar. Müşteri güvenlik duvarında gelen kural açılmaz.
+Ayrıntı: docs/architecture.md
+&quot;&quot;&quot;
+from __future__ import annotations
+
+from app.config import settings
+from app.integrations._client import request
+
+
+def _url(path: str) -&gt; str:
+    return f&quot;{settings().awx_url.rstrip(&#x27;/&#x27;)}/api/v2/{path.lstrip(&#x27;/&#x27;)}&quot;
+
+
+async def launch_job(*, job_template: str, instance_group: str, extra_vars: dict) -&gt; dict:
+    &quot;&quot;&quot;İşi müşterinin yürütme düğümünde koşturur.&quot;&quot;&quot;
+    return await request(
+        &quot;POST&quot;, _url(f&quot;job_templates/{job_template}/launch/&quot;),
+        token=settings().awx_token,
+        json={&quot;extra_vars&quot;: extra_vars, &quot;instance_group&quot;: instance_group},
+    )
+
+
+async def job_status(*, job_id: int) -&gt; dict:
+    return await request(&quot;GET&quot;, _url(f&quot;jobs/{job_id}/&quot;), token=settings().awx_token)
+
+
+async def call_via_relay(op: str, *, tenant: str, **params) -&gt; dict:
+    &quot;&quot;&quot;Müşteri ağındaki bir arayüze (Veeam, vCenter) relay üzerinden ulaşır.&quot;&quot;&quot;
+    return await launch_job(
+        job_template=&quot;relay_api_call&quot;,
+        instance_group=f&quot;relay-{tenant}&quot;,
+        extra_vars={&quot;operation&quot;: op, &quot;tenant&quot;: tenant, **params},
+    )
+
+
+async def ensure_execution_node(*, tenant: str, hostname: str) -&gt; dict:
+    &quot;&quot;&quot;Yeni müşteri relay&#x27;ini mesh&#x27;e kaydeder — dışa doğru eşleşme ile.&quot;&quot;&quot;
+    return await request(
+        &quot;POST&quot;, _url(&quot;instances/&quot;),
+        token=settings().awx_token,
+        json={
+            &quot;hostname&quot;: hostname,
+            &quot;node_type&quot;: &quot;execution&quot;,
+            &quot;listener_port&quot;: None,           # gelen bağlantı dinlemez
+            &quot;peers_from_control_nodes&quot;: False,  # bağlantıyı düğüm kurar
+            &quot;managed_by_policy&quot;: False,
+        },
+    )
+</pre></section><section class="file"><h3>platform/app/integrations/vault.py</h3><p class="role">Kasa; kiracı ayrışması yol düzeyinde zorunlu</p><p class="meta">şerit: D — Platform kurulumu · 58 satır · python</p><pre>&quot;&quot;&quot;Kasa — her hizmetin ilk adımı buraya yazmaktır.
+
+Kiracı ayrışması yol düzeyinde zorunludur: `tenants/&lt;slug&gt;/...`. Bir müşteri için
+çalışan iş akışı başka müşterinin yolunu isterse kasa reddeder.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+from app.config import settings
+from app.integrations._client import request
+
+
+class CrossTenantAccess(Exception):
+    &quot;&quot;&quot;A kiracısı için çalışan iş, B kiracısının alanını isteyemez.&quot;&quot;&quot;
+
+
+def _path(tenant: str, key: str) -&gt; str:
+    if key.startswith(&quot;tenants/&quot;) and not key.startswith(f&quot;tenants/{tenant}/&quot;):
+        raise CrossTenantAccess(f&quot;{tenant} → {key}&quot;)
+    return f&quot;tenants/{tenant}/{key.lstrip(&#x27;/&#x27;)}&quot;
+
+
+async def call(op: str, *, tenant: str, **params) -&gt; dict:
+    return await {&quot;store_access&quot;: store_access, &quot;has&quot;: has, &quot;revoke&quot;: revoke}[op](
+        tenant=tenant, **params
+    )
+
+
+async def store_access(*, tenant: str, keys: list[str] | None = None, store: str = &quot;&quot;, **_) -&gt; dict:
+    &quot;&quot;&quot;Erişim bilgilerini ilgili kasaya yazar.
+
+    `store` hangi kasanın kullanılacağını söyler: `.env`, `ansible-vault`
+    veya `n8n-credentials`. Değer platforma hiç uğramaz; yalnız referansı tutulur.
+    &quot;&quot;&quot;
+    return await request(
+        &quot;POST&quot;, f&quot;{settings().vault_addr.rstrip(&#x27;/&#x27;)}/v1/secret/data/{_path(tenant, &#x27;access&#x27;)}&quot;,
+        token=settings().vault_token, header=&quot;X-Vault-Token&quot;, prefix=&quot;&quot;,
+        json={&quot;data&quot;: {&quot;store&quot;: store, &quot;keys&quot;: keys or [], &quot;status&quot;: &quot;pending-intake&quot;}},
+    )
+
+
+async def has(*, tenant: str, key: str, **_) -&gt; bool:
+    try:
+        await request(
+            &quot;GET&quot;, f&quot;{settings().vault_addr.rstrip(&#x27;/&#x27;)}/v1/secret/data/{_path(tenant, key)}&quot;,
+            token=settings().vault_token, header=&quot;X-Vault-Token&quot;, prefix=&quot;&quot;,
+        )
+        return True
+    except RuntimeError:
+        return False
+
+
+async def revoke(*, tenant: str, key: str = &quot;&quot;, **_) -&gt; dict:
+    &quot;&quot;&quot;Çıkış sürecinin parçası: anahtar iptal edilir ve değiştirilir.&quot;&quot;&quot;
+    return await request(
+        &quot;DELETE&quot;, f&quot;{settings().vault_addr.rstrip(&#x27;/&#x27;)}/v1/secret/metadata/{_path(tenant, key)}&quot;,
+        token=settings().vault_token, header=&quot;X-Vault-Token&quot;, prefix=&quot;&quot;,
+    )
+</pre></section><section class="file"><h3>platform/app/integrations/netbox.py</h3><p class="role">Envanter; kimlik anahtarı ajan kimliği + seri no</p><p class="meta">şerit: C — Sağlayıcı arayüzü D — Platform kurulumu · 62 satır · python</p><pre>&quot;&quot;&quot;NetBox — envanter ve doğruluk kaynağı.
+
+Her şeyin sağlık kontrolü buna karşı çözümlenir: &#x27;var olanı envanterle karşılaştır&#x27;.
+Kimlik anahtarı hostname veya ağ kartı kimliği DEĞİL, ajan kimliği + seri numarasıdır —
+klonlanmış sanal makineler ikisini de paylaşır.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+from app.config import settings
+from app.integrations._client import request
+
+
+def _url(path: str) -&gt; str:
+    return f&quot;{settings().netbox_url.rstrip(&#x27;/&#x27;)}/api/{path.lstrip(&#x27;/&#x27;)}&quot;
+
+
+async def call(op: str, *, tenant: str, **params) -&gt; dict:
+    return await {
+        &quot;ensure_tenant&quot;: ensure_tenant,
+        &quot;ensure_device&quot;: ensure_device,
+        &quot;decommission&quot;: decommission,
+        &quot;list_devices&quot;: list_devices,
+    }[op](tenant=tenant, **params)
+
+
+async def ensure_tenant(*, tenant: str, **_) -&gt; dict:
+    return await request(
+        &quot;POST&quot;, _url(&quot;tenancy/tenants/&quot;),
+        token=settings().netbox_token, prefix=&quot;Token&quot;,
+        json={&quot;name&quot;: tenant, &quot;slug&quot;: tenant},
+    )
+
+
+async def ensure_device(*, tenant: str, uuid: str, serial: str | None = None, **fields) -&gt; dict:
+    &quot;&quot;&quot;Ajan kimliği birincil anahtardır; seri numarası ikincil doğrulamadır.&quot;&quot;&quot;
+    return await request(
+        &quot;POST&quot;, _url(&quot;dcim/devices/&quot;),
+        token=settings().netbox_token, prefix=&quot;Token&quot;,
+        json={
+            &quot;tenant&quot;: {&quot;slug&quot;: tenant},
+            &quot;custom_fields&quot;: {&quot;agent_uuid&quot;: uuid},
+            &quot;serial&quot;: serial or &quot;&quot;,
+            **fields,
+        },
+    )
+
+
+async def list_devices(*, tenant: str, **_) -&gt; dict:
+    return await request(
+        &quot;GET&quot;, _url(f&quot;dcim/devices/?tenant={tenant}&amp;limit=1000&quot;),
+        token=settings().netbox_token, prefix=&quot;Token&quot;,
+    )
+
+
+async def decommission(*, tenant: str, uuid: str, **_) -&gt; dict:
+    &quot;&quot;&quot;Söküm: kayıt silinmez, durumu değişir — envanter geçmişi korunur.&quot;&quot;&quot;
+    return await request(
+        &quot;PATCH&quot;, _url(f&quot;dcim/devices/?cf_agent_uuid={uuid}&quot;),
+        token=settings().netbox_token, prefix=&quot;Token&quot;,
+        json={&quot;status&quot;: &quot;decommissioning&quot;, &quot;tenant&quot;: {&quot;slug&quot;: tenant}},
+    )
+</pre></section><section class="file"><h3>platform/app/integrations/zabbix.py</h3><p class="role">İzleme; satılan şey host kaydı ve uyarı kuralıdır</p><p class="meta">şerit: D — Platform kurulumu · 55 satır · python</p><pre>&quot;&quot;&quot;Zabbix — izleme. D şeridinin ana yükü buradadır.
+
+Ajanın kurulması taşımadır; satılan şey host kaydı, şablon bağı ve uyarı kuralıdır.
+A şeridi kusursuz çalışıp D şeridi hiç koşmazsa müşteri hiçbir şey satın almamış olur.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+from app.config import settings
+from app.integrations._client import request
+
+
+async def _rpc(method: str, params: dict) -&gt; dict:
+    return await request(
+        &quot;POST&quot;, settings().zabbix_url,
+        json={&quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;method&quot;: method, &quot;params&quot;: params, &quot;id&quot;: 1},
+        headers={&quot;Authorization&quot;: f&quot;Bearer {settings().zabbix_token}&quot;},
+    )
+
+
+async def call(op: str, *, tenant: str, **params) -&gt; dict:
+    return await {
+        &quot;ensure_host_group&quot;: ensure_host_group,
+        &quot;ensure_host&quot;: ensure_host,
+        &quot;link_template&quot;: link_template,
+        &quot;ensure_action&quot;: ensure_action,
+    }[op](tenant=tenant, **params)
+
+
+async def ensure_host_group(*, tenant: str, **_) -&gt; dict:
+    return await _rpc(&quot;hostgroup.create&quot;, {&quot;name&quot;: f&quot;tenant/{tenant}&quot;})
+
+
+async def ensure_host(*, tenant: str, host: str, proxy: str | None = None, **_) -&gt; dict:
+    &quot;&quot;&quot;Host her zaman müşterinin site relay proxy&#x27;sine bağlanır — doğrudan değil.&quot;&quot;&quot;
+    return await _rpc(
+        &quot;host.create&quot;,
+        {
+            &quot;host&quot;: host,
+            &quot;groups&quot;: [{&quot;name&quot;: f&quot;tenant/{tenant}&quot;}],
+            &quot;proxy_hostid&quot;: proxy or f&quot;relay-{tenant}&quot;,
+            &quot;tags&quot;: [{&quot;tag&quot;: &quot;tenant&quot;, &quot;value&quot;: tenant}],
+        },
+    )
+
+
+async def link_template(*, tenant: str, host: str, template: str, **_) -&gt; dict:
+    return await _rpc(&quot;host.update&quot;, {&quot;host&quot;: host, &quot;templates&quot;: [{&quot;name&quot;: template}]})
+
+
+async def ensure_action(*, tenant: str, name: str, escalation: list | None = None, **_) -&gt; dict:
+    return await _rpc(
+        &quot;action.create&quot;,
+        {&quot;name&quot;: f&quot;{tenant}/{name}&quot;, &quot;operations&quot;: escalation or [], &quot;status&quot;: 0},
+    )
+</pre></section><section class="file"><h3>platform/app/integrations/ticketing.py</h3><p class="role">F şeridinin arayüzü; kabul kriteri olmadan iş emri kapanmaz</p><p class="meta">şerit: F — İnsan işi · 58 satır · python</p><pre>&quot;&quot;&quot;Destek kaydı sistemi — F şeridinin arayüzü ve paketlerin şekillendiği yer.&quot;&quot;&quot;
+from __future__ import annotations
+
+from app.config import settings
+from app.integrations._client import request
+
+
+async def call(op: str, *, tenant: str, **params) -&gt; dict:
+    return await {
+        &quot;ensure_tenant&quot;: ensure_tenant,
+        &quot;ensure_queue&quot;: ensure_queue,
+        &quot;ensure_sla&quot;: ensure_sla,
+        &quot;create_work_order&quot;: create_work_order,
+    }[op](tenant=tenant, **params)
+
+
+async def ensure_tenant(*, tenant: str, name: str | None = None, **_) -&gt; dict:
+    return await request(
+        &quot;POST&quot;, f&quot;{settings().ticketing_url.rstrip(&#x27;/&#x27;)}/entities&quot;,
+        token=settings().ticketing_token,
+        json={&quot;slug&quot;: tenant, &quot;name&quot;: name or tenant},
+    )
+
+
+async def ensure_queue(*, tenant: str, queue: str, **_) -&gt; dict:
+    return await request(
+        &quot;POST&quot;, f&quot;{settings().ticketing_url.rstrip(&#x27;/&#x27;)}/queues&quot;,
+        token=settings().ticketing_token,
+        json={&quot;tenant&quot;: tenant, &quot;name&quot;: queue},
+    )
+
+
+async def ensure_sla(*, tenant: str, matrix: dict | None = None, **_) -&gt; dict:
+    return await request(
+        &quot;POST&quot;, f&quot;{settings().ticketing_url.rstrip(&#x27;/&#x27;)}/sla&quot;,
+        token=settings().ticketing_token,
+        json={&quot;tenant&quot;: tenant, &quot;matrix&quot;: matrix or {&quot;P1&quot;: &quot;4h&quot;, &quot;P2&quot;: &quot;8h&quot;, &quot;P3&quot;: &quot;NBD&quot;}},
+    )
+
+
+async def create_work_order(
+    *, tenant: str, title: str, queue: str = &quot;saha&quot;, sla: str | None = None,
+    acceptance: str | None = None, **_
+) -&gt; dict:
+    &quot;&quot;&quot;İnsan işi de kayıt altındadır: kabul kriteri olmadan iş emri kapanmaz.&quot;&quot;&quot;
+    return await request(
+        &quot;POST&quot;, f&quot;{settings().ticketing_url.rstrip(&#x27;/&#x27;)}/tickets&quot;,
+        token=settings().ticketing_token,
+        json={
+            &quot;tenant&quot;: tenant,
+            &quot;title&quot;: title,
+            &quot;queue&quot;: queue,
+            &quot;sla&quot;: sla,
+            &quot;acceptance_criteria&quot;: acceptance,
+            &quot;requires_signoff&quot;: True,
+        },
+    )
+</pre></section><section class="file"><h3>platform/app/api/routers/agents.py</h3><p class="role">Ajan uçları; bağlantıyı her zaman ajan kurar</p><p class="meta">şerit: A — Aracı yazılım · 63 satır · python</p><pre>&quot;&quot;&quot;Ajan uçları. Bağlantıyı her zaman ajan kurar; platform ajanı hiç aramaz.&quot;&quot;&quot;
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+
+from pydantic import BaseModel
+
+from app.catalog import load_catalog
+from app.config import settings
+from app.security import agent_identity, issue_agent_token
+from app.models import Lane
+from app.services.spec_compiler import compile_spec
+
+router = APIRouter(prefix=&quot;/agents&quot;, tags=[&quot;agents&quot;])
+_catalog = load_catalog(settings().catalog_dir)
+
+
+class EnrollRequest(BaseModel):
+    enrollment_code: str
+    tenant: str
+    device_uuid: str
+    hostname: str
+    serial: Optional[str] = None
+    os_family: Optional[str] = None
+    role: str = &quot;workstation&quot;
+
+
+class ReportRequest(BaseModel):
+    observed: dict[str, str] = {}
+    inventory: dict = {}
+
+
+@router.post(&quot;/enroll&quot;)
+async def enroll(req: EnrollRequest) -&gt; dict:
+    if not settings().agent_enroll_secret:
+        raise HTTPException(503, &quot;kayıt sırrı tanımlı değil&quot;)
+    token = issue_agent_token(tenant=req.tenant, device_uuid=req.device_uuid)
+    return {&quot;token&quot;: token, &quot;checkin_seconds&quot;: settings().agent_checkin_seconds}
+
+
+@router.post(&quot;/checkin&quot;)
+async def checkin(req: ReportRequest, identity: tuple = Depends(agent_identity)) -&gt; dict:
+    &quot;&quot;&quot;Ajan durumunu bildirir, karşılığında olması gereken ayarları alır.&quot;&quot;&quot;
+    tenant, device_uuid = identity
+    spec = compile_spec(catalog=_catalog, tenant=tenant, entitlements=_entitlements_for(tenant))
+    todo = [t for t in spec.by_lane(Lane.A) if req.observed.get(f&quot;{t.service_id}/{t.task_id}&quot;) != &quot;ok&quot;]
+    return {
+        &quot;device&quot;: device_uuid,
+        &quot;seen_at&quot;: datetime.now(timezone.utc).isoformat(),
+        &quot;next_checkin&quot;: settings().agent_checkin_seconds,
+        &quot;tasks&quot;: [
+            {&quot;service_id&quot;: t.service_id, &quot;task_id&quot;: t.task_id,
+             &quot;action&quot;: t.action, &quot;params&quot;: t.params}
+            for t in todo
+        ],
+    }
+
+
+def _entitlements_for(tenant: str) -&gt; list[str]:
+    &quot;&quot;&quot;Gerçek kurulumda veritabanından gelir; burada katalogdaki tümü.&quot;&quot;&quot;
+    return [s.id for s in _catalog]
+</pre></section><section class="file"><h3>platform/app/api/routers/specs.py</h3><p class="role">Tanım derleme, kuru çalıştırma ve dağıtım</p><p class="meta">şerit: D — Platform kurulumu · 60 satır · python</p><pre>&quot;&quot;&quot;Tanım derleme, kuru çalıştırma ve dağıtım.&quot;&quot;&quot;
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+
+from app.catalog import load_catalog
+from app.config import settings
+from app.services.dispatcher import dispatch
+from app.services.spec_compiler import MissingSecret, compile_spec
+
+router = APIRouter(prefix=&quot;/specs&quot;, tags=[&quot;specs&quot;])
+_catalog = load_catalog(settings().catalog_dir)
+
+
+class CompileRequest(BaseModel):
+    tenant: str
+    entitlements: list[str]
+    previous_services: list[str] = []
+    device_roles: list[str] = []
+    version: int = 1
+    dry_run: bool = True
+
+
+@router.post(&quot;/compile&quot;)
+async def compile_endpoint(req: CompileRequest) -&gt; dict:
+    try:
+        spec = compile_spec(
+            catalog=_catalog,
+            tenant=req.tenant,
+            entitlements=req.entitlements,
+            previous_services=req.previous_services,
+            device_roles=set(req.device_roles),
+            version=req.version,
+        )
+    except MissingSecret as exc:
+        raise HTTPException(409, str(exc)) from None
+    except Exception as exc:
+        raise HTTPException(400, str(exc)) from None
+
+    return {
+        &quot;spec&quot;: spec.to_json(),
+        &quot;summary&quot;: {
+            &quot;services&quot;: len(spec.services),
+            &quot;tasks&quot;: len(spec.tasks),
+            &quot;removed&quot;: spec.removed,
+            &quot;by_lane&quot;: {
+                lane: len([t for t in spec.tasks if t.lane == lane]) for lane in &quot;ABCDEF&quot;
+            },
+        },
+    }
+
+
+@router.post(&quot;/apply&quot;)
+async def apply_endpoint(req: CompileRequest) -&gt; dict:
+    spec = compile_spec(
+        catalog=_catalog, tenant=req.tenant, entitlements=req.entitlements,
+        previous_services=req.previous_services, device_roles=set(req.device_roles),
+        version=req.version,
+    )
+    return {&quot;results&quot;: await dispatch(spec, dry_run=req.dry_run)}
+</pre></section><section class="file"><h3>platform/app/catalog/services/switch-management.yaml</h3><p class="role">Örnek katalog kaydı — 39 hizmetin her biri böyle tanımlı</p><p class="meta">şerit: B — Uzaktan ayar · 47 satır · yaml</p><pre># Bu dosya tasarım belgesinden üretilmiştir; hizmet kimliği sitedeki kimlikle aynıdır.
+id: switch-management
+name: &quot;Switch Management&quot;
+area: &quot;Network Management&quot;
+tier: &quot;Essential&quot;
+lane: B
+lanes: [B, C, D, E]
+plain: &quot;Ofisteki bilgisayarları, yazıcıları ve telefonları birbirine bağlayan ağ anahtarlarının ayarlanması ve izlenmesi.&quot;
+executor: &quot;Site relay&#x27;den SSH (şifreli uzaktan bağlantı) ile Ansible cisco.ios/arista.eos/community.network&quot;
+automation_grade: ASSISTED
+secret_stores: [&quot;ansible-vault&quot;, &quot;n8n-credentials&quot;]
+requires: [envanter-yonetim-sistemi]
+health_check: &quot;Zabbix SNMP erişilebilirliği, port bazlı LLD ifOperStatus, gecelik config-fark işi yeşil&quot;
+gotcha: &quot;Hatalı trunk/VLAN basımı relay&#x27;in kendi yolunu keser; IOS&#x27;ta commit-confirm yoktur, play&#x27;leri &#x27;reload in 5&#x27; ile sarın.&quot;
+tasks:
+  - id: vault-intake
+    lane: D
+    action: vault.store_access
+    description: &quot;Erişim bilgilerini kasaya yaz; parola koda gömülmez.&quot;
+    params: {&quot;store&quot;: [&quot;ansible-vault&quot;, &quot;n8n-credentials&quot;]}
+  - id: step-01
+    lane: D
+    action: netbox.ensure_device
+    description: &quot;NetBox API (uygulama arayüzü) ile cihazı, arayüzleri ve yönetim IP&#x27;sini (ağ adresi) oluştur&quot;
+  - id: step-02
+    lane: B
+    action: awx.launch
+    description: &quot;Baseline&#x27;ı bas: SNMPv3 (cihaz izleme protokolünün şifreli sürümü), syslog→relay, NTP (saat eşitleme), AAA (kimlik doğrulama ve yetkilendirme), port-security, STP (ağ döngü koruması) koruyucuları&quot;
+  - id: step-03
+    lane: D
+    action: zabbix.ensure_host
+    description: &quot;Zabbix host&#x27;u + Cisco IOS (Cisco cihaz işletim sistemi) by SNMP (cihaz izleme protokolü) şablonu, arayüz LLD&#x27;si (otomatik bileşen keşfi), uplink trigger&#x27;ları&quot;
+  - id: step-04
+    lane: E
+    action: n8n.schedule
+    description: &quot;n8n gecelik config çekimini git&#x27;e al, onaysız değişiklikte fark alarmı ver&quot;
+    params: {&quot;workflow&quot;: &quot;scheduled_generic&quot;, &quot;cron&quot;: &quot;0 6 1 * *&quot;}
+teardown:
+  - id: revoke-access
+    lane: D
+    action: vault.revoke
+    description: &quot;Kasa anahtarlarını iptal et ve değiştir.&quot;
+  - id: netbox-decommission
+    lane: D
+    action: netbox.decommission
+    description: &quot;Envanter kaydını hizmetten çıkarıldı olarak işaretle.&quot;
+</pre></section><section class="file"><h3>platform/tests/test_catalog.py</h3><p class="role">Tasarım kurallarını koda bağlayan testler</p><p class="meta">şerit: D — Platform kurulumu · 68 satır · python</p><pre>&quot;&quot;&quot;Katalog bütünlüğü. Bu testler tasarımın kurallarını koda bağlar.&quot;&quot;&quot;
+import pytest
+
+from app.catalog import load_catalog
+from app.catalog.loader import CatalogError
+from app.models import Lane
+
+CATALOG_DIR = &quot;app/catalog/services&quot;
+
+
+@pytest.fixture(scope=&quot;module&quot;)
+def catalog():
+    return load_catalog(CATALOG_DIR)
+
+
+def test_yayindaki_hizmet_sayisi(catalog):
+    assert len(catalog) == 39
+
+
+def test_her_hizmetin_ilk_adimi_kasadir(catalog):
+    &quot;&quot;&quot;Kasaya yazılmamış bir yetkiyle hiçbir hizmet başlatılmaz.&quot;&quot;&quot;
+    for svc in catalog:
+        assert svc.tasks[0].action == &quot;vault.store_access&quot;, svc.id
+
+
+def test_her_hizmetin_sokum_gorevi_var(catalog):
+    &quot;&quot;&quot;Çıkış hattı, giriş hattının aynadaki hâlidir.&quot;&quot;&quot;
+    for svc in catalog:
+        assert svc.teardown, f&quot;{svc.id}: söküm görevi yok&quot;
+        assert any(t.action == &quot;vault.revoke&quot; for t in svc.teardown), svc.id
+
+
+def test_serit_dagilimi(catalog):
+    counts = {lane: len(catalog.by_lane(lane)) for lane in Lane}
+    assert counts[Lane.A] == 2      # yalnız Windows ve Linux Server Yönetimi
+    assert counts[Lane.B] == 13
+    assert counts[Lane.C] == 10
+    assert counts[Lane.D] == 1
+    assert counts[Lane.E] == 3
+    assert counts[Lane.F] == 10
+    assert sum(counts.values()) == 39
+
+
+def test_envanter_her_seyin_on_kosulu(catalog):
+    &quot;&quot;&quot;Her hizmetin sağlık kontrolü envantere karşı çözümlenir.&quot;&quot;&quot;
+    envanter = catalog.get(&quot;envanter-yonetim-sistemi&quot;)
+    assert envanter.requires == ()
+    for svc in catalog:
+        if svc.id != envanter.id:
+            assert &quot;envanter-yonetim-sistemi&quot; in svc.requires, svc.id
+
+
+def test_kasa_degerleri_gecerli(catalog):
+    for svc in catalog:
+        assert svc.secret_stores, svc.id
+        for store in svc.secret_stores:
+            assert store in {&quot;.env&quot;, &quot;ansible-vault&quot;, &quot;n8n-credentials&quot;}
+
+
+def test_bozuk_katalog_aciliste_patlar(tmp_path):
+    (tmp_path / &quot;kotu.yaml&quot;).write_text(
+        &quot;id: kotu\nname: Kötü\nlane: A\nautomation_grade: FULL\n&quot;
+        &quot;secret_stores: [&#x27;.env&#x27;]\ntasks:\n  - id: x\n    lane: A\n    action: agent.converge\n&quot;,
+        encoding=&quot;utf-8&quot;,
+    )
+    with pytest.raises(CatalogError, match=&quot;vault.store_access&quot;):
+        load_catalog(tmp_path)
+</pre></section><section class="file"><h3>platform/tests/test_spec_compiler.py</h3><p class="role">Ön koşul, söküm ve kasa kuralının testleri</p><p class="meta">şerit: D — Platform kurulumu · 64 satır · python</p><pre>import pytest
+
+from app.catalog import load_catalog
+from app.models import Lane
+from app.services.spec_compiler import MissingSecret, compile_spec
+from app.services.task_graph import topological_order
+
+CATALOG_DIR = &quot;app/catalog/services&quot;
+
+
+@pytest.fixture(scope=&quot;module&quot;)
+def catalog():
+    return load_catalog(CATALOG_DIR)
+
+
+def test_on_kosul_once_gelir(catalog):
+    order = topological_order(catalog, [&quot;switch-management&quot;])
+    ids = [s.id for s in order]
+    assert ids[0] == &quot;envanter-yonetim-sistemi&quot;
+    assert &quot;switch-management&quot; in ids
+
+
+def test_hak_setinde_olmayan_on_kosul_da_kurulur(catalog):
+    spec = compile_spec(catalog=catalog, tenant=&quot;acme&quot;, entitlements=[&quot;firewall-management&quot;])
+    assert &quot;envanter-yonetim-sistemi&quot; in spec.services
+
+
+def test_paket_dusunce_sokum_gorevi_cikar(catalog):
+    &quot;&quot;&quot;Enterprise&#x27;dan Professional&#x27;a düşüş: kaldırılan hizmet söküm görevi üretir.&quot;&quot;&quot;
+    spec = compile_spec(
+        catalog=catalog,
+        tenant=&quot;acme&quot;,
+        entitlements=[&quot;envanter-yonetim-sistemi&quot;],
+        previous_services=[&quot;envanter-yonetim-sistemi&quot;, &quot;immutable-backup&quot;],
+    )
+    assert &quot;immutable-backup&quot; in spec.removed
+    teardown = [t for t in spec.tasks if t.teardown]
+    assert teardown and all(t.service_id == &quot;immutable-backup&quot; for t in teardown)
+
+
+def test_ilk_gorev_her_zaman_kasa(catalog):
+    spec = compile_spec(catalog=catalog, tenant=&quot;acme&quot;, entitlements=[&quot;active-directory&quot;])
+    assert spec.tasks[0].action == &quot;vault.store_access&quot;
+
+
+def test_kasada_olmayan_sir_derlemeyi_durdurur(catalog):
+    svc = catalog.get(&quot;switch-management&quot;)
+    object.__setattr__(svc.tasks[1], &quot;requires_secret&quot;, [&quot;snmpv3&quot;])  # noqa: SLF001
+    with pytest.raises(MissingSecret):
+        compile_spec(
+            catalog=catalog, tenant=&quot;acme&quot;,
+            entitlements=[&quot;switch-management&quot;], vault_has=set(),
+        )
+
+
+def test_serit_dagilimi_gorevlerde_gorunur(catalog):
+    spec = compile_spec(
+        catalog=catalog, tenant=&quot;acme&quot;,
+        entitlements=[s.id for s in catalog],
+    )
+    assert spec.by_lane(Lane.B), &quot;B şeridinde görev yok&quot;
+    assert spec.by_lane(Lane.F), &quot;F şeridinde görev yok&quot;
+    assert len(spec.services) == 39
+</pre></section><section class="file"><h3>.github/workflows/ci.yml</h3><p class="role">Şifresiz kasa, depoya girmiş .env ve açık metin sır kalıbını reddeder</p><p class="meta">şerit: D — Platform kurulumu · 72 satır · yaml</p><pre>name: ci
+
+on:
+  push: {branches: [main]}
+  pull_request: {}
+
+jobs:
+  secret-scan:
+    name: Sır taraması
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Şifresiz ansible-vault dosyası var mı
+        run: |
+          fail=0
+          while IFS= read -r f; do
+            head -1 &quot;$f&quot; | grep -q &#x27;^\$ANSIBLE_VAULT&#x27; || { echo &quot;ŞİFRESİZ: $f&quot;; fail=1; }
+          done &lt; &lt;(find . -path &#x27;*/group_vars/*&#x27; -name &#x27;vault*.yml&#x27;)
+          exit $fail
+
+      - name: Depoya girmiş .env dosyası var mı
+        run: |
+          found=$(git ls-files | grep -E &#x27;(^|/)\.env$&#x27; || true)
+          [ -z &quot;$found&quot; ] || { echo &quot;DEPODA .env: $found&quot;; exit 1; }
+
+      - name: Kaynak kodda açık metin sır kalıbı
+        run: |
+          if git ls-files -- &#x27;*.py&#x27; &#x27;*.yml&#x27; &#x27;*.yaml&#x27; &#x27;*.json&#x27; \
+             | xargs grep -nEi &quot;(password|secret|api[_-]?key|token)[\&quot;&#x27;]?\s*[:=]\s*[\&quot;&#x27;][A-Za-z0-9/+=._-]{12,}[\&quot;&#x27;]&quot; \
+             | grep -v -e example -e CHANGEME -e &#x27;{{&#x27; -e &#x27;\$env&#x27; -e lookup ; then
+            echo &quot;Açık metin sır bulundu&quot;; exit 1
+          fi
+
+  platform:
+    name: Platform testleri
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: &#x27;3.12&#x27;}
+      - working-directory: platform
+        run: |
+          pip install -e &quot;.[dev]&quot;
+          python -m pytest -q
+          ruff check .
+
+  agent:
+    name: Ajan testleri
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: &#x27;3.12&#x27;}
+      - working-directory: agent
+        run: |
+          pip install -e &quot;.[dev]&quot;
+          python -m pytest -q
+          ruff check .
+
+  catalog:
+    name: Katalog bütünlüğü
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: &#x27;3.12&#x27;}
+      - working-directory: platform
+        run: |
+          pip install -e &quot;.[dev]&quot;
+          python -m pytest tests/test_catalog.py -q
+</pre></section><section class="file"><h3>README.md</h3><p class="role">Beş bileşen, şerit karşılıkları ve kasa tablosu</p><p class="meta">şerit: D — Platform kurulumu · 60 satır · markdown</p><pre># Hisar Delivery Platform
+
+Hisar Research&#x27;ün yönetilen hizmet kataloğunu (yayında 39 hizmet) uçtan uca teslim eden
+otomasyon platformunun kaynak kodu.
+
+&gt; **Durum:** Bu depo, `Hisar Hizmet Şeritleri` tasarım belgesinin koda dökülmüş hâlidir.
+&gt; Belgedeki altı yürütme şeridi (A–F) burada çalıştırılabilir bileşenlere karşılık gelir.
+
+## Beş bileşen
+
+| # | Bileşen | Klasör | Ne yapar |
+|---|---------|--------|----------|
+| 1 | **Orkestratör (n8n)** | `orchestrator/` | Sözleşme imzalanınca görev listesini derletir, işi şeritlere dağıtır, tekrar eden işleri takvimde koşturur |
+| 2 | **HR Platformu** | `platform/` | Beyin: katalog, hak seti, tanım derleyici, denetim kaydı, Zabbix/NetBox/SIEM/ticket entegrasyonları |
+| 3 | **Site Relay** | `relay/` | Müşteri sahasındaki aracı düğüm: iş kuyruğu, AWX yürütme düğümü, Zabbix proxy, paket önbelleği |
+| 4 | **İnsan** | `human/` | İş emri şablonları, yetki belgeleri, kabul kriterleri, runbook&#x27;lar |
+| 5 | **Aracı yazılım (agent)** | `agent/` | Uç cihaz ve sunucularda koşan Python ajanı: durum bildirir, tanımı çeker, uygular |
+
+## Şeritler ve kod karşılıkları
+
+| Şerit | Ne yürütür | Kod |
+|-------|-----------|-----|
+| **A** | Uç cihaz ajanı | `agent/` |
+| **B** | Ansible ile uzaktan ayar | `relay/ansible/` + `platform/app/integrations/awx.py` |
+| **C** | Sağlayıcı arayüzleri | `platform/app/integrations/` (netbox, zabbix, veeam, cloud) |
+| **D** | HR platform kurulumu | `platform/app/services/` + `integrations/{zabbix,netbox,siem,ticketing}.py` |
+| **E** | Takvimli işler | `orchestrator/workflows/scheduled_*.json` |
+| **F** | İnsan iş emri | `human/` + `platform/app/integrations/ticketing.py` |
+
+## Sır yönetimi — istisnasız
+
+Hiçbir parola, anahtar veya sertifika kaynak koda yazılmaz.
+
+| Nerede çalışıyor | Kasa |
+|------------------|------|
+| Agent ve makinede koşan script&#x27;ler | `.env` (bkz. `agent/.env.example`) |
+| Ansible adımları | `ansible-vault` (bkz. `relay/ansible/group_vars/all/vault.yml`) |
+| n8n iş akışları ve API çağrıları | n8n credentials |
+| Platform arka ucu | ortam değişkeni → `platform/app/config.py` |
+
+CI, `.env` ve vault dosyalarının şifresiz hâlde depoya girmesini engeller (`.github/workflows/ci.yml`).
+
+## Hızlı başlangıç
+
+```bash
+# Platform
+cd platform &amp;&amp; python -m venv .venv &amp;&amp; . .venv/bin/activate
+pip install -e &quot;.[dev]&quot; &amp;&amp; cp .env.example .env
+uvicorn app.main:app --reload
+
+# Agent (geliştirme)
+cd agent &amp;&amp; pip install -e &quot;.[dev]&quot; &amp;&amp; cp .env.example .env
+python -m hragent --once
+
+# Relay (müşteri sahası)
+cd relay &amp;&amp; cp .env.example .env &amp;&amp; docker compose up -d
+```
+
+Ayrıntı: [`docs/architecture.md`](docs/architecture.md)
+</pre></section><h2 style="border-top-color:#7A4CD0">3 · Site Relay</h2><p class="sub">Müşteri sahasındaki aracı düğüm: kuyruk, yürütme düğümü, izleme vekili</p><section class="file"><h3>relay/docker-compose.yml</h3><p class="role">Relay yığını; hiçbiri internete açılmaz</p><p class="meta">şerit: A — Aracı yazılım B — Uzaktan ayar C — Sağlayıcı arayüzü · 57 satır · yaml</p><pre># Site Relay yığını. Hiçbiri gelen bağlantı için dış dünyaya açılmaz;
+# yalnız müşterinin yerel ağına ve giden 443/27199&#x27;a ihtiyaç duyar.
+services:
+  redis:
+    image: redis:7-alpine
+    command: [&quot;redis-server&quot;, &quot;--requirepass&quot;, &quot;${REDIS_PASSWORD}&quot;, &quot;--appendonly&quot;, &quot;yes&quot;]
+    volumes: [&quot;redis-data:/data&quot;]
+    networks: [relay]
+    restart: unless-stopped
+
+  relay-api:
+    build: ./relay_api
+    env_file: [.env]
+    environment:
+      REDIS_URL: &quot;redis://:${REDIS_PASSWORD}@redis:6379/0&quot;
+    ports:
+      - &quot;127.0.0.1:8080:8080&quot;   # yalnız yerel ağ; internete açılmaz
+    depends_on: [redis]
+    networks: [relay]
+    restart: unless-stopped
+
+  receptor:
+    image: quay.io/ansible/receptor:latest
+    volumes:
+      - ./receptor/receptor.conf:/etc/receptor/receptor.conf:ro
+      - receptor-data:/var/lib/receptor
+    networks: [relay]
+    restart: unless-stopped
+
+  zabbix-proxy:
+    image: zabbix/zabbix-proxy-sqlite3:alpine-7.0-latest
+    environment:
+      ZBX_SERVER_HOST: &quot;${ZBX_SERVER_HOST}&quot;
+      ZBX_HOSTNAME: &quot;${ZBX_HOSTNAME}&quot;
+      ZBX_PROXYMODE: &quot;0&quot;          # etkin mod: proxy merkeze kendisi bağlanır
+    ports:
+      - &quot;10051:10051&quot;             # yalnız müşteri yerel ağı — ajanlar buraya bildirir
+    networks: [relay]
+    restart: unless-stopped
+
+  package-cache:
+    image: nginx:alpine
+    volumes:
+      - ./package-cache/nginx.conf:/etc/nginx/nginx.conf:ro
+      - package-data:/var/cache/packages
+    ports: [&quot;8081:80&quot;]            # yalnız müşteri yerel ağı
+    networks: [relay]
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  receptor-data:
+  package-data:
+
+networks:
+  relay:
+</pre></section><section class="file"><h3>relay/receptor/receptor.conf</h3><p class="role">Yürütme düğümü: gelen bağlantı dinlemez, kendisi dışarı bağlanır</p><p class="meta">şerit: B — Uzaktan ayar · 34 satır · ini</p><pre># AWX automation mesh — yürütme düğümü.
+#
+# Kritik iki ayar:
+#   * listener yok            → düğüm gelen bağlantı DİNLEMEZ
+#   * tcp-peer (giden)        → bağlantıyı düğüm kendisi kurar
+# AWX tarafında bu düğüm `listener_port: null` ve `peers_from_control_nodes: false`
+# ile kaydedilir. Böylece müşteri güvenlik duvarında gelen kural açılmaz.
+
+- node:
+    id: relay-${RELAY_TENANT}
+
+- log-level: info
+
+- tcp-peer:
+    address: ${RECEPTOR_PEER}
+    redial: true
+    tls: mesh-client
+
+- tls-client:
+    name: mesh-client
+    rootcas: /var/lib/receptor/tls/ca.crt
+    cert: /var/lib/receptor/tls/relay.crt
+    key: /var/lib/receptor/tls/relay.key
+
+- control-service:
+    service: control
+    filename: /var/run/receptor/receptor.sock
+
+- work-command:
+    worktype: ansible-runner
+    command: ansible-runner
+    params: worker
+    allowruntimeparams: true
+</pre></section><section class="file"><h3>relay/relay_api/main.py</h3><p class="role">Ajanların tek muhatabı</p><p class="meta">şerit: A — Aracı yazılım · 61 satır · python</p><pre>&quot;&quot;&quot;Relay API — ajanların tek muhatabı.
+
+Ajan platformu doğrudan görmez; her şey relay üzerinden geçer. Bu, müşteri ağından
+dışarı tek bir çıkış noktası olmasını sağlar.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import os
+
+import structlog
+from fastapi import FastAPI, Header, HTTPException
+from pydantic import BaseModel
+
+import queue as jobqueue
+
+log = structlog.get_logger(__name__)
+app = FastAPI(title=&quot;Hisar Site Relay&quot;, version=&quot;0.1.0&quot;)
+
+TENANT = os.environ.get(&quot;RELAY_TENANT&quot;, &quot;&quot;)
+RELAY_TOKEN = os.environ.get(&quot;RELAY_TOKEN&quot;, &quot;&quot;)
+
+
+class Task(BaseModel):
+    service_id: str
+    task_id: str
+    action: str
+    params: dict = {}
+    device_uuid: str | None = None
+    teardown: bool = False
+
+
+class Checkin(BaseModel):
+    device_uuid: str
+    observed: dict = {}
+    inventory: dict = {}
+
+
+def _require_platform(authorization: str) -&gt; None:
+    if not RELAY_TOKEN or authorization != f&quot;Bearer {RELAY_TOKEN}&quot;:
+        raise HTTPException(401, &quot;yetkisiz&quot;)
+
+
+@app.get(&quot;/healthz&quot;)
+async def healthz() -&gt; dict:
+    return {&quot;status&quot;: &quot;ok&quot;, &quot;tenant&quot;: TENANT, &quot;queue_depth&quot;: await jobqueue.depth(TENANT)}
+
+
+@app.post(&quot;/queue&quot;)
+async def enqueue(task: Task, authorization: str = Header(default=&quot;&quot;)) -&gt; dict:
+    &quot;&quot;&quot;Platform görev bırakır.&quot;&quot;&quot;
+    _require_platform(authorization)
+    return await jobqueue.push(TENANT, task.model_dump())
+
+
+@app.post(&quot;/agents/checkin&quot;)
+async def checkin(req: Checkin) -&gt; dict:
+    &quot;&quot;&quot;Ajan yoklaması: durumunu bildirir, bekleyen görevlerini alır.&quot;&quot;&quot;
+    tasks = await jobqueue.pop_all(TENANT, req.device_uuid)
+    log.info(&quot;ajan_yoklamasi&quot;, cihaz=req.device_uuid, gorev=len(tasks))
+    return {&quot;tasks&quot;: tasks, &quot;next_checkin&quot;: int(os.environ.get(&quot;CHECKIN_SECONDS&quot;, &quot;45&quot;))}
+</pre></section><section class="file"><h3>relay/relay_api/queue.py</h3><p class="role">İş kuyruğu; cihaz kimliğine göre bölümlenir</p><p class="meta">şerit: A — Aracı yazılım · 67 satır · python</p><pre>&quot;&quot;&quot;Relay iş kuyruğu.
+
+Platform görevi buraya bırakır; ajan bir sonraki yoklamasında çeker. Ajan hiçbir zaman
+aranmaz — yön her zaman içeriden dışarıdır. Kuyruk cihaz kimliğine göre bölümlenir ki
+bir cihazın işi başka cihaza gitmesin.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import json
+import os
+
+import redis.asyncio as redis
+import structlog
+
+log = structlog.get_logger(__name__)
+
+TTL_SECONDS = 24 * 3600
+_client: redis.Redis | None = None
+
+
+def client() -&gt; redis.Redis:
+    global _client
+    if _client is None:
+        _client = redis.from_url(
+            os.environ.get(&quot;REDIS_URL&quot;, &quot;redis://localhost:6379/0&quot;), decode_responses=True
+        )
+    return _client
+
+
+def _key(tenant: str, device_uuid: str) -&gt; str:
+    return f&quot;queue:{tenant}:{device_uuid or &#x27;unassigned&#x27;}&quot;
+
+
+async def push(tenant: str, task: dict) -&gt; dict:
+    key = _key(tenant, task.get(&quot;device_uuid&quot;, &quot;&quot;))
+    r = client()
+    await r.rpush(key, json.dumps(task, ensure_ascii=False))
+    await r.expire(key, TTL_SECONDS)
+    depth = await r.llen(key)
+    log.info(&quot;gorev_kuyruga_alindi&quot;, kuyruk=key, derinlik=depth)
+    return {&quot;queued&quot;: True, &quot;queue&quot;: key, &quot;depth&quot;: depth}
+
+
+async def pop_all(tenant: str, device_uuid: str, limit: int = 50) -&gt; list[dict]:
+    &quot;&quot;&quot;Ajan yoklamasında bekleyen görevleri alır. Alınan görev kuyruktan düşer.&quot;&quot;&quot;
+    key = _key(tenant, device_uuid)
+    r = client()
+    out: list[dict] = []
+    for _ in range(limit):
+        raw = await r.lpop(key)
+        if raw is None:
+            break
+        out.append(json.loads(raw))
+    # cihaza özel kuyruk boşsa, atanmamış havuzdan da al
+    if not out and device_uuid:
+        shared = _key(tenant, &quot;&quot;)
+        for _ in range(limit):
+            raw = await r.lpop(shared)
+            if raw is None:
+                break
+            out.append(json.loads(raw))
+    return out
+
+
+async def depth(tenant: str, device_uuid: str = &quot;&quot;) -&gt; int:
+    return int(await client().llen(_key(tenant, device_uuid)))
+</pre></section><section class="file"><h3>relay/ansible/ansible.cfg</h3><p class="role">Parolalar playbook&#x27;ta değil kasada</p><p class="meta">şerit: B — Uzaktan ayar · 17 satır · ini</p><pre>[defaults]
+inventory = inventory/netbox.yml
+roles_path = roles
+host_key_checking = True
+stdout_callback = yaml
+# Parolalar playbook&#x27;un içinde durmaz; ansible-vault&#x27;tan çözülür.
+vault_password_file = /var/lib/receptor/vault-pass
+retry_files_enabled = False
+
+[privilege_escalation]
+become = True
+become_method = sudo
+
+[ssh_connection]
+pipelining = True
+ssh_args = -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=yes
+</pre></section><section class="file"><h3>relay/ansible/inventory/netbox.yml</h3><p class="role">Makine listesi elle tutulmaz; envanterden gelir</p><p class="meta">şerit: B — Uzaktan ayar · 17 satır · yaml</p><pre># Envanter doğruluk kaynağıdır: makine listesi elle tutulmaz, NetBox&#x27;tan gelir.
+# Böylece bir cihaz envantere girmeden hiçbir playbook onu göremez.
+plugin: netbox.netbox.nb_inventory
+api_endpoint: &quot;{{ lookup(&#x27;env&#x27;, &#x27;NETBOX_URL&#x27;) }}&quot;
+token: &quot;{{ lookup(&#x27;env&#x27;, &#x27;NETBOX_TOKEN&#x27;) }}&quot;        # değer kasadan gelir
+validate_certs: true
+config_context: false
+group_by:
+  - device_roles
+  - tenants
+  - sites
+query_filters:
+  - status: active
+  - tenant: &quot;{{ lookup(&#x27;env&#x27;, &#x27;RELAY_TENANT&#x27;) }}&quot;   # yalnız bu müşterinin cihazları
+compose:
+  ansible_host: primary_ip4.address | default(name)
+</pre></section><section class="file"><h3>relay/ansible/roles/switch_baseline/tasks/main.yml</h3><p class="role">Geri sayımlı yeniden başlatma ile korunan switch ayarı</p><p class="meta">şerit: B — Uzaktan ayar · 37 satır · yaml</p><pre>---
+# Switch temel ayarı. Hatalı bir basım relay&#x27;in kendi yolunu keser; IOS&#x27;ta
+# commit-confirm yoktur, bu yüzden geri sayımlı yeniden başlatma ile korunuruz.
+- name: Geri alma ağı kur (5 dakika içinde onaylanmazsa cihaz eski config ile açılır)
+  cisco.ios.ios_command:
+    commands:
+      - command: &quot;reload in 5&quot;
+        prompt: &quot;Proceed with reload&quot;
+        answer: &quot;y&quot;
+  changed_when: false
+
+- name: Çalışan yapılandırmayı yedekle
+  cisco.ios.ios_config:
+    backup: true
+    backup_options:
+      dir_path: /var/lib/receptor/config-backups
+      filename: &quot;{{ inventory_hostname }}-{{ ansible_date_time.iso8601_basic_short }}.cfg&quot;
+
+- name: Temel ayarları uygula
+  cisco.ios.ios_config:
+    lines:
+      - &quot;ntp server {{ ntp_servers[0] }}&quot;
+      - &quot;logging host {{ syslog_target }}&quot;
+      - &quot;snmp-server group hr v3 priv&quot;
+      - &quot;spanning-tree portfast bpduguard default&quot;
+      - &quot;spanning-tree loopguard default&quot;
+  notify: onayla ve geri alma iptal
+
+- name: SNMPv3 kullanıcısı (parola kasadan gelir)
+  cisco.ios.ios_config:
+    lines:
+      - &gt;-
+        snmp-server user {{ snmpv3_user }} hr v3 auth sha {{ snmpv3_auth_pass }}
+        priv aes 128 {{ snmpv3_priv_pass }}
+  no_log: true          # parola hiçbir günlüğe düşmez
+  notify: onayla ve geri alma iptal
+</pre></section><section class="file"><h3>relay/ansible/roles/firewall_baseline/tasks/main.yml</h3><p class="role">HA sanal adresine değil birincil düğüme basar</p><p class="meta">şerit: B — Uzaktan ayar · 35 satır · yaml</p><pre>---
+# Güvenlik duvarı temel ayarı. Yapılandırma HA sanal adresine değil, birincil düğümün
+# gerçek yönetim adresine basılır; aksi hâlde devir anında fark kaybolabilir.
+- name: Birincil düğümü doğrula
+  fortinet.fortios.fortios_monitor_fact:
+    selector: system_ha-peer
+  register: ha
+  failed_when: ha.meta.results is undefined
+
+- name: Yapılandırmayı yedekle
+  fortinet.fortios.fortios_monitor:
+    selector: system.config.backup
+    params: {scope: global}
+
+- name: Yönetim erişimini yalnız relay&#x27;e sınırla
+  fortinet.fortios.fortios_system_interface:
+    system_interface:
+      name: &quot;{{ mgmt_interface | default(&#x27;mgmt&#x27;) }}&quot;
+      allowaccess: &quot;ping https ssh&quot;
+      trusthost1: &quot;{{ relay_cidr }}&quot;
+
+- name: Yönetici çok adımlı doğrulaması
+  fortinet.fortios.fortios_system_admin:
+    system_admin:
+      name: &quot;{{ hr_admin_user }}&quot;
+      two_factor: &quot;fortitoken&quot;
+  no_log: true
+
+- name: Kayıtları relay toplayıcısına gönder
+  fortinet.fortios.fortios_log_syslogd_setting:
+    log_syslogd_setting:
+      status: &quot;enable&quot;
+      server: &quot;{{ syslog_target }}&quot;
+      mode: &quot;reliable&quot;
+</pre></section><section class="file"><h3>relay/ansible/playbooks/site.yml</h3><p class="role">Hangi rolün koşacağını envanterdeki cihaz rolü belirler</p><p class="meta">şerit: B — Uzaktan ayar · 20 satır · yaml</p><pre>---
+# Ana giriş noktası. AWX iş şablonu bunu çağırır; hangi rolün koşacağını
+# NetBox&#x27;taki cihaz rolü belirler — elle host listesi tutulmaz.
+- name: Ağ anahtarları
+  hosts: device_roles_switch
+  gather_facts: false
+  connection: network_cli
+  roles: [switch_baseline]
+
+- name: Güvenlik duvarları
+  hosts: device_roles_firewall
+  gather_facts: false
+  connection: httpapi
+  roles: [firewall_baseline]
+
+- name: Etki alanı denetleyicileri
+  hosts: device_roles_domain_controller
+  gather_facts: true
+  roles: [ad_baseline]
+</pre></section><section class="file"><h3>relay/ansible/playbooks/teardown.yml</h3><p class="role">Çıkış hattı: giriş hattının aynadaki hâli</p><p class="meta">şerit: B — Uzaktan ayar D — Platform kurulumu · 21 satır · yaml</p><pre>---
+# Çıkış hattı: giriş hattının aynadaki hâli. Sözleşme bitince koşar.
+- name: Erişimleri geri al
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: HR yönetim erişimini kaldır
+      ansible.builtin.include_role:
+        name: &quot;{{ device_role }}_baseline&quot;
+        tasks_from: teardown
+      when: device_role is defined
+
+    - name: Kasa anahtarını iptal et
+      ansible.builtin.uri:
+        url: &quot;{{ lookup(&#x27;env&#x27;, &#x27;VAULT_ADDR&#x27;) }}/v1/secret/metadata/tenants/{{ tenant }}/{{ inventory_hostname }}&quot;
+        method: DELETE
+        headers:
+          X-Vault-Token: &quot;{{ lookup(&#x27;env&#x27;, &#x27;VAULT_TOKEN&#x27;) }}&quot;
+      delegate_to: localhost
+      no_log: true
+</pre></section><section class="file"><h3>relay/ansible/group_vars/all/vault.yml</h3><p class="role">ansible-vault ile şifreli; şifresiz hâli CI tarafından reddedilir</p><p class="meta">şerit: B — Uzaktan ayar · 15 satır · yaml</p><pre>$ANSIBLE_VAULT;1.1;AES256
+# Bu dosya ansible-vault ile şifrelenmiştir. Depoda yalnız şifreli hâli bulunur.
+# Şifresiz hâlde depoya girmesini CI engeller (.github/workflows/ci.yml → secret-scan).
+#
+# İçeriği (çözülünce):
+#   vault_switch_enable_password: ...
+#   vault_snmpv3_auth_pass: ...
+#   vault_snmpv3_priv_pass: ...
+#   vault_firewall_api_key: ...
+#   vault_ad_service_account_password: ...
+#   vault_veeam_api_token: ...
+#
+# ÖRNEK yer tutucu — gerçek dosya `ansible-vault encrypt` çıktısıdır.
+36613464656661383661383964363638393764373862623565383537383363396533393264653938
+</pre></section><h2 style="border-top-color:#657279">4 · İnsan</h2><p class="sub">İş emri, yetki belgesi ve kabul formu şablonları</p><section class="file"><h3>human/templates/access_pack.md</h3><p class="role">0. gün erişim paketi; liste paketten otomatik üretilir</p><p class="meta">şerit: F — İnsan işi · 26 satır · markdown</p><pre># 0. Gün Erişim Paketi — {{ musteri }}
+
+Bu liste **otomatik üretilmiştir**: yalnız `{{ paket }}` paketinin gerektirdiği erişimler
+istenir. Gereksiz hiçbir yetki talep edilmez, gereken hiçbir yetki unutulmaz.
+
+Her kalem alındığı anda kendi kasasına yazılır ve bir daha açık metin olarak durmaz.
+
+| # | Erişim | Nereye yazılır | Kaç hizmet buna bağlı | Teslim alındı |
+|---|--------|----------------|----------------------|---------------|
+{% for item in erisimler %}| {{ loop.index }} | {{ item.ad }} | `{{ item.kasa }}` | {{ item.bagimli_hizmet }} | ☐ |
+{% endfor %}
+
+## Saha erişimi
+
+- [ ] Lokasyon listesi ve adresler
+- [ ] Bina giriş izni / kart veya refakat düzeni
+- [ ] Kabinet anahtarı
+- [ ] Site relay için rack veya sanal makine kapasitesi, yönetim ağı ve giden 443 izni
+
+## Kapanış
+
+Paket tamamlanmadan hiçbir hizmet başlatılmaz. Her kalem kasaya yazıldıktan sonra
+otomatik kanarya testi koşar; **yeşil dönmeden hizmet başlatılmış sayılmaz.**
+
+İmza (müşteri yetkilisi): ____________________   Tarih: __________
+</pre></section><section class="file"><h3>human/templates/acceptance.md</h3><p class="role">Proje → yönetilen devri; sağlık yeşil olmadan kapanmaz</p><p class="meta">şerit: F — İnsan işi · 21 satır · markdown</p><pre># Kabul Formu — Proje&#x27;den Yönetilen Hizmete Devir
+
+Kurulum işi, **devralacak hizmetin ilk sağlık kontrolü yeşile dönmeden kapanmaz.**
+Bu form, &quot;kuruldu ama izlenmiyor&quot; ve &quot;teslim edildi ama yedeği yok&quot; boşluğunu kapatır.
+
+| Alan | Değer |
+|------|-------|
+| Proje hizmeti | {{ proje_hizmeti }} |
+| Devralan yönetilen hizmet | {{ yonetilen_hizmet }} |
+| Devir tarihi | {{ tarih }} |
+
+## Kapanış koşulları
+
+- [ ] Envanter kaydı oluşturuldu ve doğrulandı
+- [ ] İzleme host&#x27;u açıldı, şablonu bağlandı, ilk veri geldi
+- [ ] Yedekleme kapsamına alındı ve ilk geri dönüş noktası oluştu
+- [ ] Erişim bilgileri kasaya yazıldı, kanarya testi yeşil
+- [ ] Sağlık kontrolü **yeşil** — ekran görüntüsü eklendi
+
+Saha ekibi: ______________  Devralan: ______________  Müşteri: ______________
+</pre></section><section class="file"><h3>human/templates/pentest_authorization.md</h3><p class="role">İmzasız test başlamaz</p><p class="meta">şerit: F — İnsan işi · 20 satır · markdown</p><pre># Sızma Testi Yetki Mektubu
+
+&gt; **Bu mektup imzalanmadan test başlamaz.** Yetkisiz test suç teşkil eder; kapsam dışı
+&gt; bir sistem etkilenirse sorumluluk hizmet sağlayıcıya geçer.
+
+| Alan | Değer |
+|------|-------|
+| Müşteri | {{ musteri }} |
+| Test penceresi | {{ baslangic }} – {{ bitis }} |
+| Kapsam (adres / alan adı) | {{ kapsam }} |
+| **Kapsam dışı** | {{ kapsam_disi }} |
+| Acil durdurma iletişimi | {{ acil_irtibat }} |
+
+## Kurallar
+- Hizmet kesintisine yol açabilecek testler yalnız yazılı ek onayla yapılır.
+- Endüstriyel kontrol cihazları ve eski yazıcılar varsayılan olarak kapsam dışıdır.
+- Elde edilen veriler test bitiminde imha edilir; imha kaydı rapora eklenir.
+
+Müşteri yetkilisi: ____________  Unvan: ____________  Tarih: ______  İmza: ______
+</pre></section><section class="file"><h3>human/runbooks/dr_failover.md</h3><p class="role">Failover&#x27;ı kimin ilan edeceği isimle yazılı</p><p class="meta">şerit: F — İnsan işi · 22 satır · markdown</p><pre># Felaket Kurtarma — Devir Runbook&#x27;u
+
+**Failover&#x27;ı ilan etmeye yetkili kişi burada isimle yazılıdır.** Yetki nesnesi
+tanımlı değilse otomasyon bekler; bu bilinçli bir tasarım kararıdır.
+
+| Rol | İsim | İletişim |
+|-----|------|----------|
+| Failover ilan yetkisi | {{ yetkili }} | {{ iletisim }} |
+| Müşteri onayı | {{ musteri_yetkili }} | {{ musteri_iletisim }} |
+
+## Sıra
+1. Olayı doğrula — izleme ve saha teyidi
+2. Yetkili failover ilan eder (sözlü yeterli değil, kayıt açılır)
+3. Adres değişikliği ve alan adı süreleri: kesimden **önce** düşürülmüş olmalı
+4. Replikaları etkinleştir, açılış sırasını envanterden oku
+5. Güvenlik duvarı kurallarını uygulanmamış şablondan aç
+6. Uygulama seviyesinde kabul testi
+7. Müşteriye bildir, kaydı kapat
+
+&gt; Süreyi replikasyon değil adres değişikliği, alan adı süresi ve lisans yeniden
+&gt; aktivasyonu belirler. Tatbikatta bunlar ölçülür.
+</pre></section><h2 style="border-top-color:#2F6FED">5 · Uç Nokta Ajanı</h2><p class="sub">Uç cihazda koşan Python ajanı</p><section class="file"><h3>agent/hragent/__main__.py</h3><p class="role">Ajan döngüsü; ilk gün ile 400. gün aynı</p><p class="meta">şerit: A — Aracı yazılım · 73 satır · python</p><pre>&quot;&quot;&quot;Ajan döngüsü.
+
+Devreye alma ile günlük işletme aynı döngüdür: ilk gün her şey eksiktir,
+sonraki turlarda yalnız sapanlar uygulanır.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import argparse
+import sys
+import time
+
+import structlog
+
+from hragent import inventory as inv
+from hragent.client import Client
+from hragent.config import Config
+from hragent.runner import UnknownAction, run_task
+
+log = structlog.get_logger(__name__)
+
+
+def one_cycle(client: Client, observed: dict, *, dry_run: bool = False) -&gt; dict:
+    facts = inv.collect()
+    response = client.checkin(observed, facts)
+    tasks = response.get(&quot;tasks&quot;, [])
+    log.info(&quot;gorev_alindi&quot;, sayi=len(tasks), cihaz=facts[&quot;uuid&quot;])
+
+    for task in tasks:
+        try:
+            result = run_task(task, dry_run=dry_run)
+            observed[result[&quot;key&quot;]] = result[&quot;state&quot;]
+        except UnknownAction as exc:
+            log.warning(&quot;bilinmeyen_eylem&quot;, error=str(exc))
+        except Exception as exc:  # noqa: BLE001 — tek görev hatası döngüyü düşürmez
+            key = f&quot;{task.get(&#x27;service_id&#x27;)}/{task.get(&#x27;task_id&#x27;)}&quot;
+            observed[key] = &quot;failed&quot;
+            log.error(&quot;gorev_hatasi&quot;, gorev=key, error=str(exc))
+
+    return response
+
+
+def main(argv: list[str] | None = None) -&gt; int:
+    parser = argparse.ArgumentParser(prog=&quot;hragent&quot;)
+    parser.add_argument(&quot;--once&quot;, action=&quot;store_true&quot;, help=&quot;tek tur koş ve çık&quot;)
+    parser.add_argument(&quot;--dry-run&quot;, action=&quot;store_true&quot;, help=&quot;uygulama, yalnız raporla&quot;)
+    args = parser.parse_args(argv)
+
+    config = Config.load()
+    if not config.platform_url:
+        log.error(&quot;yapilandirma_eksik&quot;, eksik=&quot;HRAGENT_PLATFORM_URL&quot;)
+        return 2
+
+    client = Client(config)
+    if not config.token and config.enrollment_code:
+        client.config.token = client.enroll(inv.collect())
+        log.info(&quot;kayit_tamam&quot;)
+
+    observed: dict = {}
+    while True:
+        try:
+            response = one_cycle(client, observed, dry_run=args.dry_run)
+            wait = int(response.get(&quot;next_checkin&quot;, config.checkin_seconds))
+        except Exception as exc:  # noqa: BLE001 — ağ kesintisinde susmayıp beklemeye devam
+            log.error(&quot;tur_basarisiz&quot;, error=str(exc))
+            wait = config.checkin_seconds
+        if args.once:
+            return 0
+        time.sleep(wait)
+
+
+if __name__ == &quot;__main__&quot;:
+    sys.exit(main())
+</pre></section><section class="file"><h3>agent/hragent/client.py</h3><p class="role">Bağlantıyı her zaman ajan kurar: giden 443</p><p class="meta">şerit: A — Aracı yazılım · 50 satır · python</p><pre>&quot;&quot;&quot;Platform istemcisi.
+
+Bağlantıyı her zaman ajan kurar: giden 443. Müşterinin güvenlik duvarında
+HR için gelen kural açılmaz.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import httpx
+import structlog
+
+from hragent.config import Config
+
+log = structlog.get_logger(__name__)
+
+
+class Client:
+    def __init__(self, config: Config) -&gt; None:
+        self.config = config
+
+    def _headers(self) -&gt; dict:
+        return {&quot;Authorization&quot;: f&quot;Bearer {self.config.token}&quot;} if self.config.token else {}
+
+    def enroll(self, inventory: dict) -&gt; str:
+        &quot;&quot;&quot;Kayıt: cihaza özel belirteç alınır. Kayıt kodu tek kullanımlıktır.&quot;&quot;&quot;
+        with httpx.Client(timeout=30) as client:
+            resp = client.post(
+                f&quot;{self.config.platform_url}/agents/enroll&quot;,
+                json={
+                    &quot;enrollment_code&quot;: self.config.enrollment_code,
+                    &quot;tenant&quot;: self.config.tenant,
+                    &quot;device_uuid&quot;: inventory[&quot;uuid&quot;],
+                    &quot;hostname&quot;: inventory[&quot;hostname&quot;],
+                    &quot;serial&quot;: inventory.get(&quot;serial&quot;),
+                    &quot;os_family&quot;: inventory.get(&quot;os_family&quot;),
+                },
+            )
+            resp.raise_for_status()
+            return resp.json()[&quot;token&quot;]
+
+    def checkin(self, observed: dict, inventory: dict) -&gt; dict:
+        &quot;&quot;&quot;Durum bildirilir, karşılığında yapılacak görevler alınır.&quot;&quot;&quot;
+        with httpx.Client(timeout=30) as client:
+            resp = client.post(
+                f&quot;{self.config.platform_url}/agents/checkin&quot;,
+                headers=self._headers(),
+                json={&quot;observed&quot;: observed, &quot;inventory&quot;: inventory},
+            )
+            resp.raise_for_status()
+            return resp.json()
+</pre></section><section class="file"><h3>agent/hragent/runner.py</h3><p class="role">Yalnız A şeridini yürütür; Ansible işini reddeder</p><p class="meta">şerit: A — Aracı yazılım · 41 satır · python</p><pre>&quot;&quot;&quot;Görev yürütücü: platformdan gelen eylemi uygun uygulayıcıya bağlar.&quot;&quot;&quot;
+from __future__ import annotations
+
+import structlog
+
+from hragent.apply import ensure_file, ensure_package, ensure_service
+
+log = structlog.get_logger(__name__)
+
+
+class UnknownAction(Exception):
+    pass
+
+
+def run_task(task: dict, *, dry_run: bool = False) -&gt; dict:
+    &quot;&quot;&quot;Tek bir görevi uygular ve sonucu döndürür. İstisna yutulmaz, yukarı taşınır.&quot;&quot;&quot;
+    action = task.get(&quot;action&quot;, &quot;&quot;)
+    params = task.get(&quot;params&quot;, {}) or {}
+    key = f&quot;{task.get(&#x27;service_id&#x27;)}/{task.get(&#x27;task_id&#x27;)}&quot;
+
+    if action != &quot;agent.converge&quot;:
+        raise UnknownAction(f&quot;{key}: ajan bu eylemi yürütmez → {action}&quot;)
+
+    results = []
+    for pkg in params.get(&quot;packages&quot;, []):
+        results.append(ensure_package(pkg[&quot;name&quot;], version=pkg.get(&quot;version&quot;), dry_run=dry_run))
+    for svc in params.get(&quot;services&quot;, []):
+        results.append(ensure_service(svc[&quot;name&quot;], state=svc.get(&quot;state&quot;, &quot;running&quot;),
+                                      dry_run=dry_run))
+    for f in params.get(&quot;files&quot;, []):
+        results.append(ensure_file(f[&quot;path&quot;], f[&quot;content&quot;], mode=int(f.get(&quot;mode&quot;, &quot;644&quot;), 8),
+                                   secret=f.get(&quot;secret&quot;, False), dry_run=dry_run))
+
+    failed = [r for r in results if r[&quot;state&quot;] == &quot;failed&quot;]
+    return {
+        &quot;key&quot;: key,
+        &quot;state&quot;: &quot;failed&quot; if failed else &quot;ok&quot;,
+        &quot;changed&quot;: any(r[&quot;changed&quot;] for r in results),
+        &quot;details&quot;: results,
+    }
+</pre></section><section class="file"><h3>agent/hragent/secrets.py</h3><p class="role">`.env` okur; fazla açık izinli dosyayı reddeder</p><p class="meta">şerit: A — Aracı yazılım · 60 satır · python</p><pre>&quot;&quot;&quot;Sır okuma.
+
+Ajanın çalıştırdığı hiçbir script parolayı içinde taşımaz. Değerler `.env` dosyasından
+okunur; dosya 0600 izinleriyle durur ve depoya asla girmez.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import os
+import stat
+from pathlib import Path
+
+import structlog
+
+log = structlog.get_logger(__name__)
+
+DEFAULT_PATHS = (
+    Path(&quot;/etc/hragent/.env&quot;),
+    Path(&quot;C:/ProgramData/HRAgent/.env&quot;),
+    Path(&quot;.env&quot;),
+)
+
+
+class InsecureSecretFile(Exception):
+    &quot;&quot;&quot;Sır dosyası fazla açık izinlerle duruyorsa okumayı reddederiz.&quot;&quot;&quot;
+
+
+def _check_permissions(path: Path) -&gt; None:
+    if os.name == &quot;nt&quot;:  # Windows&#x27;ta izin modeli farklı, ACL ayrıca kontrol edilir
+        return
+    mode = path.stat().st_mode
+    if mode &amp; (stat.S_IRGRP | stat.S_IROTH):
+        raise InsecureSecretFile(f&quot;{path}: grup/diğer okuyabiliyor, 0600 olmalı&quot;)
+
+
+def load(path: str | None = None) -&gt; dict:
+    &quot;&quot;&quot;`.env` dosyasını okur. Değerler süreç dışına hiç çıkmaz.&quot;&quot;&quot;
+    candidates = [Path(path)] if path else list(DEFAULT_PATHS)
+    for candidate in candidates:
+        if not candidate.is_file():
+            continue
+        _check_permissions(candidate)
+        values = {}
+        for line in candidate.read_text(encoding=&quot;utf-8&quot;).splitlines():
+            line = line.strip()
+            if not line or line.startswith(&quot;#&quot;) or &quot;=&quot; not in line:
+                continue
+            key, _, value = line.partition(&quot;=&quot;)
+            values[key.strip()] = value.strip().strip(&#x27;&quot;&#x27;).strip(&quot;&#x27;&quot;)
+        log.info(&quot;sirlar_yuklendi&quot;, kaynak=str(candidate), anahtar_sayisi=len(values))
+        return values
+    log.warning(&quot;sir_dosyasi_bulunamadi&quot;, aranan=[str(c) for c in candidates])
+    return {}
+
+
+def get(key: str, default: str = &quot;&quot;) -&gt; str:
+    &quot;&quot;&quot;Önce ortam değişkeni, sonra `.env`. Koda gömülü varsayılan parola yoktur.&quot;&quot;&quot;
+    if key in os.environ:
+        return os.environ[key]
+    return load().get(key, default)
+</pre></section><section class="file"><h3>agent/hragent/inventory.py</h3><p class="role">Kimlik anahtarı kalıcı ajan kimliği — klon makineler için</p><p class="meta">şerit: A — Aracı yazılım · 79 satır · python</p><pre>&quot;&quot;&quot;Donanım ve yazılım envanteri.
+
+Kimlik anahtarı hostname veya ağ kartı kimliği DEĞİLDİR: klonlanmış sanal makineler
+ikisini de paylaşır ve iki varlık tek kayda çöker. Anahtar, kalıcı ajan kimliği +
+seri numarasıdır.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import platform
+import subprocess
+import uuid
+from pathlib import Path
+
+import structlog
+
+log = structlog.get_logger(__name__)
+
+UUID_FILE = Path(&quot;/etc/hragent/uuid&quot;) if platform.system() != &quot;Windows&quot; \
+    else Path(&quot;C:/ProgramData/HRAgent/uuid&quot;)
+
+
+def device_uuid() -&gt; str:
+    &quot;&quot;&quot;Kalıcı ajan kimliği. Bir kez üretilir, diskte kalır.&quot;&quot;&quot;
+    if UUID_FILE.is_file():
+        value = UUID_FILE.read_text(encoding=&quot;utf-8&quot;).strip()
+        if value:
+            return value
+    value = str(uuid.uuid4())
+    try:
+        UUID_FILE.parent.mkdir(parents=True, exist_ok=True)
+        UUID_FILE.write_text(value, encoding=&quot;utf-8&quot;)
+    except OSError as exc:
+        log.warning(&quot;kimlik_yazilamadi&quot;, error=str(exc))
+    return value
+
+
+def serial_number() -&gt; str:
+    &quot;&quot;&quot;Üretici seri numarası. Boş veya yinelenen olabilir — tek başına anahtar değildir.&quot;&quot;&quot;
+    system = platform.system()
+    try:
+        if system == &quot;Linux&quot;:
+            path = Path(&quot;/sys/class/dmi/id/product_serial&quot;)
+            return path.read_text(encoding=&quot;utf-8&quot;).strip() if path.is_file() else &quot;&quot;
+        if system == &quot;Darwin&quot;:
+            # ioreg çıktısı geçerli UTF-8 olmayabilir: bayt olarak alıp hoşgörülü çözeriz,
+            # ayrıca tüm ağaç yerine yalnız platform düğümünü sorarız.
+            raw = subprocess.run(
+                [&quot;ioreg&quot;, &quot;-c&quot;, &quot;IOPlatformExpertDevice&quot;, &quot;-d&quot;, &quot;2&quot;],
+                capture_output=True, timeout=10, check=False,
+            ).stdout
+            out = raw.decode(&quot;utf-8&quot;, errors=&quot;replace&quot;)
+            for line in out.splitlines():
+                if &quot;IOPlatformSerialNumber&quot; in line:
+                    parts = line.split(&#x27;&quot;&#x27;)
+                    return parts[-2] if len(parts) &gt;= 2 else &quot;&quot;
+            return &quot;&quot;
+        if system == &quot;Windows&quot;:
+            raw = subprocess.run(
+                [&quot;wmic&quot;, &quot;bios&quot;, &quot;get&quot;, &quot;serialnumber&quot;],
+                capture_output=True, timeout=10, check=False,
+            ).stdout
+            out = raw.decode(&quot;utf-8&quot;, errors=&quot;replace&quot;).splitlines()
+            return out[1].strip() if len(out) &gt; 1 else &quot;&quot;
+    except (OSError, subprocess.SubprocessError, IndexError, UnicodeDecodeError) as exc:
+        log.warning(&quot;seri_no_okunamadi&quot;, error=str(exc))
+    return &quot;&quot;
+
+
+def collect() -&gt; dict:
+    return {
+        &quot;uuid&quot;: device_uuid(),
+        &quot;serial&quot;: serial_number(),
+        &quot;hostname&quot;: platform.node(),
+        &quot;os_family&quot;: platform.system(),
+        &quot;os_release&quot;: platform.release(),
+        &quot;arch&quot;: platform.machine(),
+        &quot;python&quot;: platform.python_version(),
+    }
+</pre></section><section class="file"><h3>agent/hragent/apply/packages.py</h3><p class="role">Paketler relay önbelleğinden; kurulu ise dokunmaz</p><p class="meta">şerit: A — Aracı yazılım · 55 satır · python</p><pre>&quot;&quot;&quot;Paket kurulumu. Paketler site relay&#x27;in önbelleğinden çekilir — geniş alan ağı doymasın.&quot;&quot;&quot;
+from __future__ import annotations
+
+import platform
+import subprocess
+
+import structlog
+
+log = structlog.get_logger(__name__)
+
+MANAGERS = {
+    &quot;Windows&quot;: [&quot;winget&quot;, &quot;install&quot;, &quot;--silent&quot;, &quot;--accept-package-agreements&quot;, &quot;--id&quot;],
+    &quot;Linux&quot;: [&quot;apt-get&quot;, &quot;install&quot;, &quot;-y&quot;],
+    &quot;Darwin&quot;: [&quot;brew&quot;, &quot;install&quot;],
+}
+
+
+class UnsupportedPlatform(Exception):
+    pass
+
+
+def _installed(name: str) -&gt; bool:
+    system = platform.system()
+    probe = {
+        &quot;Windows&quot;: [&quot;winget&quot;, &quot;list&quot;, &quot;--id&quot;, name],
+        &quot;Linux&quot;: [&quot;dpkg&quot;, &quot;-s&quot;, name],
+        &quot;Darwin&quot;: [&quot;brew&quot;, &quot;list&quot;, name],
+    }.get(system)
+    if not probe:
+        raise UnsupportedPlatform(system)
+    return subprocess.run(probe, capture_output=True, check=False).returncode == 0
+
+
+def ensure_package(name: str, *, version: str | None = None, dry_run: bool = False) -&gt; dict:
+    &quot;&quot;&quot;İstenen paketin kurulu olmasını sağlar. Kurulu ise hiçbir şey yapmaz.&quot;&quot;&quot;
+    if _installed(name):
+        return {&quot;action&quot;: &quot;package&quot;, &quot;name&quot;: name, &quot;state&quot;: &quot;ok&quot;, &quot;changed&quot;: False}
+    if dry_run:
+        return {&quot;action&quot;: &quot;package&quot;, &quot;name&quot;: name, &quot;state&quot;: &quot;would-install&quot;, &quot;changed&quot;: False}
+
+    system = platform.system()
+    cmd = MANAGERS.get(system)
+    if not cmd:
+        raise UnsupportedPlatform(system)
+    target = f&quot;{name}={version}&quot; if version and system == &quot;Linux&quot; else name
+    result = subprocess.run([*cmd, target], capture_output=True, text=True, check=False)
+    ok = result.returncode == 0
+    if not ok:
+        log.error(&quot;paket_kurulamadi&quot;, paket=name, kod=result.returncode, hata=result.stderr[:400])
+    return {
+        &quot;action&quot;: &quot;package&quot;, &quot;name&quot;: name,
+        &quot;state&quot;: &quot;ok&quot; if ok else &quot;failed&quot;,
+        &quot;changed&quot;: ok, &quot;exit_code&quot;: result.returncode,
+    }
+</pre></section><section class="file"><h3>agent/hragent/apply/files.py</h3><p class="role">Sır dosyaları daima 0600</p><p class="meta">şerit: A — Aracı yazılım · 37 satır · python</p><pre>&quot;&quot;&quot;Dosya içeriği ve izinleri. Sır dosyaları daima 0600 yazılır.&quot;&quot;&quot;
+from __future__ import annotations
+
+import hashlib
+import os
+from pathlib import Path
+
+SECRET_MODE = 0o600
+
+
+def _digest(data: bytes) -&gt; str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def ensure_file(
+    path: str, content: str, *, mode: int = 0o644, secret: bool = False, dry_run: bool = False
+) -&gt; dict:
+    target = Path(path)
+    desired = content.encode(&quot;utf-8&quot;)
+    effective_mode = SECRET_MODE if secret else mode
+
+    if target.is_file() and _digest(target.read_bytes()) == _digest(desired):
+        if os.name != &quot;nt&quot; and (target.stat().st_mode &amp; 0o777) != effective_mode:
+            if not dry_run:
+                target.chmod(effective_mode)
+            return {&quot;action&quot;: &quot;file&quot;, &quot;path&quot;: path, &quot;state&quot;: &quot;ok&quot;, &quot;changed&quot;: True}
+        return {&quot;action&quot;: &quot;file&quot;, &quot;path&quot;: path, &quot;state&quot;: &quot;ok&quot;, &quot;changed&quot;: False}
+
+    if dry_run:
+        return {&quot;action&quot;: &quot;file&quot;, &quot;path&quot;: path, &quot;state&quot;: &quot;would-write&quot;, &quot;changed&quot;: False}
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(desired)
+    if os.name != &quot;nt&quot;:
+        target.chmod(effective_mode)
+    return {&quot;action&quot;: &quot;file&quot;, &quot;path&quot;: path, &quot;state&quot;: &quot;ok&quot;, &quot;changed&quot;: True}
+</pre></section><section class="file"><h3>agent/tests/test_runner.py</h3><p class="role">Ajanın kendi şeridi dışına çıkmadığının testi</p><p class="meta">şerit: A — Aracı yazılım · 29 satır · python</p><pre>import pytest
+
+from hragent.runner import UnknownAction, run_task
+
+
+def test_ajan_kendi_seridinde_olmayan_eylemi_reddeder():
+    &quot;&quot;&quot;Ajan yalnız A şeridini yürütür; Ansible işi ona verilmez.&quot;&quot;&quot;
+    with pytest.raises(UnknownAction):
+        run_task({&quot;service_id&quot;: &quot;switch-management&quot;, &quot;task_id&quot;: &quot;step-02&quot;, &quot;action&quot;: &quot;awx.launch&quot;})
+
+
+def test_bos_gorev_basarili_ve_degisiklik_yok():
+    result = run_task(
+        {&quot;service_id&quot;: &quot;x&quot;, &quot;task_id&quot;: &quot;t&quot;, &quot;action&quot;: &quot;agent.converge&quot;, &quot;params&quot;: {}}
+    )
+    assert result[&quot;state&quot;] == &quot;ok&quot; and result[&quot;changed&quot;] is False
+
+
+def test_dosya_gorevi_uygulanir(tmp_path):
+    target = tmp_path / &quot;zabbix_agent2.conf&quot;
+    result = run_task(
+        {
+            &quot;service_id&quot;: &quot;server-monitoring&quot;, &quot;task_id&quot;: &quot;step-01&quot;, &quot;action&quot;: &quot;agent.converge&quot;,
+            &quot;params&quot;: {&quot;files&quot;: [{&quot;path&quot;: str(target), &quot;content&quot;: &quot;ServerActive=relay\n&quot;}]},
+        }
+    )
+    assert result[&quot;state&quot;] == &quot;ok&quot; and result[&quot;changed&quot;] is True
+    assert target.read_text(encoding=&quot;utf-8&quot;) == &quot;ServerActive=relay\n&quot;
+</pre></section>
+<p class="foot">Şerit kısaltmaları: A — aracı yazılım · B — uzaktan ayar · C — sağlayıcı arayüzü ·
+D — platform kurulumu · E — takvimli iş · F — insan işi.</p>
+</body></html>

@@ -1,0 +1,882 @@
+<title>Hisar Şerit Akışı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F1F4F4; --surface:#FFFFFF; --surface-2:#E8EDED; --surface-3:#DDE5E5;
+  --ink:#0F1718; --ink-2:#37474A; --muted:#5E7075; --rule:#D3DCDC; --rule-2:#BECCCC;
+  --accent:#0B6970; --accent-2:#0A585D; --accent-soft:#DAEDED;
+  --A:#2F6FED; --B:#7A4CD0; --C:#0C8F84; --D:#AD6A0C; --E:#B93B74; --F:#657279;
+  --ok:#1B7A46; --warn:#9C6205; --neutral:#657279;
+  --shadow:0 1px 2px rgba(15,23,24,.05), 0 8px 24px -16px rgba(15,23,24,.22);
+  --display:'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --body:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono:'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1213; --surface:#141C1E; --surface-2:#1B2528; --surface-3:#243033;
+    --ink:#E7EEEE; --ink-2:#C3D0D1; --muted:#8EA0A4; --rule:#24302F; --rule-2:#31403F;
+    --accent:#3FB5BB; --accent-2:#7ED3D7; --accent-soft:#0F2A2C;
+    --A:#6D9BFF; --B:#AD8BEC; --C:#2CC6B3; --D:#E0A64B; --E:#EB7CAA; --F:#94A3AB;
+    --ok:#46C67E; --warn:#E0A83C; --neutral:#94A3AB;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px -20px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1213; --surface:#141C1E; --surface-2:#1B2528; --surface-3:#243033;
+  --ink:#E7EEEE; --ink-2:#C3D0D1; --muted:#8EA0A4; --rule:#24302F; --rule-2:#31403F;
+  --accent:#3FB5BB; --accent-2:#7ED3D7; --accent-soft:#0F2A2C;
+  --A:#6D9BFF; --B:#AD8BEC; --C:#2CC6B3; --D:#E0A64B; --E:#EB7CAA; --F:#94A3AB;
+  --ok:#46C67E; --warn:#E0A83C; --neutral:#94A3AB;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px -20px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1140px;margin-inline:auto;padding-inline:20px}
+.prose{max-width:68ch}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.018em;line-height:1.15}
+p{margin:0 0 1em}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+/* ---- top bar ---- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.topbar-in{display:flex;align-items:center;gap:16px;min-height:52px;flex-wrap:wrap}
+.mark{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.topbar nav{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+.topbar nav a{font-size:12.5px;color:var(--muted);text-decoration:none;font-weight:500}
+.topbar nav a:hover{color:var(--ink)}
+
+/* ---- hero ---- */
+.hero{padding-block:56px 40px}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+.hero h1{font-size:clamp(34px,6vw,58px);font-weight:700}
+.hero .lead{font-size:clamp(16px,2.1vw,19px);color:var(--ink-2);max-width:60ch;margin-top:20px}
+.facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--rule)}
+.fact{display:flex;flex-direction:column;gap:2px}
+.fact b{font-family:var(--display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fact span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- sections ---- */
+section{padding-block:44px;border-top:1px solid var(--rule)}
+section:first-of-type{border-top:0}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.1em;padding-top:4px}
+h2{font-size:clamp(22px,3.4vw,30px);font-weight:600}
+.sec-sub{color:var(--muted);margin:0 0 28px;max-width:66ch;font-size:15px}
+
+/* ---- distribution bar ---- */
+.dist{margin-top:8px}
+.dist-bar{display:flex;height:64px;border-radius:5px;overflow:hidden;border:1px solid var(--rule);background:var(--surface-2)}
+.dist-seg{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 10px;min-width:0;color:#fff;transition:flex-grow .45s cubic-bezier(.4,0,.2,1);overflow:hidden;border:0;cursor:pointer;font-family:inherit;text-align:left}
+.dist-seg b{font-family:var(--mono);font-size:13px;font-weight:600;line-height:1.1}
+.dist-seg span{font-size:10.5px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.dist-seg[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-2px}
+.dist-cap{display:flex;justify-content:space-between;gap:16px;margin-top:10px;flex-wrap:wrap}
+.dist-cap p{margin:0;font-size:13px;color:var(--muted)}
+
+/* ---- controls ---- */
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:26px 0 18px}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:2px}
+.seg button{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;padding:6px 12px;border:0;background:none;color:var(--muted);border-radius:4px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.search{flex:1;min-width:180px;max-width:280px;font-family:var(--body);font-size:13.5px;padding:8px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);color:var(--ink)}
+.search::placeholder{color:var(--muted)}
+.tally{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-left:auto;white-space:nowrap}
+
+/* ---- lane board ---- */
+.board{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.lane{display:grid;grid-template-columns:64px 1fr;background:var(--surface);border:1px solid var(--rule);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
+.lane-rail{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;padding:14px 0}
+.lane-rail b{font-family:var(--display);font-size:25px;font-weight:700;line-height:1}
+.lane-rail span{font-family:var(--mono);font-size:11px;font-variant-numeric:tabular-nums;opacity:.92}
+.lane-body{padding:14px 18px 15px;min-width:0}
+.lane-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.lane-title h3{font-size:16.5px;font-weight:600}
+.lane-title em{font-family:var(--mono);font-size:11px;font-style:normal;color:var(--muted)}
+.lane-desc{font-size:13.5px;color:var(--ink-2);margin:6px 0 10px;max-width:74ch}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:11.5px;padding:2.5px 8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-2);white-space:nowrap}
+.chip.dim{opacity:.32}
+
+/* ---- figures ---- */
+figure{margin:0;padding:22px 20px 16px;background:var(--surface);border:1px solid var(--rule);border-radius:8px;box-shadow:var(--shadow);overflow-x:auto}
+figure svg{display:block;width:100%;min-width:600px;max-width:100%;height:auto;color:var(--ink-2)}
+.abbrnote{display:block;margin-top:10px;padding-top:9px;border-top:1px dashed var(--rule);font-size:12px;line-height:1.55;color:var(--muted)}
+.abbrnote b{color:var(--ink-2);font-weight:600}
+figcaption{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted);min-width:600px}
+
+/* ---- decomposition ---- */
+.decomp{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:20px;box-shadow:var(--shadow)}
+.decomp-h{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:14px;letter-spacing:.04em}
+.decomp-h b{color:var(--ink);font-size:14px;font-weight:600}
+.task{display:grid;grid-template-columns:26px 1fr;gap:12px;align-items:start;padding:9px 0;border-top:1px dashed var(--rule)}
+.task:first-of-type{border-top:0}
+.task .lm{font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;width:22px;height:22px;border-radius:4px;display:grid;place-items:center;margin-top:1px}
+.task p{margin:0;font-size:13.5px;font-family:var(--mono);color:var(--ink-2);line-height:1.5}
+
+/* ---- routing table ---- */
+.tbl-wrap{border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.tbl-scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:980px}
+thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--rule);white-space:nowrap}
+tbody tr.row{border-bottom:1px solid var(--rule);cursor:pointer}
+tbody tr.row:hover{background:var(--surface-2)}
+tbody td{padding:11px 14px;vertical-align:top;font-size:13.5px}
+.svc{font-weight:600;color:var(--ink)}
+.svc .plain{display:block;font-weight:400;color:var(--ink-2);font-size:12.5px;line-height:1.45;margin-top:3px;max-width:46ch}
+.svc small{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;font-family:var(--mono)}
+.lanepill{font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.also{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:5px}
+.flow{display:block;width:100%;max-width:330px;height:auto;margin-top:10px}
+.flow .fn{fill:var(--surface-2);stroke:var(--rule-2);stroke-width:1}
+.flow .ft{font-family:var(--body);font-size:11px;fill:var(--ink-2)}
+.flow .ft-mid{fill:var(--ink);font-weight:500}
+.flow .fe{font-family:var(--mono);font-size:9.5px;fill:var(--muted)}
+.flow .fl{stroke:var(--muted);stroke-width:1.2}
+.flow .fh{fill:var(--muted)}
+@media (prefers-reduced-motion:reduce){.flow .fd{display:none}}
+.exec{color:var(--ink-2);font-size:12.5px;min-width:300px;max-width:360px}
+.grade{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;padding:2px 7px;border-radius:3px;white-space:nowrap;border:1px solid}
+.g-FULL{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 35%,transparent);background:color-mix(in srgb,var(--ok) 9%,transparent)}
+.g-ASSISTED{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 35%,transparent);background:color-mix(in srgb,var(--warn) 9%,transparent)}
+.g-HUMAN{color:var(--neutral);border-color:color-mix(in srgb,var(--neutral) 35%,transparent);background:color-mix(in srgb,var(--neutral) 9%,transparent)}
+.tier{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap}
+tr.detail>td{padding:0;background:var(--surface-2);border-bottom:1px solid var(--rule)}
+.detail-in{padding:16px 14px 18px;display:grid;gap:16px;grid-template-columns:1.5fr 1fr}
+.dblock h4{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:7px}
+.dblock ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.dblock li{font-family:var(--mono);font-size:12px;color:var(--ink-2);line-height:1.45}
+.dblock p{margin:0;font-size:12.5px;color:var(--ink-2)}
+.gotcha{margin-top:10px;padding:10px 12px;border-left:2px solid var(--warn);background:color-mix(in srgb,var(--warn) 7%,transparent);border-radius:0 4px 4px 0}
+.gotcha p{font-size:12.5px;color:var(--ink-2)}
+.gotcha strong{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--warn);display:block;margin-bottom:3px}
+.empty{padding:34px;text-align:center;color:var(--muted);font-size:13.5px}
+
+/* ---- credentials ---- */
+.creds{display:grid;gap:9px;counter-reset:c}
+.cred{display:grid;grid-template-columns:30px 1fr;gap:13px;align-items:baseline;background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:11px 15px}
+.cred b{font-family:var(--mono);font-size:11px;color:var(--accent);font-variant-numeric:tabular-nums}
+.cred span{font-size:13.5px;color:var(--ink-2)}
+
+/* ---- tool grid ---- */
+.tools{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.tool{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 17px;box-shadow:var(--shadow)}
+.tool h3{font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.03em;margin-bottom:8px}
+.tool p{font-size:13.5px;color:var(--ink-2);margin:0}
+.tool .role{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:9px}
+
+/* ---- callout ---- */
+.callout{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 28%,transparent);border-radius:8px;padding:20px 22px}
+.callout h3{font-size:17px;font-weight:600;margin-bottom:9px;color:var(--accent-2)}
+.callout p{color:var(--ink-2);font-size:14px}
+.callout p:last-child{margin-bottom:0}
+.pcs{display:flex;flex-direction:column;gap:12px;margin:0 0 30px}
+.pc{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:15px 18px 16px;box-shadow:var(--shadow)}
+.pc-p{margin:0;font-size:14px;color:var(--ink);line-height:1.55}
+.pc-c{margin:11px 0 0;padding-top:11px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.pc-c b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;font-weight:600}
+h3.grp{font-size:15px;font-weight:600;margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid var(--accent);display:inline-block}
+.gaps{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+.gap{display:grid;grid-template-columns:auto 1fr;gap:10px;font-size:13.5px;color:var(--ink-2);padding:9px 0;border-top:1px dashed var(--rule)}
+.gap i{font-family:var(--mono);font-style:normal;color:var(--E);font-size:12px}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);padding:1.5px 5px;border-radius:3px;border:1px solid var(--rule)}
+.glos{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.gl{display:grid;grid-template-columns:150px 1fr;gap:16px;background:var(--surface);padding:11px 16px}
+.gl b{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--accent)}
+.gl span{font-size:13.5px;color:var(--ink-2)}
+@media (max-width:620px){.gl{grid-template-columns:1fr;gap:3px}}
+footer{padding-block:34px 60px;border-top:1px solid var(--rule);color:var(--muted);font-size:12.5px}
+
+
+/* ---- hareket katmanı ---- */
+@keyframes barIn{from{flex-grow:.0001}}
+@keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* şeritler: opaklık YOK — animasyon hiç çalışmasa bile kart görünür kalır */
+@keyframes laneIn{from{transform:translateY(14px)}to{transform:none}}
+@keyframes railPulse{0%,100%{box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}50%{box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}}
+@keyframes dashFlow{to{stroke-dashoffset:-18}}
+@keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
+.dist-bar.intro .dist-seg{animation:barIn .9s cubic-bezier(.22,.8,.25,1) both}
+.dist-bar.intro .dist-seg:nth-child(1){animation-delay:.05s}
+.dist-bar.intro .dist-seg:nth-child(2){animation-delay:.13s}
+.dist-bar.intro .dist-seg:nth-child(3){animation-delay:.21s}
+.dist-bar.intro .dist-seg:nth-child(4){animation-delay:.29s}
+.dist-bar.intro .dist-seg:nth-child(5){animation-delay:.37s}
+.dist-bar.intro .dist-seg:nth-child(6){animation-delay:.45s}
+.dist-seg{transition:flex-grow .5s cubic-bezier(.22,.8,.25,1), filter .2s}
+.dist-seg:hover{filter:brightness(1.12)}
+html.anim .hero h1,html.anim .hero .lead,html.anim .facts{animation:riseIn .75s cubic-bezier(.22,.8,.25,1) both}
+html.anim .hero h1{animation-delay:.06s}
+html.anim .hero .lead{animation-delay:.16s}
+html.anim .facts{animation-delay:.26s}
+html.anim .reveal{opacity:0;transform:translateY(18px)}
+html.anim .reveal.in{opacity:1;transform:none;transition:opacity .65s cubic-bezier(.22,.8,.25,1),transform .65s cubic-bezier(.22,.8,.25,1)}
+html.anim #board .lane{animation:laneIn .5s cubic-bezier(.22,.8,.25,1) both}
+html.anim #board .lane:nth-child(1){animation-delay:.03s}
+html.anim #board .lane:nth-child(2){animation-delay:.10s}
+html.anim #board .lane:nth-child(3){animation-delay:.17s}
+html.anim #board .lane:nth-child(4){animation-delay:.24s}
+html.anim #board .lane:nth-child(5){animation-delay:.31s}
+html.anim #board .lane:nth-child(6){animation-delay:.38s}
+.lane{transition:box-shadow .25s,transform .25s}
+.lane:hover{transform:translateX(3px);box-shadow:0 2px 4px rgba(15,23,24,.06),0 14px 34px -18px rgba(15,23,24,.3)}
+.lane:hover .lane-rail{animation:railPulse 1.6s ease-in-out infinite}
+.chip{transition:background .18s,border-color .18s,transform .18s}
+.chip:hover{transform:translateY(-1px);background:var(--surface-3)}
+tbody tr.row{transition:background .15s}
+.lanepill{transition:transform .18s}
+tbody tr.row:hover .lanepill{transform:scale(1.08)}
+.task{animation:laneIn .45s cubic-bezier(.22,.8,.25,1) both}
+.cred{transition:transform .2s,border-left-width .2s}
+.cred:hover{transform:translateX(3px);border-left-width:4px}
+.tool,.gl{transition:transform .25s,box-shadow .25s,background .2s}
+.tool:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(15,23,24,.06),0 16px 36px -20px rgba(15,23,24,.35)}
+.gl:hover{background:var(--surface-2)}
+.flowdot{filter:drop-shadow(0 0 3px currentColor)}
+.dashflow{animation:dashFlow 1.1s linear infinite}
+.tally::after{content:"_";animation:cursorBlink 1.1s step-end infinite;margin-left:1px}
+@media (prefers-reduced-motion:reduce){
+  html.anim .reveal{opacity:1!important;transform:none!important}
+  html.anim #board .lane{animation:none!important;opacity:1!important;transform:none!important}
+  .dist-bar.intro .dist-seg,html.anim .hero h1,html.anim .hero .lead,html.anim .facts,.task{animation:none!important;opacity:1!important;transform:none!important}
+  .dashflow,.tally::after{animation:none!important}
+  circle.flowdot{display:none}
+}
+
+@media (max-width:760px){
+  .detail-in{grid-template-columns:1fr}
+  .hero{padding-block:36px 28px}
+  .facts{gap:20px}
+  .lane{grid-template-columns:52px 1fr}
+  .lane-rail b{font-size:21px}
+  .tally{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <span class="mark">Hisar Research · Hizmet Teslim Mimarisi</span>
+    <nav>
+      <a href="#lanes">Şeritler</a>
+      <a href="#planes">Düzlemler</a>
+      <a href="#routing">Yönlendirme</a>
+      <a href="#sira">Sıra</a>
+      <a href="#bootstrap">0. Gün</a>
+      <a href="#start">Nereden</a>
+      <a href="#sozluk">Sözlük</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">Müşteri kurulumunu insansız yapmak · kapsam: pre-sales.hisarresearch.com'da yayında olan hizmetler</p>
+    <h1>Altı şerit, tek katalog, sahada kimse yok.</h1>
+    <p class="lead">Hisar Research'ün sattığı her hizmeti, müşterinin sistemleri üzerinde birilerinin kurması gerekir. Bu sayfa kataloğunuzda <strong>şu an yayında olan <span data-stat="total">39</span> hizmetin</strong> tamamını, o işi fiilen yapan şeye eşliyor — ve çalışanların bilgisayarına kurulan aracı yazılımın (agent) tek başına neden bunların yalnızca ikisini teslim edebildiğini gösteriyor.<br><span style="font-size:.88em;color:var(--muted)">Teknik terimlerin ve kısaltmaların günlük Türkçe karşılıkları sayfanın sonundaki <a href="#sozluk">sözlükte</a>.</span></p>
+    <div class="facts">
+      <div class="fact"><b data-stat="total">74</b><span>yayındaki hizmet</span></div>
+      <div class="fact"><b>9</b><span>çözüm alanı</span></div>
+      <div class="fact"><b>6</b><span>yürütme şeridi</span></div>
+      <div class="fact"><b data-stat="fullpct">—</b><span>hiç insan gerekmeyen</span></div>
+    </div>
+  </div>
+
+  <section id="dist">
+    <div class="sec-head"><span class="sec-num">01</span><h2>Ağırlık merkezi nerede, yatırım nereye</h2></div>
+    <p class="sec-sub">İlk öneriniz şuydu: her bilgisayara küçük bir aracı yazılım (agent) kurulsun, ortamı taraşın, gereken programları kendisi kursun. Sezgi doğru — ama yayındaki her hizmete tek tek <em>"bu işi fiilen kim yapacak?"</em> diye sorduğunuzda katalog şöyle bölünüyor.</p>
+    <div class="dist">
+      <div class="dist-bar" id="distBar" role="img" aria-label="Hizmet kalemlerinin altı yürütme şeridine dağılımı"></div>
+      <div class="dist-cap">
+        <p>Renkli bölümler tıklanabilir — aşağıdaki yönlendirme tablosunu şerite göre filtreler.</p>
+        <p id="distNote"></p>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:26px">
+      <p>A şeridi — yani aracı yazılım — yayındaki 39 hizmetin yalnızca <strong>ikisini</strong> taşıyor: Windows ve Linux Server Yönetimi. Bir ağ anahtarı (switch), bir güvenlik duvarı, bir sanallaştırma sunucusu, bir Amazon bulut hesabı veya bina içi kablolama işi sizin yazılımınızı çalıştıramaz. Bunların üzerine program kurulamaz; ya dışarıdan ayar basılır ya da oraya bir insan gider.</p>
+      <p>Bu, ilk önerinizin yanlış olduğu anlamına gelmiyor; kapsamının yanlış anlaşıldığı anlamına geliyor. Paket karşılaştırma tablosundaki 83 satır (yama yönetimi, antivirüs, uç nokta güvenliği, bilgisayar envanteri…) aracı yazılımı çok daha büyük gösteriyor — ama bunların hiçbiri şu an yayında bir hizmet değil. <strong>Aracı yazılım, bugün sattığınızın değil, satmayı planladığınızın altyapısı.</strong></p>
+    </div>
+  </section>
+
+  <section id="planes">
+    <div class="sec-head"><span class="sec-num">02</span><h2>Beyin merkezde, eller sahada</h2></div>
+    <p class="sec-sub">Bütün kararlar sizin sunucunuzda alınır; müşteri tarafındaki hiçbir parça karar vermez, sadece söyleneni yapar. Bağlantıyı kimin başlattığı ise tasarımın tamamıdır: ters kurarsanız 200 müşterinin hepsinden, güvenlik duvarında size dışarıdan giriş izni açmalarını istemek zorunda kalırsınız — ki bunu hiçbir müşteri kabul etmez.</p>
+    <figure>
+      <svg viewBox="0 0 900 470" role="img" aria-label="HR kontrol düzlemi kataloğu ve derlenmiş spec'i tutar; müşteri ağındaki agent'lar spec'lerini şirket içindeki site relay üzerinden dışa doğru çeker, relay agent çalıştıramayan cihazlara Ansible ile basar ve üretici bulut API'leri müşteri ağına hiç girmeden HR tarafından çağrılır">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+          <marker id="arA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#0B6970"/>
+          </marker>
+        </defs>
+
+        <rect x="340" y="18" width="544" height="434" rx="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="6 5" opacity=".55"/>
+        <text x="356" y="40" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" letter-spacing="1.4" opacity=".7">MÜŞTERİ AĞI</text>
+
+        <rect x="18" y="52" width="250" height="196" rx="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="34" y="78" font-family="Archivo, sans-serif" font-size="13" font-weight="600" fill="currentColor">HR IT Yönetim Sunucusu</text>
+        <text x="34" y="95" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity=".65" letter-spacing="1.1">KONTROL DÜZLEMİ — TEK BEYİN</text>
+        <line x1="34" y1="106" x2="252" y2="106" stroke="currentColor" opacity=".25"/>
+        <text x="34" y="126" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">hizmet kataloğu</text>
+        <text x="34" y="146" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">hak seti (müşteri bazlı)</text>
+        <text x="34" y="166" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">spec derleyici</text>
+        <text x="34" y="186" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">sır kasası (kiracı bazlı)</text>
+        <text x="34" y="206" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">denetim logu</text>
+        <text x="34" y="230" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity=".6">envanter: NetBox · Zabbix</text>
+
+        <rect x="18" y="322" width="250" height="104" rx="8" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".7"/>
+        <text x="34" y="347" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">Üretici kontrol düzlemleri</text>
+        <text x="34" y="367" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".75">HRC · Azure · AWS · vCenter</text>
+        <text x="34" y="384" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".75">Veeam · GravityZone</text>
+        <text x="34" y="408" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity=".55">C ŞERİDİ — LAN DIŞINDA</text>
+
+        <rect x="378" y="66" width="232" height="78" rx="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="394" y="91" font-family="Archivo, sans-serif" font-size="13" font-weight="600" fill="currentColor">Site relay (şirket içi)</text>
+        <text x="394" y="109" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".75">paket cache · Zabbix proxy</text>
+        <text x="394" y="126" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".75">Ansible atlama noktası</text>
+
+        <rect x="378" y="226" width="212" height="92" rx="8" fill="none" stroke="#0B6970" stroke-width="1.8"/>
+        <text x="394" y="251" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="#0B6970">Endpoint'ler ve sunucular</text>
+        <text x="394" y="270" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".78">HR agent kurulu</text>
+        <text x="394" y="288" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".78">durum bildirir, spec uygular</text>
+        <text x="394" y="308" font-family="IBM Plex Mono, monospace" font-size="10" fill="#0B6970" letter-spacing=".8">A ŞERİDİ</text>
+
+        <rect x="648" y="226" width="212" height="92" rx="8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <text x="664" y="251" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">Cihazlar</text>
+        <text x="664" y="270" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".78">switch · router · firewall</text>
+        <text x="664" y="288" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".78">Wi-Fi controller · hipervizör</text>
+        <text x="664" y="308" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity=".7" letter-spacing=".8">B ŞERİDİ — AGENT MÜMKÜN DEĞİL</text>
+
+        <line x1="484" y1="226" x2="484" y2="150" stroke="#0B6970" stroke-width="2" marker-end="url(#arA)"/>
+        <text x="496" y="180" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#0B6970">spec çeker / durum bildirir</text>
+        <text x="496" y="196" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#0B6970">dışa 443 · her 30–60 sn</text>
+
+        <path d="M378,100 L274,140" fill="none" stroke="#0B6970" stroke-width="2" marker-end="url(#arA)"/>
+        <text x="276" y="88" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#0B6970">yalnızca dışa 443</text>
+        <text x="276" y="104" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#0B6970" opacity=".8">içeri kural yok, VPN yok</text>
+
+        <path d="M610,110 C690,110 700,170 726,220" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#ar)"/>
+        <text x="638" y="150" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor">Ansible basım</text>
+        <text x="638" y="166" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".8">SSH · WinRM · NETCONF</text>
+
+        <line x1="143" y1="248" x2="143" y2="316" stroke="currentColor" stroke-width="1.6" marker-end="url(#ar)"/>
+        <g>
+          <circle class="flowdot" r="4.5" fill="#0B6970" color="#0B6970">
+            <animateMotion dur="1.9s" repeatCount="indefinite" path="M484,226 L484,152"/>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="1.9s" repeatCount="indefinite"/>
+          </circle>
+          <circle class="flowdot" r="4.5" fill="#0B6970" color="#0B6970">
+            <animateMotion dur="1.9s" begin="0.95s" repeatCount="indefinite" path="M378,100 L276,139"/>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="1.9s" begin="0.95s" repeatCount="indefinite"/>
+          </circle>
+          <circle class="flowdot" r="4" fill="currentColor">
+            <animateMotion dur="2.6s" begin="0.4s" repeatCount="indefinite" path="M610,110 C690,110 700,170 726,218"/>
+            <animate attributeName="opacity" values="0;.9;.9;0" keyTimes="0;0.15;0.8;1" dur="2.6s" begin="0.4s" repeatCount="indefinite"/>
+          </circle>
+          <circle class="flowdot" r="4" fill="currentColor">
+            <animateMotion dur="2.6s" begin="1.6s" repeatCount="indefinite" path="M143,250 L143,314"/>
+            <animate attributeName="opacity" values="0;.9;.9;0" keyTimes="0;0.15;0.8;1" dur="2.6s" begin="1.6s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+        <text x="155" y="285" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor">REST / SDK</text>
+      </svg>
+      <figcaption>Müşteri ağına giren her bağlantı <em>içeriden</em> başlatılır: aracı yazılım ve aktarıcı sunucu (relay) dışarıyı arar, dışarıdan içeri kimse aramaz. Böylece müşterinin güvenlik duvarında tek bir delik açmanız gerekmez. C şeridi ise müşterinin ağına hiç girmez; o ayarlar zaten Amazon, Microsoft gibi sağlayıcıların kendi sistemlerinde durur.<span class="abbrnote"><b>Şemadaki kısaltmalar:</b> HR = Hisar Research · LAN = müşterinin yerel ağı · SSH, WinRM, NETCONF = bir cihaza uzaktan bağlanma yöntemleri · REST / SDK = sağlayıcının sistemine yazılım üzerinden bağlanma · 443 = şifreli internet bağlantı noktası · HRC = Hisar Research’ün kendi bulutu · AWS = Amazon’un bulut platformu · VPN = şifreli uzaktan bağlantı ağı</span></figcaption>
+    </figure>
+  </section>
+
+  <section id="lanes">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Altı şerit</h2></div>
+    <p class="sec-sub">Pakete göre süzün; her şeridin o müşteri için tam olarak neyi yapması gerektiğini görün. <em>Proje bazlı</em> olanlar, pakete dahil olmayıp tek tek satılan yerinde kurulum, taşıma ve danışmanlık hizmetleri. F şeridi bilerek gri bırakıldı: bunlar otomasyonun ortadan kaldıramadığı, yalnızca planlayıp takip edebildiği insan işleri.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Pakete göre filtrele">
+        <button type="button" data-tier="all" aria-pressed="true">Tümü · 39</button>
+        <button type="button" data-tier="Essential" aria-pressed="false">Essential</button>
+        <button type="button" data-tier="Professional" aria-pressed="false">Professional</button>
+        <button type="button" data-tier="Enterprise" aria-pressed="false">Enterprise</button>
+        <button type="button" data-tier="Proje" aria-pressed="false">Proje bazlı</button>
+      </div>
+      <span class="tally" id="tally"></span>
+    </div>
+    <div class="board" id="board"></div>
+  </section>
+
+  <section id="decompose">
+    <div class="sec-head"><span class="sec-num">04</span><h2>Tek bir hizmet, tek bir işlem değildir</h2></div>
+    <p class="sec-sub">Tüm sistemin üzerine oturduğu fikir bu. Katalogdaki bir hizmet aslında bir <strong>görev listesidir</strong> ve bu görevlerin her biri farklı bir şeride düşer. Müşteri tek bir kutucuğu işaretler; arka planda aşağıdakilerin hepsi çalışır.</p>
+    <div class="decomp" id="decomp"></div>
+    <div class="prose" style="margin-top:22px">
+      <p>Bunu başka türlü kurarsanız — tek bir kurulum dosyası ya da makine başına kontrol listesi olarak — her yeni müşteri için izleme sistemini, envanteri ve destek kuyruğunu sonsuza dek elle bağlamak zorunda kalırsınız. Görev listesi olarak kurarsanız 301. bilgisayar kimseye ihtiyaç duymaz: ağda görünür, hangi gruba ait olduğu belirlenir, olması gereken ayarlar kendiliğinden hesaplanır ve uygulanır.</p>
+    </div>
+  </section>
+
+  <section id="pipeline">
+    <div class="sec-head"><span class="sec-num">05</span><h2>Devreye alma bir aşama değildir</h2></div>
+    <p class="sec-sub">Müşteriyi ilk gün kuran çevrim, 400. günde de her şeyi doğru tutan çevrimdir. Ayrı bir "kurulum dosyası" yoktur: sistem olması gereken durumu bilir ve arada bir kontrol edip sapmaları kendi düzeltir.</p>
+    <figure>
+      <svg viewBox="0 0 900 330" role="img" aria-label="Sepet seçimi sözleşmeye, hak setine, derlenmiş görev grafiğine ve işi altı yürütücü şeride dağıtan bir dağıtıcıya dönüşür; yürütücüler durumu geri bildirir ve bu sürekli olarak aynı görev grafiğine drift mutabakatı olarak döner">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor">
+          <rect x="16" y="34" width="132" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="30" y="57">sepet</text><text x="30" y="72">pre-sales sitesi</text>
+          <line x1="148" y1="60" x2="172" y2="60" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar2)"/>
+
+          <rect x="176" y="34" width="118" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="190" y="57">sözleşme</text><text x="190" y="72">imzalandı</text>
+          <line x1="294" y1="60" x2="318" y2="60" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar2)"/>
+
+          <rect x="322" y="34" width="146" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <text x="336" y="57">hak seti</text><text x="336" y="72" opacity=".7">N hizmet ID'si</text>
+          <line x1="468" y1="60" x2="492" y2="60" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar2)"/>
+
+          <rect x="496" y="34" width="162" height="52" rx="6" fill="none" stroke="#0B6970" stroke-width="1.8"/>
+          <text x="510" y="57" fill="#0B6970">görev grafiği derlendi</text><text x="510" y="72" opacity=".75">müşteri · rol bazlı</text>
+          <line x1="658" y1="60" x2="682" y2="60" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar2)"/>
+
+          <rect x="686" y="34" width="122" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <text x="700" y="57">dağıtıcı</text><text x="700" y="72" opacity=".7">n8n</text>
+
+          <path d="M747,86 L747,116 L60,116 L60,140" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="190" y1="116" x2="190" y2="140" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="320" y1="116" x2="320" y2="140" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="450" y1="116" x2="450" y2="140" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="580" y1="116" x2="580" y2="140" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="710" y1="116" x2="710" y2="140" stroke="currentColor" stroke-width="1.3"/>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600">
+          <rect x="16" y="140" width="88" height="34" rx="5" fill="#2F6FED"/><text x="34" y="162" fill="#fff">A agent</text>
+          <rect x="146" y="140" width="88" height="34" rx="5" fill="#7A4CD0"/><text x="160" y="162" fill="#fff">B ansible</text>
+          <rect x="276" y="140" width="88" height="34" rx="5" fill="#0C8F84"/><text x="296" y="162" fill="#fff">C api</text>
+          <rect x="406" y="140" width="88" height="34" rx="5" fill="#AD6A0C"/><text x="420" y="162" fill="#fff">D platform</text>
+          <rect x="536" y="140" width="88" height="34" rx="5" fill="#B93B74"/><text x="552" y="162" fill="#fff">E zamanlı</text>
+          <rect x="666" y="140" width="88" height="34" rx="5" fill="#657279"/><text x="684" y="162" fill="#fff">F insan</text>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor">
+          <line x1="60" y1="174" x2="60" y2="206" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="190" y1="174" x2="190" y2="206" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="320" y1="174" x2="320" y2="206" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="450" y1="174" x2="450" y2="206" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="580" y1="174" x2="580" y2="206" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="710" y1="174" x2="710" y2="206" stroke="currentColor" stroke-width="1.3"/>
+          <rect x="16" y="206" width="792" height="46" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="34" y="226">durum geri bildirilir — NetBox, Zabbix ve ticket kuyruğu gerçeğe döner</text>
+          <text x="34" y="243" opacity=".7">her yürütücü kendi sağlık kontrolünü kanıtlar; sapan her şey yeniden uygulanır</text>
+
+          <path class="dashflow" d="M824,229 L866,229 L866,14 L577,14 L577,30" fill="none" stroke="#0B6970" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar2)" color="#0B6970"/>
+          <text x="600" y="300" fill="#0B6970">mutabakat — 0. günde ve 400. günde aynı döngü</text>
+          <path d="M590,294 L576,294" fill="none" stroke="#0B6970" stroke-width="1.4"/>
+          <path d="M576,294 L576,258" fill="none" stroke="#0B6970" stroke-width="1.4"/>
+        </g>
+        <g>
+          <circle class="flowdot" r="4.5" fill="#0B6970" color="#0B6970">
+            <animateMotion dur="5.6s" repeatCount="indefinite"
+              path="M20,60 L806,60 L747,60 L747,116 L60,116 L60,140 L60,206 L824,229 L866,229 L866,14 L577,14 L577,32"
+              keyPoints="0;0.34;0.42;0.5;0.62;0.68;0.78;0.9;1" keyTimes="0;0.3;0.38;0.46;0.6;0.68;0.8;0.92;1" calcMode="linear"/>
+            <animate attributeName="opacity" values="0;1;1;1;0" keyTimes="0;0.06;0.75;0.95;1" dur="5.6s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+        <g>
+        </g>
+      </svg>
+      <figcaption>Kesikli dönüş oku işin özü: ilk kurulum ile günlük işletme aynı çevrimdir. Müşteri paketini yükseltmek ayrı bir proje değildir — satın aldığı hizmet listesine yeni satırlar eklenir, bir sonraki kontrol turunda sistem onları kendiliğinden kurar.<span class="abbrnote"><b>Şemadaki kısaltmalar:</b> ID = kimlik numarası · n8n = işleri birbirine bağlayıp otomatik çalıştıran araç</span></figcaption>
+    </figure>
+  </section>
+
+  <section id="sira">
+    <div class="sec-head"><span class="sec-num">06</span><h2>Çözüm sırası</h2></div>
+    <p class="sec-sub">Otuz dokuz hizmeti aynı anda kurmaya çalışmak, hiçbirini bitirememenin en hızlı yolu. Sıralama kataloğun kendi ağırlığından çıkıyor: önce her şeyin dayandığı omurga, sonra en çok hizmet taşıyan şerit, en son insan işlerinin devri.</p>
+    <figure>
+      <svg viewBox="0 0 900 250" role="img" aria-label="Beş aşamalı kurulum sırası: omurga, uzaktan ayar basma, sağlayıcı arayüzleri, aracı yazılım ve takvimli işler, proje devri; altta her aşamada geçerli olan kasa, sürümlü tanım, bakım penceresi ve yetki tablosu">
+        <defs><marker id="ra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+        <g font-family="IBM Plex Mono, monospace">
+          <rect x="8" y="40" width="156" height="92" rx="7" fill="none" stroke="#0B6970" stroke-width="1.8"/>
+          <text x="22" y="62" font-size="9" fill="#0B6970" letter-spacing="1.2">AŞAMA 0</text>
+          <text x="22" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Omurga</text>
+          <text x="22" y="101" font-size="10.5" fill="currentColor" opacity=".8">1 hizmet</text>
+          <text x="22" y="119" font-size="9.5" fill="currentColor" opacity=".65">relay · kasa · envanter</text>
+          <line x1="166" y1="86" x2="186" y2="86" stroke="currentColor" stroke-width="1.4" marker-end="url(#ra)"/>
+
+          <rect x="190" y="40" width="156" height="92" rx="7" fill="none" stroke="#7A4CD0" stroke-width="1.8"/>
+          <text x="204" y="62" font-size="9" fill="#7A4CD0" letter-spacing="1.2">AŞAMA 1</text>
+          <text x="204" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Uzaktan ayar</text>
+          <text x="204" y="101" font-size="10.5" fill="currentColor" opacity=".8">13 hizmet</text>
+          <text x="204" y="119" font-size="9.5" fill="currentColor" opacity=".65">sunucu ve ağ cihazları</text>
+          <line x1="348" y1="86" x2="368" y2="86" stroke="currentColor" stroke-width="1.4" marker-end="url(#ra)"/>
+
+          <rect x="372" y="40" width="156" height="92" rx="7" fill="none" stroke="#0C8F84" stroke-width="1.8"/>
+          <text x="386" y="62" font-size="9" fill="#0C8F84" letter-spacing="1.2">AŞAMA 2</text>
+          <text x="386" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Sağlayıcı arayüzü</text>
+          <text x="386" y="101" font-size="10.5" fill="currentColor" opacity=".8">10 hizmet</text>
+          <text x="386" y="119" font-size="9.5" fill="currentColor" opacity=".65">bulut ve yedekleme</text>
+          <line x1="530" y1="86" x2="550" y2="86" stroke="currentColor" stroke-width="1.4" marker-end="url(#ra)"/>
+
+          <rect x="554" y="40" width="156" height="92" rx="7" fill="none" stroke="#2F6FED" stroke-width="1.8"/>
+          <text x="568" y="62" font-size="9" fill="#2F6FED" letter-spacing="1.2">AŞAMA 3</text>
+          <text x="568" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Ajan ve takvim</text>
+          <text x="568" y="101" font-size="10.5" fill="currentColor" opacity=".8">5 hizmet</text>
+          <text x="568" y="119" font-size="9.5" fill="currentColor" opacity=".65">sunucu ajanı, raporlar</text>
+          <line x1="712" y1="86" x2="732" y2="86" stroke="currentColor" stroke-width="1.4" marker-end="url(#ra)"/>
+
+          <rect x="736" y="40" width="156" height="92" rx="7" fill="none" stroke="#657279" stroke-width="1.8"/>
+          <text x="750" y="62" font-size="9" fill="#657279" letter-spacing="1.2">AŞAMA 4</text>
+          <text x="750" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Proje devri</text>
+          <text x="750" y="101" font-size="10.5" fill="currentColor" opacity=".8">10 hizmet</text>
+          <text x="750" y="119" font-size="9.5" fill="currentColor" opacity=".65">kurulum → yönetilen</text>
+
+          <rect x="8" y="170" width="884" height="62" rx="7" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="5 4" opacity=".6"/>
+          <text x="24" y="192" font-size="9" fill="currentColor" opacity=".7" letter-spacing="1.2">HER AŞAMADA GEÇERLİ</text>
+          <text x="24" y="215" font-size="10.5" fill="currentColor">kasa (.env · ansible-vault · n8n credentials)</text>
+          <text x="300" y="215" font-size="10.5" fill="currentColor">sürümlü tanım + geri alma</text>
+          <text x="520" y="215" font-size="10.5" fill="currentColor">bakım penceresi</text>
+          <text x="680" y="215" font-size="10.5" fill="currentColor">yetki tablosu</text>
+        </g>
+      </svg>
+      <figcaption>Her aşama, bir öncekinin sağlık kontrolü yeşile döndüğünde başlar. Aşama 0 tek bir hizmettir ama omurganın tamamını ayağa kaldırır: aktarıcı sunucu, kasa, envanter ve kayıt yolu. Alttaki dört nesne aşamalara ait değil, hepsinin üzerinde durur — ilk günden tanımlanmazsa sonradan geriye dönük eklenemez.</figcaption>
+    </figure>
+  </section>
+
+  <section id="routing">
+    <div class="sec-head"><span class="sec-num">07</span><h2>Yönlendirme tablosu</h2></div>
+    <p class="sec-sub">Yayındaki <span data-stat="total">39</span> hizmetin tamamı. Her satırda hizmetin ne işe yaradığı ve o işi kimin yaptığı yazıyor; satıra tıklayınca teknik adımlar, gereken yetkiler ve hizmetin hâlâ çalıştığının nasıl kanıtlandığı açılıyor.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Pakete göre filtrele">
+        <button type="button" data-tier="all" aria-pressed="true">All</button>
+        <button type="button" data-tier="Essential" aria-pressed="false">Essential</button>
+        <button type="button" data-tier="Professional" aria-pressed="false">Professional</button>
+        <button type="button" data-tier="Enterprise" aria-pressed="false">Enterprise</button>
+        <button type="button" data-tier="Proje" aria-pressed="false">Proje</button>
+      </div>
+      <div class="seg" role="group" aria-label="Şeride göre filtrele" id="laneSeg"></div>
+      <input class="search" id="q" type="search" placeholder="Hizmet veya araç ara…" aria-label="Hizmet ara">
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr>
+            <th>Hizmet</th><th>Şerit</th><th>Yürütücü</th><th>Otomasyon</th><th>Paket</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" hidden>Bu filtreye uyan kayıt yok.</div>
+    </div>
+  </section>
+
+  <section id="bootstrap">
+    <div class="sec-head"><span class="sec-num">08</span><h2>İlk gün: erişimleri tek seferde toplamak</h2></div>
+    <p class="sec-sub">Yayındaki hizmetlerin çoğu program kurulamayan cihazlarda ve sahada yapılan işlerde; dolayısıyla devreye almanın hızını belirleyen şey, üzerine program kurulamayan her şeyin şifrelerinin ve binanın kapısının size ne zaman açıldığı. Bunu kovalanacak bir iş olmaktan çıkarmanın yolu, erişim listesini müşterinin aldığı paketten <strong>otomatik üretmek</strong> ve tek bir formda toplamak: aşağıdaki akış tam olarak bunu yapıyor, ardından gelen liste de o formun içeriğidir.</p>
+    <figure style="margin-bottom:26px">
+      <svg viewBox="0 0 900 190" role="img" aria-label="Sözleşmeden başlayıp gereken erişimlerin otomatik listelenmesi, müşteriye tek form, kasaya yazılması ve kanarya testiyle doğrulanması; test başarısızsa destek kaydı açılır">
+        <defs><marker id="rb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+        <g font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor">
+          <rect x="8" y="30" width="154" height="76" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="22" y="58">sözleşme</text><text x="22" y="76" opacity=".7">ve paket</text>
+          <line x1="164" y1="68" x2="186" y2="68" stroke="currentColor" stroke-width="1.3" marker-end="url(#rb)"/>
+
+          <rect x="190" y="30" width="154" height="76" rx="6" fill="none" stroke="#0B6970" stroke-width="1.8"/>
+          <text x="204" y="54" fill="#0B6970">gereken erişimler</text><text x="204" y="72" fill="#0B6970">otomatik listelenir</text>
+          <text x="204" y="92" font-size="9.5" opacity=".65">yalnız o paketin</text>
+          <line x1="346" y1="68" x2="368" y2="68" stroke="currentColor" stroke-width="1.3" marker-end="url(#rb)"/>
+
+          <rect x="372" y="30" width="154" height="76" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="386" y="58">müşteriye</text><text x="386" y="76" opacity=".7">tek form</text>
+          <line x1="528" y1="68" x2="550" y2="68" stroke="currentColor" stroke-width="1.3" marker-end="url(#rb)"/>
+
+          <rect x="554" y="30" width="154" height="76" rx="6" fill="none" stroke="#0B6970" stroke-width="1.8"/>
+          <text x="568" y="58" fill="#0B6970">kasaya yazılır</text><text x="568" y="78" font-size="9.5" opacity=".65">açık metin kalmaz</text>
+          <line x1="710" y1="68" x2="732" y2="68" stroke="currentColor" stroke-width="1.3" marker-end="url(#rb)"/>
+
+          <rect x="736" y="30" width="156" height="76" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="750" y="54">kanarya testi</text><text x="750" y="74" font-size="9.5" opacity=".7">yeşilse hizmet</text><text x="750" y="90" font-size="9.5" opacity=".7">başlatılır</text>
+
+          <path d="M814,110 L814,150 L449,150 L449,112" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#rb)"/>
+          <text x="470" y="145" font-size="9.5" opacity=".75">başarısızsa destek kaydı açılır, hizmet başlatılmaz</text>
+        </g>
+      </svg>
+      <figcaption>Erişim toplamayı kovalanan bir iş olmaktan çıkaran şey ikinci kutu: liste müşterinin aldığı paketten üretilir, dolayısıyla kimseden gereksiz yetki istenmez ve hiçbir gereken yetki unutulmaz. Son kutu da sözü fiile bağlar — yetki kasaya yazıldıktan sonra otomatik bir test bağlantısı kurulur, yeşil dönmeden hizmet başlatılmış sayılmaz.</figcaption>
+    </figure>
+    <div class="creds" id="creds"></div>
+    <div class="prose" style="margin-top:28px">
+      <p>Bu liste aslında sizin devreye alma sözleşmeniz. Her satırı bir kez yapılması gereken bir görüşme, ardından da şifreli bir kasada saklanması gereken bir parola. Kasada her müşterinin bölmesi ayrı olmalı: bir müşteri için çalışan işlem, başka bir müşterinin bölmesini asla okuyamamalı. Müşteriye vereceğiniz kontrol listesini birebir bundan üretin ve müşterinin aldığı pakete göre kısaltın — Essential paketi alan bir müşteriden sanallaştırma sunucusu şifresi istenmemeli.</p>
+    </div>
+  </section>
+
+  <section id="hard">
+    <div class="sec-head"><span class="sec-num">09</span><h2>Zor kalemler ve çözümleri</h2></div>
+    <p class="sec-sub">Her maddenin altında ne yapılacağı yazıyor. Üstte otomasyona direnen dokuz hizmet, altta tek tek bakınca görünmeyip bütüne bakınca ortaya çıkan on iki eksik — hepsi bir sonraki sürümde kapatılabilir işlere çevrildi.</p>
+    <h3 class="grp">Otomasyona direnen dokuz hizmet</h3>
+    <div class="pcs" id="hardest"></div>
+    <h3 class="grp">Bütünde görünen on iki eksik</h3>
+    <div class="pcs" id="gaps"></div>
+  </section>
+
+  <section id="tools">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Hangi araç ne işe yarar</h2></div>
+    <p class="sec-sub">Bugün için Ansible türü otomasyon ile n8n'i, ileride ise yapay zekâ ajanlarını düşünüyorsunuz. Her birinin burada tam olarak tek bir doğru görevi var; en sık yapılan hata, birini gücünün yetmediği bir konuma terfi ettirmek.</p>
+    <div class="tools">
+      <div class="tool"><span class="role">Yalnızca A şeridi</span><h3>HR (Hisar Research) agent’ı</h3><p>Bilgisayarın durumunu bildirir, olması gereken ayarları merkezden alır ve uygular. Çalıştırdığı bash ve PowerShell script’leri hiçbir parola taşımaz; gizli değerleri <code>.env</code> dosyasından okur. Ekranı yok, müşterinin oynayabileceği bir ayar dosyası yok, kendi kararı yok. Basit kalsın: aksi hâlde bir yazılım üreticisi kurulum ayarını her değiştirdiğinde 10.000 bilgisayara güncelleme dağıtmak zorunda kalırsınız.</p></div>
+      <div class="tool"><span class="role">Yalnızca B şeridi</span><h3>Ansible / AWX (Ansible yönetim arayüzü)</h3><p>Uzaktan bağlanabildiğiniz her cihaza ayar basan kolunuz; müşterinin binasındaki aktarıcı sunucudan çalışır. Cihaz parolaları playbook’un içinde değil <code>ansible-vault</code> içinde şifreli durur, çalışma anında çözülür. Onu en üstteki koordinatör yapmayın: neyin olması gerektiğini hatırlamaz, müşterileri birbirinden ayırmaz ve kendi başına zamanlama yapamaz.</p></div>
+      <div class="tool"><span class="role">Orkestratör + E şeridi</span><h3>n8n</h3><p>Sözleşme imzalandığı anda görev listesini hazırlar, işi altı şeride dağıtır, hataları izler, insan gerektiren işler için iş emri açar. Bağlandığı her sistemin parolasını <code>n8n credentials</code> deposundan alır; akışın içinde açık metin parola bulunmaz — ve aylık rapor, yedek testi gibi tekrar eden her işi kendi takviminde çalıştırır. Bu yardımcı bir araç değil, sistemin omurgası.</p></div>
+      <div class="tool"><span class="role">Dikiş yerlerinde, ileride</span><h3>Yapay zekâ ajanları</h3><p>En çok işe yarayacağı üç yer: ağda yeni görünen bir cihazın ne olduğuna karar vermek; gelen bir alarmı önceliklendirip çözüm önerisini insan görmeden hazırlamak; müşterinin istisna talebini okuyup hangi ayarın değişmesi gerektiğini önermek. Üçünde de yapay zekâ yalnızca bir <em>ayar önerisi</em> üretir ve bu öneri aynı kontrollü hattan geçer. Hiçbir kasaya erişmez, hiçbir parolayı görmez ve müşteri sistemlerine doğrudan dokunmaz.</p></div>
+    </div>
+  </section>
+
+  <section id="start">
+    <div class="sec-head"><span class="sec-num">11</span><h2>Tek kural ve nereden başlamalı</h2></div>
+    <div class="callout">
+      <h3>Tek katalog, iki yüz</h3>
+      <p>Sitedeki her hizmetin bir kimlik numarası olmalı ve otomasyon sisteminiz aynı numarayı kullanmalı. "Firewall Management" sitede bir pazarlama başlığı, otomasyonda bambaşka bir isim olarak durduğu anda satılan ile teslim edilen birbirinden ayrışır. Bu tür platformları teknoloji değil, tam olarak bu ayrışma batırır.</p>
+      <p>Satış yüzü sitede durur, teslim yüzü otomasyonda: görev listesi, o işi yapan şerit, gereken şifreler, sağlık kontrolü. Aynı kaydın iki yüzü, kimlik numarasıyla birbirine bağlı.</p>
+    </div>
+    <div class="prose" style="margin-top:26px">
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:10px" id="firstBuildH">Önce tek bir hizmeti uçtan uca kurun</h3>
+      <p id="firstBuild"></p>
+      <p>Bu omurga bir kez gerçekten çalıştığında — sepetten satın alınan hizmet listesine, oradan görev listesine, uygulanmış ayarlara ve düzenli sapma kontrolüne kadar — geriye kalan hizmetler mimari iş değil, sadece katalog doldurma işidir. Altı aylık bir proje ile altı yıllık bir proje arasındaki fark budur.</p>
+    </div>
+  </section>
+
+  <section id="sozluk">
+    <div class="sec-head"><span class="sec-num">12</span><h2>Sözlük</h2></div>
+    <p class="sec-sub">Bu sayfada geçen kısaltmaların ve yabancı kökenli terimlerin günlük Türkçe karşılıkları. Ürün adları (Zabbix, Ansible, Veeam gibi) marka olduğu için çevrilmemiştir.</p>
+    <div class="glos" id="glos"></div>
+  </section>
+
+  <footer>
+    Kapsam: pre-sales.hisarresearch.com/services üzerinde yayında olan 9 çözüm alanındaki 39 hizmet. Paket karşılaştırma tablosundaki, henüz yayında hizmet olarak bulunmayan özellik satırları ve Microsoft 365 Management kapsam dışıdır. Hizmet adları, kategoriler ve paket içerikleri siteden okunmuştur. Şerit atamaları bir tasarım önerisidir, üretici taahhüdü değildir.
+  </footer>
+
+</div>
+</main>
+
+<script>
+const DATA = {"items": [{"name": "Active Directory", "area": "Server Management", "tier": "Essential", "primary_lane": "B", "all_lanes": ["B", "A", "D", "E"], "executor": "Site relay'den WinRM (Windows uzaktan yönetim) ile Ansible microsoft.ad + PowerShell GPO (merkezî Windows kuralı) modülleri", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] ansible microsoft.ad denetimi: FSMO (Active Directory özel rolleri), site/subnet, repadmin /replsum, GPO dışa aktarımı", "[B] OU (kullanıcı klasörü)/parola/kilitleme/Kerberos baseline'ını uygula ve HR (Hisar Research) servis hesabını yalnız tier-0 yetkilendir", "[A] Her DC'ye (etki alanı denetleyicisi) role=dc etiketli agent kur; patch ring'i asla iki DC'yi aynı anda yeniden başlatmasın", "[D] DC başına AD (Active Directory kullanıcı sistemi) şablonlu Zabbix host'u: replikasyon hatası, lsass, SYSVOL (etki alanı ortak klasörü), LDAP (dizin sorgulama) yanıt süresi", "[E] n8n haftalık tarama: atıl hesaplar, ayrıcalıklı grup drift'i, baseline'a göre GPO farkı"], "credential_needed": "Tier-0 Domain Admin servis hesabı + tüm DC'lere WinRM/Kerberos erişimi. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Zabbix'te repadmin replsum + SYSVOL/DFSR durumu, ayrıca LDAP/Kerberos sentetik kimlik doğrulaması", "automation_grade": "ASSISTED", "gotcha": "Site relay'de önbelleğe alınan tier-0 bilgileri o relay'i tek kutuluk domain ele geçirme hedefine çevirir.", "plain": "Çalışanların kullanıcı hesaplarının, şifrelerinin ve kimin hangi dosyaya erişebileceğinin tutulduğu merkezî sistem. İşe giren çalışanın hesabı burada açılır, ayrılanınki burada kapanır.", "flow": ["HR Kontrol", "Ansible görevi", "Site Relay", "WinRM ile bağlanır", "Etki Alanı Sunucusu"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "DB Server Management", "area": "Server Management", "tier": "Professional", "primary_lane": "B", "all_lanes": ["B", "A", "C", "D", "E"], "executor": "ansible community.postgresql/mysql + win_shell ile T-SQL; uygulama farkındalıklı backup için Veeam REST (web tabanlı arayüz)", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Instance'ları, sürümleri ve edition'ları keşfet; NetBox'a yaz ve yapılandırma baseline'ını dondur", "[B] Motor baseline'ını uygula: max memory, tempdb dosyaları, autogrowth, Ola/pg_cron bakımı", "[C] REST API (uygulama arayüzü) ile DB (veritabanı) VM'i (sanal makine) başına Veeam uygulama farkındalıklı işlemeyi ve log truncate'i aç", "[D] Ayrı düşük yetkili izleme hesabıyla MSSQL (Microsoft SQL (veritabanı sorgu dili) Server)/PostgreSQL ODBC (veritabanı bağlantı arayüzü) şablonlu Zabbix host'u", "[E] n8n gecelik: backup zincirini doğrula ve boş instance'a geri dönüş testi, DBCC (SQL Server bakım komutu)/vacuum raporu"], "credential_needed": "Instance başına sysadmin/superuser + düşük yetkili bir Zabbix izleme hesabı. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "ODBC oturum+sorgu probu, replikasyon gecikmesi ve pakete göre RPO'ya (kabul edilebilir veri kaybı) karşı son sağlam geri dönüş noktası yaşı", "automation_grade": "ASSISTED", "gotcha": "DB yapılandırması bedelsiz sabitlenemez: max memory/tempdb restart ister, saf bir döngü prod'u sürekli yeniden başlatır.", "plain": "Şirketin verilerinin saklandığı veritabanı sunucularının bakımı, hızlı çalışması ve ayakta kalması.", "flow": ["HR Kontrol", "Ansible görevi", "Site Relay", "SSH / WinRM", "Veritabanı Sunucusu"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "DHCP Management", "area": "Server Management", "tier": "Essential", "primary_lane": "B", "all_lanes": ["B", "A", "D", "E"], "executor": "Site relay'den ansible win_shell + DhcpServer PS modülü (ISC (açık kaynak DHCP yazılımı) için community.general)", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Scope'ları, rezervasyonları ve option'ları (Get-DhcpServerv4Scope) NetBox IPAM'e (ağ adres yönetimi) aktar", "[B] DHCP (otomatik adres dağıtımı) failover çiftini 50/50 yük dengeli kur/doğrula ve sunucuyu AD'de (Active Directory kullanıcı sistemi) yetkilendir", "[D] NetBox prefix'lerini otoriter işaretle; prefix veya rezervasyon değişiminde n8n webhook'u tetikle", "[D] Scope başına Zabbix item'ları: boş lease %, failover durumu, servis durumu, %15'te trigger", "[E] n8n saatlik scope kullanım taraması + VLAN (sanal ağ bölmesi) başına haftalık sahte DHCP probu"], "credential_needed": "DHCP Administrators + AD yetkilendirme hakkı; NetBox API (uygulama arayüzü) token. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Zabbix scope başına failover durumu ve boş lease sorgular; VLAN başına relay'den DHCPDISCOVER (adres isteği paketi) probu", "automation_grade": "ASSISTED", "gotcha": "Option 43/66 ile telefon/AP rezervasyonları NetBox'ta yoktur — IPAM'den scope yeniden kurmak VoIP'i (internet üzerinden telefon) çökertir.", "plain": "Ağa bağlanan her cihaza otomatik adres veren sistemin yönetimi. Bu olmazsa yeni bağlanan bilgisayar ağı göremez.", "flow": ["NetBox envanteri", "adres planı", "Site Relay", "WinRM ile yazar", "DHCP Sunucusu"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "DNS Management", "area": "Server Management", "tier": "Essential", "primary_lane": "B", "all_lanes": ["B", "C", "D", "E"], "executor": "Relay'den ansible win_dns_record / nsupdate; genel zone'lar için Cloudflare + Route53 API (uygulama arayüzü)", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Her zone'u dışa aktar (dnscmd /zoneexport, named-checkzone) ve NetBox DNS'e (alan adı çözümleme) içe aktar", "[D] NetBox'ı DNS doğruluk kaynağı işaretle, kayıt sahipliğini ve n8n'e değişiklik webhook'unu aç", "[C] Registrar/Cloudflare/Route53 API token'larını devral; apex, MX (e-posta yönlendirme kaydı), SPF (e-posta gönderici doğrulama), DKIM (e-posta imzası), DMARC (e-posta sahtecilik koruması) kayıtlarını çek", "[D] Zabbix item'ları: relay'den zone bazlı çözümleme, NS'ler (alan adı sunucusu kaydı) arası SOA (alan adı ana kaydı) seri drift'i, NXDOMAIN (bulunamayan alan adı) oranı", "[E] n8n gecelik NetBox→DNS mutabakatını kuru modda + 30/14/7 günde alan adı/sertifika bitiş alarmı"], "credential_needed": "AD (Active Directory kullanıcı sistemi) DNS'te DnsAdmins (DNS yönetici grubu) + her genel zone/registrar için birer API token. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "Relay'den apex/MX/autodiscover sentetik çözümlemesi + tüm NS'lerde SOA seri eşleşmesi", "automation_grade": "ASSISTED", "gotcha": "Elle açılmış kayıtları içe aktarmamış bir NetBox→DNS mutabakatı ilk koşuda canlı kayıtları siler.", "plain": "İnternet adreslerini (örneğin sirketiniz.com) bilgisayarların anladığı numaralara çeviren sistemin yönetimi. Bozulursa siteler ve e-posta anında çalışmaz olur.", "flow": ["NetBox envanteri", "kayıt listesi", "Site Relay", "WinRM / nsupdate", "DNS Sunucusu"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "File Server Management", "area": "Server Management", "tier": "Essential", "primary_lane": "B", "all_lanes": ["B", "A", "C", "D", "E"], "executor": "ansible.windows win_share/win_acl + FSRM (dosya sunucusu kota yöneticisi); dosya seviyesi backup işleri için Veeam REST (web tabanlı arayüz) API (uygulama arayüzü)", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Paylaşımları, NTFS (Windows dosya izinleri) ACL'lerini (erişim izin listesi) ve DFS (dağıtık dosya paylaşımı) isim alanlarını NetBox'a envanterle, salt-okunur baseline olarak dondur", "[B] FSRM kota + dosya tarama şablonlarını uygula ve VSS (Windows anlık kopya) gölge kopyalarını günde iki kez aç", "[A] Agent SMBv1'i (eski dosya paylaşım sürümü) kapatır, SMB (Windows dosya paylaşımı) imzalama/şifrelemeyi zorunlu kılar, veri birimlerinde dedup açar", "[C] Veeam REST API ile paylaşım birimlerine bağlı dosya seviyesi işi oluştur, RPO'yu (kabul edilebilir veri kaybı) pakete göre kur", "[D] Birim boş %, VSS snapshot yaşı, SMB oturum sayısı üzerine Zabbix trigger'ları; Grafana kutucuğu"], "credential_needed": "Dosya sunucularında local admin + paylaşım/NTFS sahipliği; Veeam API token. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Relay'den SMB sentetik bağlama+okuma, VSS snapshot yaşı, API'den son sağlam Veeam geri dönüş noktası", "automation_grade": "ASSISTED", "gotcha": "NTFS ACL baseline'ını kalıtımın üzerine yeniden uygulamak canlı erişimi keser — ACL'leri denetleyin, asla sabitlemeyin.", "plain": "Şirketin ortak dosyalarının durduğu sunucunun yönetimi: kimin hangi klasöre girebileceği, alanın dolup dolmadığı ve dosyaların yedeği.", "flow": ["HR Kontrol", "paylaşım planı", "Site Relay", "WinRM ile uygular", "Dosya Sunucusu"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Linux Server Yönetimi", "area": "Server Management", "tier": "Professional", "primary_lane": "A", "all_lanes": ["A", "B", "D", "E"], "executor": "HR (Hisar Research) agent (apt/dnf, systemd, sysctl) + relay'den servis yapılandırması için ansible rolleri", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[A] Agent'ı cloud-init veya tek seferlik kurucu ile başlat, site relay CA'sına (sertifika otoritesi) karşı kaydet", "[A] CIS (güvenlik sıkılaştırma standardı)-lite baseline'ı sabitle: sshd sıkılaştırma, sudoers, auditd, zaman senkronu, patch ring", "[B] Sunucunun işlevine göre ansible rol yapılandırması (nginx, postfix, docker, HAProxy (yük dağıtıcı))", "[D] 'Linux by Zabbix agent2' şablonlu host + systemd unit, inode ve OOM (bellek yetersizliği) trigger'ları", "[E] n8n aylık rapor: bekleyen CVE'ler (dnf updateinfo / apt), restart gereksinimi, EOL (kullanım ömrü sonu) dağıtımlar"], "credential_needed": "root veya NOPASSWD (parolasız yetki) sudo + site relay'de tutulan SSH (şifreli uzaktan bağlantı) anahtarı. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "agent2 heartbeat + Zabbix systemd/disk/inode trigger'ları ve restart-gerekli bayrağı item'ı", "automation_grade": "ASSISTED", "gotcha": "Dağıtım çeşitliliği: tek bir agent derlemesi RHEL7 (eski bir Linux sürümü) glibc'yi ıskalar ve eski çekirdekler canlı yamayı sessizce atlar.", "plain": "Linux işletim sistemiyle çalışan sunucuların güncellemeleri, güvenlik ayarları ve kesintisiz çalışması.", "flow": ["HR Kontrol", "ayar tanımı", "Site Relay", "agent çeker", "Linux Sunucu"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Print Server", "area": "Server Management", "tier": "Professional", "primary_lane": "B", "all_lanes": ["B", "A", "D", "E"], "executor": "ansible win_shell + PrintManagement PS modülü; endpoint'lerde kuyrukları HR (Hisar Research) agent eşler", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Kuyrukları, sürücüleri ve portları (Get-Printer) NetBox'a cihaz + yapılandırma olarak aktar", "[B] Point-and-Print kısıtlarını ve paket farkındalıklı v4 sürücüleri zorunlu kıl (PrintNightmare (yazıcı sürücüsü güvenlik açığı))", "[A] Agent kuyrukları NetBox sahasına / AD (Active Directory kullanıcı sistemi) grubuna göre eşler — logon script yok, GPP (grup ilkesi tercihleri) tercihi yok", "[D] Zabbix: spooler servisi, kuyruk derinliği, iş hata oranı, SNMP (cihaz izleme protokolü) toner ve sayfa sayacı", "[E] n8n aylık baskı hacmi ve toner-az raporu, saha başına sarf için otomatik ticket"], "credential_needed": "Sunucuda local admin + Print Operators; yazıcılarda SNMP v2c/v3. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Zabbix spooler + kuyruk derinliği trigger'ları ve saha başına planlı relay test baskısı", "automation_grade": "ASSISTED", "gotcha": "PrintNightmare sonrası Point-and-Print sıkılaştırması admin olmayan sürücü kurulumunu engeller; kuyruklar sessizce düşer.", "plain": "Şirketteki yazıcıların tek merkezden tanımlanması, sürücülerinin dağıtılması ve baskı sıralarının yönetimi.", "flow": ["HR Kontrol", "kuyruk listesi", "Site Relay", "WinRM ile kurar", "Yazıcı Sunucusu"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Virtualization Management", "area": "Server Management", "tier": "Enterprise", "primary_lane": "C", "all_lanes": ["C", "B", "D", "E"], "executor": "pyVmomi/vSphere REST (web tabanlı arayüz) + relay'den Ansible community.vmware ve Hyper-V için ansible.windows", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] En az yetkili vCenter/SCVMM servis hesabını oluştur; pyVmomi ile tam envanter çek", "[B] Ansible host baseline'ı: NTP (saat eşitleme), syslog→SIEM (güvenlik kayıt merkezi), SNMPv3 (cihaz izleme protokolünün şifreli sürümü), HA (yedekli çalışma)/DRS, snapshot + VMFS (VMware dosya sistemi) alarm politikası", "[D] Cluster/host/VM'leri NetBox'a kaydet; Zabbix VMware şablonları + datastore trigger'ları", "[B] Host'ları Lifecycle Manager baseline'ına kaydet ve patch'leri relay cache'ine hazırla", "[E] n8n gecelik tarama: snapshot yaşı, sahipsiz VMDK'lar (sanal disk dosyası), thin provision aşımı, CBT (değişen blok takibi) hataları"], "credential_needed": "vCenter SSO (tek oturum açma) servis hesabı (özel rol) + ESXi (VMware sanallaştırma işletim sistemi)/Hyper-V host kimlik bilgileri. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "Zabbix VMware şablonu vCenter SDK'sını (geliştirici kütüphanesi) sorgular: cluster HA, datastore boş %, host donanımı", "automation_grade": "ASSISTED", "gotcha": "Backup'tan artakalan snapshot'lar kota alarmı çalmadan datastore'ları doldurur; tek vCenter SDK oturumu sorgulamayı yavaşlatır.", "plain": "Tek bir fiziksel sunucu üzerinde birden çok sanal sunucu çalıştıran altyapının yönetimi. Daha az donanımla daha çok iş demek.", "flow": ["HR Kontrol", "vCenter API", "Sanallaştırma Yön.", "ayar uygular", "Fiziksel Sunucular"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "Windows Server Yönetimi", "area": "Server Management", "tier": "Essential", "primary_lane": "A", "all_lanes": ["A", "B", "D", "E"], "executor": "Makinede HR (Hisar Research) agent + PowerShell DSC (Windows ayar yönetimi)/winget; rol yapılandırması için relay'den ansible.windows", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[A] hr-agent MSI'ını (Windows kurulum paketi) relay'den GPO (merkezî Windows kuralı)/PsExec ile bas, saha sertifikasıyla kontrol düzlemine kaydet", "[A] Windows baseline'ını sabitle: servisler, firewall profili, NTP (saat eşitleme), RDP (uzak masaüstü protokolü)/NLA, local admin", "[B] ansible.windows ile rol yapılandırması (IIS (Windows web sunucusu)/RDS/roller) + pakete göre host bazlı bakım penceresi", "[D] Zabbix host'u oluştur, 'Windows by Zabbix agent' şablonunu bağla, site relay proxy'sine ata", "[D] Agent verilerinden sunucuyu NetBox'a yaz (seri no, OS (işletim sistemi) build, vCPU/RAM, cluster)"], "credential_needed": "Agent MSI'ı için local admin + GPO dağıtım yetkisi. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "90 sn altı agent heartbeat + Zabbix servis/disk/uptime trigger'ları; host başına patch uyum item'ı", "automation_grade": "ASSISTED", "gotcha": "Agent 7/24 sabitleme yapar — host bazlı bakım penceresi yoksa saat 14:00'te patch için DC'yi (etki alanı denetleyicisi) yeniden başlatır.", "plain": "Windows işletim sistemiyle çalışan sunucuların güncellemeleri, güvenlik ayarları ve kesintisiz çalışması.", "flow": ["HR Kontrol", "ayar tanımı", "Site Relay", "agent çeker", "Windows Sunucu"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Database Backup", "area": "Backup & Business Continuity", "tier": "Professional", "primary_lane": "C", "all_lanes": ["A", "B", "C", "D"], "executor": "Veeam REST (web tabanlı arayüz) ile uygulama farkındalıklı iş; hazırlık için ansible community.postgresql/mysql", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Ansible backup servis hesabını açar, db_backupoperator / pg REPLICATION (çoğaltma yetkisi) yetkisi verir", "[B] Pre-freeze/post-thaw script'lerini dağıt, archive_mode / FULL recovery modelini ayarla", "[A] DB (veritabanı) motorunun gerektirdiği yerde Oracle RMAN (Oracle yedekleme aracı) / SAP (kurumsal yazılım) HANA (SAP veritabanı) için Veeam eklentisini kur", "[C] Veeam REST: uygulama farkındalıklı işlemeyi 15 dakikalık transaction log yedeğiyle aç", "[D] Log zinciri boşluğu ve dump boyut trendi için Zabbix item'ları; DB denetimi için SIEM (güvenlik kayıt merkezi) kaynağı"], "credential_needed": "Backup servis hesabı açmak için DB sysadmin; DB sunucularında OS (işletim sistemi) admin. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Log yedeği boşluğu 15 dk'yı aşarsa veya tam geri dönüş noktası RPO'dan (kabul edilebilir veri kaybı) eskiyse Zabbix alarm verir", "automation_grade": "ASSISTED", "gotcha": "İki ayrı log truncate edici (yerel SQL (veritabanı sorgu dili) Agent işi + Veeam) LSN (veritabanı kayıt sırası) zincirini kırar — veritabanı başına tek sahip olmalı.", "plain": "Veritabanlarının düzenli yedeklenmesi ve bir sorun anında kayıpsız geri yüklenebilmesi.", "flow": ["HR Kontrol", "REST API", "Veeam Sunucusu", "uygulama uyumlu", "Veritabanı"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Immutable Backup", "area": "Backup & Business Continuity", "tier": "Enterprise", "primary_lane": "B", "all_lanes": ["B", "C", "D", "E"], "executor": "Ansible sertleştirilmiş repo rolü (XFS (Linux dosya sistemi) reflink, tek kullanımlık kimlik) + API (uygulama arayüzü) ile S3 Object Lock", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Ansible sertleştirilmiş Linux repo kurar: XFS reflink, immutable bayrağı, kayıttan sonra SSH (şifreli uzaktan bağlantı) kapalı", "[C] HRC (Hisar Research'ün kendi bulutu)/S3 API: kapasite katmanında Object Lock compliance modunu ve saklama süresini aç", "[C] Veeam REST (web tabanlı arayüz): repo ve GFS (uzun vadeli yedek saklama düzeni) copy işinde değişmezlik süresini ayarla, silmeleri engelle", "[D] Repo kimlik doğrulama/değişmezlik olayları için SIEM (güvenlik kayıt merkezi) log kaynağı; bayrak kaybında Zabbix trigger'ı", "[E] n8n haftalık silme probu: kilitli bir nesneyi silmeye çalış — başarısızlık geçme koşuludur"], "credential_needed": "Repo sunucusunda tek seferlik root SSH; Object Lock destekli S3 anahtarları. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "Haftalık n8n silme probu kilitli bir nesnede çalışır — silme başarılı olursa Zabbix alarm verir", "automation_grade": "ASSISTED", "gotcha": "Compliance modundaki Object Lock kısaltılamaz: yanlış bir saklama süresi o veriyi ve maliyetini yıllarca sabitler.", "plain": "Fidye yazılımı bulaşsa bile silinemeyen, değiştirilemeyen yedek. Saldırgan diğer yedekleri de şifrelese bu kopya sağlam kalır.", "flow": ["HR Kontrol", "sertleştirme", "Site Relay", "SSH ile kilitler", "Yedek Deposu"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "Off-site Backup", "area": "Backup & Business Continuity", "tier": "Enterprise", "primary_lane": "C", "all_lanes": ["B", "C", "D", "E"], "executor": "REST (web tabanlı arayüz) ile Veeam backup copy işi + Cloud Connect; tenant repo ve kotası için HRC (Hisar Research'ün kendi bulutu) API (uygulama arayüzü)", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] HRC API: Cloud Connect tenant'ı, repo kotası, saha başına bant genişliği kısıtı oluştur", "[C] Veeam REST: kendi saklama süresi olan GFS (uzun vadeli yedek saklama düzeni) backup copy işini bulut repoya kur", "[B] Ansible site relay'de WAN (internet hattı) hızlandırıcıyı ve kısıtlama penceresini yapılandırır", "[D] NetBox'ta offsite hedef/saklama alanları; Zabbix kopyalama gecikme trigger'ı", "[E] n8n korunan iş yükü başına aylık 3-2-1 uyum raporu"], "credential_needed": "HRC Cloud Connect tenant bilgileri + Veeam B&R REST servis hesabı. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "En yeni offsite noktası yerel zincirin gerisine kopyalama RPO'sunu (kabul edilebilir veri kaybı) aşacak kadar düşerse Zabbix alarm verir", "automation_grade": "FULL", "gotcha": "İlk tohumlama WAN üzerinden haftalar sürer; tohumlanmış kopya olmadan iş 1. günden alarm verir ve susturulur.", "plain": "Yedeğin ikinci bir kopyasının başka bir lokasyonda tutulması. Yangın, su baskını veya hırsızlıkta veri yine de elinizde olur.", "flow": ["Yerel Yedek", "kopya işi", "Veeam", "şifreli aktarır", "Uzak Lokasyon"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "VM Backup", "area": "Backup & Business Continuity", "tier": "Professional", "primary_lane": "C", "all_lanes": ["B", "C", "D", "E"], "executor": "vCenter/Hyper-V/HRC'ye karşı Veeam B&R REST (web tabanlı arayüz) + pyVmomi; proxy VM'i (sanal makine) Ansible kurar", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] vCenter/Hyper-V/HRC'yi Veeam B&R'a REST ile kaydet, host keşfini çalıştır", "[C] Etiket kapsamlı backup işi oluştur, uygulama farkındalıklı kimlik bilgilerini ve misafir erişimini ayarla", "[B] Ansible site relay'in yanına Veeam proxy/transport VM'ini kurar", "[D] NetBox VM senkronu + Zabbix VMware keşfi; cluster başına Grafana kapsam kutucuğu", "[E] n8n gecelik kapsam taraması: NetBox VM listesi / Veeam'de korunan nesneler"], "credential_needed": "Backup-operator rollü vCenter/Hyper-V hesabı + misafir OS (işletim sistemi) kimlik bilgileri. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "NetBox VM envanteri ile Veeam korunan-VM listesinin gecelik farkı; boşluklarda alarm", "automation_grade": "FULL", "gotcha": "Yeni VM'ler ancak iş etiket veya klasör kapsamlıysa korunur; sabit VM listeleri onları sessizce ıskalar.", "plain": "Sanal sunucuların bütün hâlde yedeklenmesi ve gerektiğinde dakikalar içinde geri getirilmesi.", "flow": ["HR Kontrol", "REST API", "Veeam Sunucusu", "yedek alır", "Sanal Sunucular"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "Router Management", "area": "Network Management", "tier": "Professional", "primary_lane": "B", "all_lanes": ["B", "D", "E", "F"], "executor": "Site relay'den SSH (şifreli uzaktan bağlantı) ile Ansible cisco.ios/community.routeros/vyos.vyos", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] NetBox'ta cihazı, WAN (internet hattı) devresini, prefix'leri ve ISP (internet servis sağlayıcısı) iletişim kaydını oluştur", "[B] Baseline'ı bas: routing, NAT (adres dönüştürme), NTP (saat eşitleme), SNMPv3 (cihaz izleme protokolünün şifreli sürümü), syslog→relay, admin AAA (kimlik doğrulama ve yetkilendirme), yönetim ACL'i (erişim izin listesi)", "[D] Zabbix host'u: ICMP (ping protokolü)+SNMP (cihaz izleme protokolü), WAN gecikme/jitter/kayıp, BGP (yönlendirme protokolü) veya varsayılan rota trigger'ları", "[E] n8n gecelik config yedeğini git'e al, ayrıca aylık ISP kesinti/SLA raporu üret", "[F] Sahada bant dışı LTE (mobil internet) modem kurulumu için yerinde iş emri aç"], "credential_needed": "Router admin/enable hesabı, SNMPv3, ISP portal okuma erişimi. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "Zabbix ICMP+SNMP uptime, ayrıca relay'den 60 saniyede bir iki dış referansa prob", "automation_grade": "ASSISTED", "gotcha": "ISP genelde kendi CPE'sinde (operatörün müşterideki cihazı) admin'i elinde tutar — HR (Hisar Research) yönetemediği bir kutu için faturalandırılır. Erişimi 0. günde kanıtlayın.", "plain": "İnterneti şirkete taşıyan yönlendiricinin (modem) ayarlarının, hattın hızının ve kesintilerinin yönetimi.", "flow": ["HR Kontrol", "yapılandırma", "Site Relay", "SSH ile basar", "Yönlendirici"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "Switch Management", "area": "Network Management", "tier": "Essential", "primary_lane": "B", "all_lanes": ["B", "C", "D", "E"], "executor": "Site relay'den SSH (şifreli uzaktan bağlantı) ile Ansible cisco.ios/arista.eos/community.network", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] NetBox API (uygulama arayüzü) ile cihazı, arayüzleri ve yönetim IP'sini (ağ adresi) oluştur", "[B] Baseline'ı bas: SNMPv3 (cihaz izleme protokolünün şifreli sürümü), syslog→relay, NTP (saat eşitleme), AAA (kimlik doğrulama ve yetkilendirme), port-security, STP (ağ döngü koruması) koruyucuları", "[D] Zabbix host'u + Cisco IOS (Cisco cihaz işletim sistemi) by SNMP (cihaz izleme protokolü) şablonu, arayüz LLD'si (otomatik bileşen keşfi), uplink trigger'ları", "[E] n8n gecelik config çekimini git'e al, onaysız değişiklikte fark alarmı ver"], "credential_needed": "Switch başına yetkili CLI (komut satırı)/enable hesabı + SNMPv3 bilgileri. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "Zabbix SNMP erişilebilirliği, port bazlı LLD ifOperStatus, gecelik config-fark işi yeşil", "automation_grade": "ASSISTED", "gotcha": "Hatalı trunk/VLAN basımı relay'in kendi yolunu keser; IOS'ta commit-confirm yoktur, play'leri 'reload in 5' ile sarın.", "plain": "Ofisteki bilgisayarları, yazıcıları ve telefonları birbirine bağlayan ağ anahtarlarının ayarlanması ve izlenmesi.", "flow": ["HR Kontrol", "yapılandırma", "Site Relay", "SSH ile basar", "Ağ Anahtarı"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "VPN Management", "area": "Network Management", "tier": "Professional", "primary_lane": "B", "all_lanes": ["A", "B", "C", "D", "E"], "executor": "ansible fortinet.fortios/cisco.ios IPsec (şifreli tünel protokolü) + istemci profili/sertifikasını basan HR (Hisar Research) agent", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Saha şablonundan IKEv2 (tünel kurulum protokolü)/IPsec p1+p2, rota tabanlı tünel ve selector'ları kur", "[A] Agent VPN (şifreli uzaktan bağlantı) istemcisini, SCEP (otomatik sertifika dağıtımı) ile makine sertifikasını ve kilitli profili kurar", "[C] Karşı uç bulutta ise Azure ARM (Azure kaynak yönetimi) / HRC (Hisar Research'ün kendi bulutu) API (uygulama arayüzü) ile uzak gateway'i oluştur", "[D] Tünel başına Zabbix host'u: phase2 SA (tünel güvenlik ilişkisi) OID'si (izleme değeri numarası) artı karşı uçtaki bir host'a sentetik prob", "[E] n8n aylık PSK (ortak kablosuz şifre)/sertifika bitiş ve sahipsiz VPN hesabı taraması"], "credential_needed": "Firewall admin, PKI (sertifika altyapısı)/SCEP sertifika üretme yetkisi, RADIUS (merkezî giriş doğrulama) veya LDAP (dizin sorgulama) bind. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Her tünelde 60 saniyede bir relay'den karşı uçtaki bir host'a prob — sadece phase2 SA durumuna bakmaz", "automation_grade": "ASSISTED", "gotcha": "Tünel 'up' görünürken trafik karanlığa gidebilir: uyuşmayan p2 selector'ları veya TCP (bağlantı protokolü)-MSS clamp yokluğu. Uçtan uca prob atın.", "plain": "Evden çalışanların ve şubelerin şirket ağına güvenli bağlanmasını sağlayan şifreli tünellerin yönetimi.", "flow": ["HR Kontrol", "tünel tanımı", "Site Relay", "SSH / API", "Güvenlik Duvarı"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Wi-Fi Management", "area": "Network Management", "tier": "Essential", "primary_lane": "C", "all_lanes": ["B", "C", "D", "E", "F"], "executor": "UniFi/Meraki/Aruba Central REST (web tabanlı arayüz) API (uygulama arayüzü); yalnız CLI'lı (komut satırı) WLC'ler (kablosuz ağ kontrolcüsü) için ansible community.network", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] Controller API ile saha/org oluştur; SSID (kablosuz ağ adı), VLAN (sanal ağ bölmesi) haritası, PSK (ortak kablosuz şifre) veya 802.1X profilini bas", "[B] Erişim switch'inde AP (kablosuz erişim noktası) yönetim VLAN'ını, PoE (kablodan elektrik besleme) bütçesini ve uplink trunk'ını ayarla", "[D] AP'leri NetBox'a kaydet, Zabbix host'ları + AP şablonları, rogue/istemci sayısı trigger'ları", "[E] n8n haftalık kanal doluluk, sahte AP ve firmware drift raporunu devreye al", "[F] Yerinde RF (radyo frekansı) ölçümü / AP konumlandırma iş emrini ticket kuyruğunda planla"], "credential_needed": "Controller org admin API anahtarı/token'ı; 802.1X varsa RADIUS (merkezî giriş doğrulama) shared secret. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "Zabbix controller API'sini sorgular: AP benimseme durumu, istemci sayısı, kanal doluluğu >%70", "automation_grade": "ASSISTED", "gotcha": "PSK değişimi her yazıcıyı, el terminalini ve IoT (internete bağlı cihazlar) cihazını sessizce dışarı atar — PSK'ye bağlı cihazların envanteri kimsede yoktur.", "plain": "Kablosuz ağın kurulması; şifrelerin, kapsama alanının ve misafir ağının yönetimi.", "flow": ["HR Kontrol", "REST API", "Kablosuz Yöneticisi", "ayar dağıtır", "Erişim Noktaları"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "Firewall Management", "area": "Firewall & Network Security", "tier": "Professional", "primary_lane": "B", "all_lanes": ["B", "C", "D", "E"], "executor": "Relay'den ansible fortinet.fortios/paloaltonetworks.panos REST (web tabanlı arayüz); FortiManager API (uygulama arayüzü)", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] NetBox cihazı + HA (yedekli çalışma) çifti kaydı; süper-admin API anahtarını HR (Hisar Research) vault'una koy", "[B] Baseline'ı sıkılaştır: admin MFA (çok adımlı doğrulama), yönetim ACL'i (erişim izin listesi) yalnız relay'e, NTP (saat eşitleme), oturum zaman aşımları", "[B] Syslog/NetFlow'u site relay'e gönder ve tam politika loglamasını aç", "[D] Zabbix host'u (CPU (işlemci), oturum, HA senkronu) artı SIEM (güvenlik kayıt merkezi) log kaynağı ve üretici parser'ı", "[E] n8n gecelik tam config dışa aktarımını git'e al, fark alarmı kur"], "credential_needed": "Her iki HA düğümünde firewall süper-admin REST API anahtarı. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "SNMP (cihaz izleme protokolü) ile Zabbix oturum/CPU/HA-senkron takibi + SIEM log kaynağı heartbeat'i (sessizlik = alarm)", "automation_grade": "ASSISTED", "gotcha": "HA VIP'ine (sanal adres) basılan config failover'da kaybolabilir; birincil düğümün gerçek yönetim IP'sini (ağ adresi) hedefleyin ve önce yedek alın.", "plain": "Şirketi internetten gelen saldırılara karşı koruyan güvenlik duvarının işletilmesi ve hangi trafiğe izin verileceğinin yönetimi.", "flow": ["HR Kontrol", "kural seti", "Site Relay", "REST API", "Güvenlik Duvarı"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "7/24 Monitoring", "area": "Monitoring & NOC", "tier": "Enterprise", "primary_lane": "F", "all_lanes": ["F", "D", "E", "C"], "executor": "NOC (7/24 izleme merkezi) nöbeti + ticket/Grafana OnCall duvar panosu; n8n devir ve SLA (hizmet seviyesi taahhüdü) ihlal işleri", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] Müşteriyi 7x24 önem matrisine ve ilk yanıt SLA'sına ekle (P1 15 dk)", "[D] Müşteri kutucuklarını NOC duvar panosuna ekle ve hizmet bazlı runbook'ları bağla", "[F] Müşteriyi vardiya devir kontrol listesine ve nöbet rotasyonuna yerleştir", "[E] Saatlik onaylanmamış P1 taraması ve otomatik vardiya devir raporu", "[D] Mesai dışı çağrı yolunu ve müşteriye giden eskalasyon merdivenini aç"], "credential_needed": "Yetkili iletişim listesi ve mesai dışı uzaktan müdahale mandası. Bu bilgiler n8n credentials içinde tutulur.", "health_check": "Vardiya başına insan onayı gerektiren ölü-adam kanaryası; ticket başına ilk yanıt SLA başarımı", "automation_grade": "HUMAN", "gotcha": "Önceden yetkilendirilmiş aksiyon listesi olmayan 15 dakikalık SLA, her gece P1'i 'müşteriye ulaşıldı'da dondurur.", "plain": "Sistemlerin gece gündüz izlenmesi. Bir arıza olduğunda siz fark etmeden ekibin haberi olur ve müdahale başlar.", "flow": ["Zabbix Alarmı", "yönlendirir", "n8n", "çağırır", "NOC Nöbetçisi"], "secret_store": "n8n credentials"}, {"name": "AWS Management", "area": "Cloud Management", "tier": "Professional", "primary_lane": "C", "all_lanes": ["C", "A", "D", "E"], "executor": "n8n → hesaplar arası AssumeRole ile boto3; baseline'lar için CloudFormation StackSets", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] HR (Hisar Research) hesaplar arası rolünü ExternalId ile StackSet olarak dağıt; ARN (AWS kaynak kimliği) + ID'yi (kimlik numarası) vault'a koy", "[C] Org CloudTrail, AWS (Amazon'un bulut platformu) Config kaydedici, Cost Explorer API (uygulama arayüzü) ve GuardDuty dışa aktarımını aç", "[A] EC2 (AWS sanal sunucusu) filosuna HR agent'ı SSM (AWS sistem yöneticisi) Distributor/RunCommand ilişkilendirmesiyle kur", "[D] NetBox hesap/VPC'leri, Zabbix 'AWS by HTTP (web protokolü)' host'ları, CloudTrail için SIEM (güvenlik kayıt merkezi) kaynağı", "[E] n8n saatlik Config envanter senkronu + haftalık Trusted Advisor ve Health olay özeti"], "credential_needed": "Hesaplar arası IAM (AWS yetki sistemi) rol ARN'i + ExternalId (HR org'undan sts:AssumeRole). Bu bilgiler .env, n8n credentials içinde tutulur.", "health_check": "n8n 15 dakikada bir AssumeRole kanaryası; Zabbix CloudTrail gecikmesini ve Config kaydediciyi izler", "automation_grade": "ASSISTED", "gotcha": "Bölge körlüğü: trail, Config ve izleme yalnız kayıtlı bölgeleri kapsar; gölge kaynaklar görünmez kalır.", "plain": "Amazon'un bulut sunucularında duran sistemlerinizin yönetimi, güvenliği ve maliyet kontrolü.", "flow": ["HR Kontrol", "IAM rolü", "AWS", "politika uygular", "Hesap Kaynakları"], "secret_store": ".env, n8n credentials"}, {"name": "Azure Management", "area": "Cloud Management", "tier": "Professional", "primary_lane": "C", "all_lanes": ["C", "A", "D", "E"], "executor": "n8n → Lighthouse ile yetkilendirilmiş SPN (Azure uygulama hesabı) üzerinden Azure ARM (Azure kaynak yönetimi) REST (web tabanlı arayüz)/az CLI (komut satırı); baseline için Bicep", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] Her aboneliği Azure Lighthouse ARM şablonuyla devral; HR (Hisar Research) SPN rollerini bağla", "[C] Baseline Bicep'i dağıt: Policy initiative, diagnostic settings, Defender planı, etiketler", "[A] IaaS (hizmet olarak altyapı) VM'lerine (sanal makine) HR agent'ı Azure VM extension / Arc customScript ile kur", "[D] NetBox tenant+prefix'leri, Zabbix 'Azure by HTTP (web protokolü)' host'ları, ticket kuyruğu, Grafana", "[E] n8n saatlik Resource Graph drift taraması + aylık Advisor/Service Health özeti"], "credential_needed": "Azure Lighthouse yetkilendirmesi (Contributor + Monitoring Reader). Bu bilgiler .env, n8n credentials içinde tutulur.", "health_check": "Zabbix 'Azure by HTTP' + n8n kanarya token çağrısı Lighthouse yetkisinin hâlâ yaşadığını kanıtlar", "automation_grade": "ASSISTED", "gotcha": "Lighthouse tenant kapsamını devredemez — Entra, faturalama, abonelik açma ve Owner erişim dışında kalır.", "plain": "Microsoft'un bulut platformundaki sunucularınızın, güvenlik ayarlarınızın ve harcamanızın yönetimi.", "flow": ["HR Kontrol", "Lighthouse yetkisi", "Azure", "politika uygular", "Abonelik Kaynakları"], "secret_store": ".env, n8n credentials"}, {"name": "Cloud Backup", "area": "Cloud Management", "tier": "Professional", "primary_lane": "C", "all_lanes": ["C", "D", "E"], "executor": "Veeam Backup for Azure/AWS REST (web tabanlı arayüz) API (uygulama arayüzü) + HRC (Hisar Research'ün kendi bulutu) nesne depolama API'si (S3 uyumlu)", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] HRC API: müşteri başına kota ve yaşam döngüsü politikalı S3 bucket/tenant oluştur", "[C] Veeam Backup for Azure/AWS appliance'ını kur, aboneliği kaydet, etiket politikasını uygula", "[C] Bucket'ı REST ile Veeam nesne deposu / SOBR (Veeam birleşik deposu) kapasite katmanı olarak ekle", "[D] Zabbix offload gecikme item'ları + bulut tenant'ı başına Grafana tüketim paneli", "[E] n8n aylık depolama + egress tüketim raporunu faturalama ve ticket sistemine bas"], "credential_needed": "Azure uygulama kaydı (Backup Contributor), AWS (Amazon'un bulut platformu) IAM (AWS yetki sistemi) rolü, HRC S3 anahtarları. Bu bilgiler n8n credentials içinde tutulur.", "health_check": "Zabbix müşteri tenant'ı başına SOBR offload gecikmesini ve kotaya göre bucket kullanımını izler", "automation_grade": "FULL", "gotcha": "Bulut repo maliyeti yedeklemede değil GERİ YÜKLEMEDE oluşur (egress + istek başına) — fiyatlanmazsa kârı yer.", "plain": "Yedeklerin buluta şifreli olarak alınması ve gerektiğinde oradan geri yüklenmesi.", "flow": ["HR Kontrol", "REST API", "Veeam", "şifreli yükler", "Bulut Deposu"], "secret_store": "n8n credentials"}, {"name": "Cloud Cost Optimization", "area": "Cloud Management", "tier": "Professional", "primary_lane": "E", "all_lanes": ["E", "C", "D", "F"], "executor": "n8n cron → Athena'da AWS (Amazon'un bulut platformu) CUR (AWS maliyet raporu), Azure Cost Mgmt dışa aktarımı, HRC (Hisar Research'ün kendi bulutu) faturalama API'si (uygulama arayüzü) → Grafana", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] AWS CUR→S3/Athena'yı, Azure Cost Management planlı dışa aktarımını ve HRC faturalama kapsamını aç", "[E] n8n günlük harcama farkı işini ve aylık rightsizing/taahhüt analizi koşusunu oluştur", "[E] Atıl kaynak taramasını planla: bağlanmamış diskler, boşta EIP'ler (AWS sabit adresi), durdurulmuş ama faturalanan VM'ler (sanal makine)", "[D] Tenant başına Grafana maliyet panosu + bütçe aşımı alarmını ticket sistemine yönlendir", "[F] Aylık tekrar eden FinOps (bulut maliyet yönetimi) incelemesini sabit bir toplantı olarak nöbet takvimine yaz"], "credential_needed": "Maliyet okuyucu: AWS ce:* + CUR bucket, Azure Cost Mgmt Reader, HRC faturalama. Bu bilgiler n8n credentials içinde tutulur.", "health_check": "n8n her maliyet dışa aktarımının 36 saatten yeni olduğunu doğrular; bayat akış Zabbix trigger'ı ateşler", "automation_grade": "ASSISTED", "gotcha": "Öneri tasarruf değildir — rightsizing onay ister ve RI (AWS rezerve kapasitesi)/Savings Plan harcamayı 1-3 yıl kilitler.", "plain": "Bulut faturasının incelenip boşa giden kaynakların kapatılması. Aynı işin daha ucuza yapılması.", "flow": ["Takvim (aylık)", "tetikler", "n8n", "fatura çeker", "Tasarruf Raporu"], "secret_store": "n8n credentials"}, {"name": "Cloud Migration", "primary_lane": "C", "all_lanes": ["C", "F", "B", "A", "E"], "executor": "Veeam/HRC replikasyon API'si (uygulama arayüzü) + hipervizör API'si; kesim orkestrasyonu n8n", "automation_grade": "ASSISTED", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] HRC (Hisar Research'ün kendi bulutu)/hedef bulutta tenant, ağ ve kaynak planını API ile oluştur", "[C] Replikasyon/taşıma işlerini kur ve ilk tam senkronu tohumla", "[B] Hedefte ağ, rota ve firewall kurallarını uygulanmamış şablon olarak hazırla", "[A] Taşınan sunuculara HR (Hisar Research) agent'ı cloud-init/altın imaj ile tohumla", "[E] n8n kesim koşusu: son senkron, güç kapatma, re-IP, DNS (alan adı çözümleme), kabul testi"], "credential_needed": "Kaynak hipervizör yöneticisi + hedef bulut tenant-admin + DNS kontrolü. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Replika gecikmesi RPO (kabul edilebilir veri kaybı) altında; kesim öncesi otomatik açılış testi (vLab/SureBackup) yeşil", "gotcha": "RTO'yu (ayağa kalkma süresi) replikasyon değil DNS TTL (önbellek süresi), re-IP ve lisans yeniden aktivasyonu patlatır; hepsini önceden düşürün.", "area": "Cloud Management", "tier": "Proje", "plain": "Sunucularınızın ve verilerinizin buluta, iş neredeyse hiç durmadan taşınması.", "flow": ["Mevcut Sunucular", "çoğaltma", "Veeam / HRC API", "kesim gecesi", "Bulut Sunucuları"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "HRC Management", "area": "Cloud Management", "tier": "Professional", "primary_lane": "C", "all_lanes": ["C", "A", "D", "E"], "executor": "n8n → HRC API (REST (web tabanlı arayüz)) + cloud-init ile agent tohumlama; platform nesneleri için NetBox/Zabbix API", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[C] HRC API: tenant, proje, kota, VPC (bulut özel ağı) + HR (Hisar Research) kapsamlı API servis hesabı oluştur", "[C] Baseline envanterin anlık görüntüsünü al: VM'ler (sanal makine), birimler, floating IP'ler (ağ adresi), imajlar, güvenlik grupları", "[D] VM'leri NetBox sanal makinelerine yaz; Zabbix host'ları + HRC tenant şablonu oluştur", "[A] HR agent'ı HRC cloud-init/userdata ve altın imajlarla her misafire tohumla", "[E] n8n 15 dk'lık HRC→NetBox mutabakatını + gecelik kota/kapasite raporunu devreye al"], "credential_needed": "HRC API tenant-admin servis hesabı + cloud-init anahtar enjeksiyonu. Bu bilgiler .env, n8n credentials içinde tutulur.", "health_check": "Zabbix tenant başına HRC API'sini sorgular: kota payı, NetBox kaydına göre VM güç durumu drift'i", "automation_grade": "ASSISTED", "gotcha": "Otomatik snapshot'lar tenant'ın depolama kotasından düşer — budanmazsa haftalar sonra yeni VM kurulumlarını bloke eder.", "plain": "Hisar Research'ün kendi bulut platformu HRC (Hisar Research'ün kendi bulutu) üzerinde duran sistemlerinizin yönetimi.", "flow": ["HR Kontrol", "HRC API", "HRC Bulutu", "kaynak açar", "Müşteri Sunucuları"], "secret_store": ".env, n8n credentials"}, {"name": "Local Cloud Management", "area": "Cloud Management", "tier": "Enterprise", "primary_lane": "B", "all_lanes": ["B", "C", "A", "D", "E"], "executor": "Site relay'den Ansible: ansible.windows/AzSHCI, openstack.cloud, SSH (şifreli uzaktan bağlantı) ile Proxmox+Ceph", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Ansible kontrol düğümlerini baseline'lar: firmware, NTP (saat eşitleme), S2D/Ceph havuzları, witness, syslog→SIEM (güvenlik kayıt merkezi)", "[C] Yerel kontrol düzleminde (AzSHCI (Microsoft'un yerel bulut ürünü)/Keystone/PVE) HR (Hisar Research) tenant'ı + servis hesabı oluştur", "[D] NetBox rack, düğüm, cluster, IPAM (ağ adres yönetimi) kayıtları; relay proxy üzerinden Zabbix + Redfish/IPMI host'ları", "[A] Her hipervizör düğümüne ve yönetim VM'ine (sanal makine) pull yakınsaması için HR agent kur", "[E] n8n haftalık cluster farkındalıklı güncelleme koşusu + aylık kapasite tahminini Grafana'ya bas"], "credential_needed": "Cluster admin (AD (Active Directory kullanıcı sistemi)/Keystone/PVE) + relay üzerinden IPMI (sunucu uzaktan yönetim protokolü)/Redfish BMC (sunucu uzaktan yönetim kartı) bilgileri. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Relay'deki Zabbix proxy: cluster quorum'u, depolama havuzu yeniden yapılanma durumu, Redfish düğüm sağlığı", "automation_grade": "ASSISTED", "gotcha": "SaaS (hizmet olarak yazılım) yedeği yok: relay veya cluster quorum'u düşerse kontrol yolu ve telemetri birlikte kaybolur.", "plain": "Şirketin kendi binasındaki özel bulut altyapısının yönetimi. Veriler dışarı çıkmadan bulutun esnekliği.", "flow": ["HR Kontrol", "küme ayarı", "Site Relay", "SSH / IPMI", "Özel Bulut Düğümleri"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Capacity Report", "area": "IT Consulting & Audit", "tier": "Professional", "primary_lane": "E", "all_lanes": ["C", "D", "E", "F"], "executor": "n8n cron → Zabbix trends API (uygulama arayüzü), pyVmomi vCenter perf, HRC (Hisar Research'ün kendi bulutu)/Azure Monitor; Grafana", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] Zabbix kapasite şablonlarını (CPU (işlemci), RAM (bellek), disk, IOPS (saniyedeki disk işlemi), WAN (internet hattı)) her host'a bağla", "[C] vCenter'ı pyVmomi ile, HRC API'sini ve Azure Monitor'ü salt-okunur rollerle bağla", "[E] Çeyreklik işi planla: p95 trendi + eşiğe Holt tahmini, doluluğa kalan gün", "[D] Grafana kapasite panosunu ve doluluğa kalan gün alarm eşiklerini yayınla", "[F] Öneriyi onaylayacak çeyreklik danışman inceleme randevusunu takvime al"], "credential_needed": "Salt-okunur vCenter hesabı + HRC/Azure Reader rolü. Bu bilgiler n8n credentials içinde tutulur.", "health_check": "Host'ların en az %80'inde 90 günlük Zabbix trend geçmişi yoksa iş rapor yayınlamayı reddeder", "automation_grade": "ASSISTED", "gotcha": "Thin provisioning ve dedup misafirdeki boş alanı yalan söyletir; tahmini VM (sanal makine) içinde değil datastore/array katmanında yapın.", "plain": "Diskin, belleğin ve internet hattının ne zaman dolacağının önceden raporlanması. Yatırımı sıkışmadan planlamanızı sağlar.", "flow": ["Takvim (çeyreklik)", "tetikler", "n8n", "veri toplar", "Kapasite Raporu"], "secret_store": "n8n credentials"}, {"name": "Envanter Yönetim Sistemi", "area": "IT Consulting & Audit", "tier": "Essential", "primary_lane": "D", "all_lanes": ["A", "B", "D", "E"], "executor": "NetBox API (uygulama arayüzü) + HR (Hisar Research) agent SMBIOS (donanım kimlik bilgisi) envanteri + relay'den SNMP (cihaz izleme protokolü) keşfi; n8n mutabakat işi", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] NetBox tenant'ı, sahaları, cihaz rollerini + özel alanları (seri no, sahip, garanti) oluştur", "[A] SMBIOS/dmidecode donanım envanteri modüllü HR agent'ı tüm endpoint'lere bas", "[B] Switch, router, AP (kablosuz erişim noktası) ve UPS'leri (kesintisiz güç kaynağı) tohumlamak için site relay'den SNMPv3 (cihaz izleme protokolünün şifreli sürümü)/LLDP keşfi çalıştır", "[E] Gecelik NetBox mutabakatını planla: agent + Zabbix LLD (otomatik bileşen keşfi) / CMDB (merkezî envanter veritabanı), hayalet ve sahipsizleri işaretle", "[D] API senkronuyla NetBox cihaz rollerinden Zabbix host gruplarını otomatik oluştur"], "credential_needed": "NetBox API token (HR tarafı) + müşteri ağında SNMPv3 salt-okunur bilgileri. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "n8n günlük: NetBox kaydı eşleşen Zabbix host'larının yüzdesi; 48 saatten bayatsa alarm", "automation_grade": "FULL", "gotcha": "Klonlanmış VM'ler (sanal makine) hostname ve MAC (ağ kartı kimliği) paylaşır; seri no+UUID (benzersiz kimlik) ile tekilleştirin yoksa NetBox hayalet kayıtlarla dolar.", "plain": "Şirketteki bütün cihazların ve yazılımların kayıt altına alındığı merkezî liste. Neyin nerede olduğunun tek doğru kaynağı.", "flow": ["Agent + Relay Keşfi", "cihaz verisi", "NetBox Envanteri", "besler", "Zabbix ve Raporlar"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "IT Audit", "primary_lane": "F", "all_lanes": ["F", "D", "E", "A", "B"], "executor": "Danışman yürütür; kanıtı NetBox/Zabbix/SIEM/agent duruşundan n8n toplar", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] Denetim çerçevesini (CIS (güvenlik sıkılaştırma standardı) / ISO (uluslararası standart) 27001 / KVKK (Kişisel Verileri Koruma Kanunu)) HR (Hisar Research) kataloğundan müşteriye örnekle", "[E] n8n kanıt toplama koşusunu kur: envanter, patch, yedek, log ve yetki dökümleri", "[A] Agent duruş raporlamasını aç, kapsam dışı kalan cihazları listele", "[F] Danışman bulguları puanlar, riskleri önceliklendirir ve yol haritasına bağlar"], "credential_needed": "Salt-okunur denetim erişimleri + denetim kapsamı ve gizlilik mutabakatı. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Kanıt kapsamı: NetBox varlıklarının kaçından otomatik kanıt toplandığı; %90 altında rapor bloke", "gotcha": "Kanıtı elle toplanan bir denetim ertesi yıl tekrarlanamaz; bulgular karşılaştırılamayınca denetim rapor olmaktan çıkar.", "area": "IT Consulting & Audit", "tier": "Proje", "plain": "Bilgi teknolojileri altyapısının baştan sona denetlenmesi ve risklerin raporlanması.", "flow": ["n8n Kanıt Toplar", "veri", "Danışman", "puanlar", "Denetim Raporu"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "IT Roadmap", "primary_lane": "F", "all_lanes": ["F", "E", "D"], "executor": "Danışman; girdiler NetBox yaşam döngüsü, kapasite trendi ve denetim bulguları", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] Yaşam döngüsü, garanti ve EOL (kullanım ömrü sonu) alanlarını NetBox'ta güncel ve dolu hâle getir", "[E] Kapasite trendi ve yenileme kohortu raporlarını çeyreklik olarak zamanla", "[F] Danışman yatırım ve dönüşüm yol haritasını bütçe takvimiyle birlikte üretir", "[D] Yol haritası kalemlerini ticket sisteminde izlenebilir iş kalemlerine bağla"], "credential_needed": "Bütçe takvimi, iş hedefleri ve varlık yenileme politikası. Bu bilgiler n8n credentials içinde tutulur.", "health_check": "Yol haritasındaki her kalemin NetBox veya kapasite verisinden bir dayanağı olmalı", "gotcha": "Veriden değil toplantıdan doğan yol haritası bir sonraki bütçe döneminde savunulamaz.", "area": "IT Consulting & Audit", "tier": "Proje", "plain": "Önümüzdeki yıllarda neyin yenilenmesi, neye yatırım yapılması gerektiğinin bütçeyle birlikte yol haritası.", "flow": ["NetBox ve Kapasite", "veri", "Danışman", "önceliklendirir", "Yol Haritası"], "secret_store": "n8n credentials"}, {"name": "Firewall Installation", "primary_lane": "F", "all_lanes": ["F", "B", "D"], "executor": "Saha ekibi cihazı devreye alır; relay'den fortinet.fortios/panos ile baseline", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] NetBox'ta cihaz, HA (yedekli çalışma) çifti ve WAN (internet hattı) devre kaydını oluştur", "[F] Cihazı rack'e al, kablola, lisansı aktive et ve ilk yönetim erişimini kur", "[B] Baseline'ı bas: admin MFA (çok adımlı doğrulama), yönetim ACL'i (erişim izin listesi), NTP (saat eşitleme), loglama, HA senkronu", "[D] Zabbix host'u + SIEM (güvenlik kayıt merkezi) log kaynağını aç, devreye alma kabulünü kaydet"], "credential_needed": "Üretici lisans/kayıt hesabı, saha erişimi, ISP (internet servis sağlayıcısı) devre bilgisi. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "HA senkron durumu, SIEM log kaynağı heartbeat'i ve gecelik config yedeği yeşil", "gotcha": "Lisans aktivasyonu üretici portalında müşteri hesabına bağlanmazsa yenilemede cihaz özelliklerini kaybeder.", "area": "On-Site & Proje Hizmetleri", "tier": "Proje", "plain": "Güvenlik duvarı cihazının yerinde kurulumu, lisanslanması ve devreye alınması.", "flow": ["Cihaz ve Lisans", "iş emri", "Saha Ekibi", "devreye alır", "Relay Ayar Basar"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "L1 Network Setup", "primary_lane": "F", "all_lanes": ["F", "D"], "executor": "Saha ekibi kablolama ve kabinet işi; NetBox kablo/port kayıtları, etiket şablonları", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[F] Saha keşfi, kabinet yerleşimi ve kablo güzergâh planını çıkar", "[D] NetBox'ta rack, panel, port ve kablo nesnelerini plan olarak önceden oluştur", "[F] Etiketleme standardını uygula ve kurulum sonrası fotoğraflı kabul yap", "[D] Kurulum sonrası gerçek portları NetBox'a yaz, plan ile farkı kapat"], "credential_needed": "Bina/kabinet erişimi, kat planları ve elektrik-iklimlendirme onayı. Bu bilgiler n8n credentials içinde tutulur.", "health_check": "NetBox kablo kayıtlarının LLDP (komşu cihaz keşfi) komşuluk verisiyle mutabakatı; eşleşmeyen portta alarm", "gotcha": "Etiketleme standardı NetBox'tan üretilmezse altı ay sonra hiçbir kablo kayıtla eşleşmez.", "area": "On-Site & Proje Hizmetleri", "tier": "Proje", "plain": "Bina içi kablolama, kabinet düzeni ve etiketleme işlerinin standartlara uygun yapılması.", "flow": ["Kabinet Planı", "iş emri", "Saha Ekibi", "kablolar, etiketler", "NetBox Kaydı"], "secret_store": "n8n credentials"}, {"name": "Migration Projects", "primary_lane": "F", "all_lanes": ["F", "C", "D", "E"], "executor": "Proje ekibi + taşıma aracı (Veeam/robocopy/DMS); kesim penceresi koşusu n8n ile", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[F] Kapsamı, kesim penceresini ve geri dönüş kriterlerini yazılı planla", "[D] Kaynak ve hedef envanterini NetBox'ta eşle, taşınacak nesne listesini dondur", "[C] Taşıma işlerini ilgili API'lerle (uygulama arayüzü) kur (Veeam, hipervizör, bulut, DMS (veri taşıma servisi))", "[E] n8n ile ön senkronları ve kesim gecesi kontrol listesini koştur", "[F] Kabul testini ve müşteri onayını kayıt altına al"], "credential_needed": "Kaynak ve hedef sistemlerde yönetici erişimi + yazılı kesim onayı. Bu bilgiler n8n credentials içinde tutulur.", "health_check": "Taşıma sonrası nesne sayısı, checksum ve uygulama seviyesinde kabul testi karşılaştırması", "gotcha": "Geri dönüş planı olmayan kesim penceresi tek yönlü bir kapıdır — kaynağı en az bir yedek döngüsü ayakta tutun.", "area": "On-Site & Proje Hizmetleri", "tier": "Proje", "plain": "Veri, e-posta ve sunucuların eski sistemden yenisine güvenli şekilde taşınması.", "flow": ["Kaynak Sistem", "proje planı", "Proje Ekibi", "kesim gecesi", "Hedef Sistem"], "secret_store": "n8n credentials"}, {"name": "Network Installation", "primary_lane": "F", "all_lanes": ["F", "B", "D"], "executor": "Saha kurulum ekibi + relay'den Ansible ile cihaz baseline'ı; NetBox niyet kayıtları", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] NetBox'ta hedef topolojiyi, VLAN (sanal ağ bölmesi) planını ve IP (ağ adresi) adreslemesini önceden tanımla", "[F] Cihazları fiziksel olarak kur, kablola ve ilk yönetim erişimini aç", "[B] Relay'den baseline config'i bas: SNMPv3 (cihaz izleme protokolünün şifreli sürümü), syslog, NTP (saat eşitleme), AAA (kimlik doğrulama ve yetkilendirme), yönetim ACL'i (erişim izin listesi)", "[D] Zabbix host'larını ve izlemeyi devreye al, kabul testini kanıtla"], "credential_needed": "Cihaz ilk kurulum hesapları, saha erişimi, ISP (internet servis sağlayıcısı) devre bilgileri. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "Kabul testi: her portun LLDP (komşu cihaz keşfi) komşusu NetBox planıyla eşleşmeli", "gotcha": "Fiziksel kurulum bitip config basılmadan ağ 'hazır' sayılırsa müşteri yarım bir sistem devralır.", "area": "On-Site & Proje Hizmetleri", "tier": "Proje", "plain": "Kablolu ve kablosuz ağın, cihazlarıyla birlikte sıfırdan kurulup çalışır hâlde teslim edilmesi.", "flow": ["NetBox Planı", "iş emri", "Saha Ekibi", "kurar, relay ayarlar", "Çalışan Ağ"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "Server Installation", "primary_lane": "F", "all_lanes": ["F", "A", "B", "D"], "executor": "Saha/uzak kurulum ekibi; sonrasında HR (Hisar Research) agent + relay'den ansible rol yapılandırması", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[F] Donanımı rack'e al, RAID (yedekli disk dizisi)/BIOS/BMC ayarlarını yap, işletim sistemini kur", "[A] HR agent'ı kur ve kontrol düzlemine kaydet, baseline'ı yakınsat", "[B] Sunucunun işlevine göre rol yapılandırmasını relay'den uygula", "[D] NetBox kaydını ve Zabbix host'unu oluştur, kabul testini kanıtla"], "credential_needed": "BMC (sunucu uzaktan yönetim kartı)/iDRAC kimlik bilgileri, işletim sistemi lisansları, saha erişimi. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Agent heartbeat + Zabbix donanım (RAID/PSU) trigger'ları teslimden itibaren yeşil", "gotcha": "BMC varsayılan parolası değiştirilip vault'a yazılmazsa sunucu ilk günden sahipsiz bir arka kapı taşır.", "area": "On-Site & Proje Hizmetleri", "tier": "Proje", "plain": "Yeni sunucunun donanımından işletim sistemine kadar anahtar teslim kurulumu.", "flow": ["Donanım", "iş emri", "Saha Ekibi", "kurar, teslim eder", "Agent Devralır"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Yerinde Destek", "primary_lane": "F", "all_lanes": ["F", "D", "E"], "executor": "Saha mühendisi nöbeti; ticket sisteminden iş emri, NetBox varlık bağlamı", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[D] Saha iş emri türünü, bölge/SLA matrisini ve müşteri lokasyon kayıtlarını oluştur", "[D] NetBox'tan saha, rack ve cihaz bağlamını iş emrine otomatik iliştir", "[F] Bölgeye göre saha mühendisi nöbetini ve yedek kaynağı ata", "[E] n8n haftalık rapor: saha ziyareti sayısı, yol süresi, ilk ziyarette çözüm oranı"], "credential_needed": "Lokasyon listesi, bina giriş izni ve isimli saha irtibat kişileri. Bu bilgiler n8n credentials içinde tutulur.", "health_check": "Kapanan her iş emrinde imza + fotoğraf kanıtı zorunlu; SLA (hizmet seviyesi taahhüdü) saati ticket'ta izlenir", "gotcha": "Bina giriş izni ve kart erişimi 0. günde alınmazsa mühendis kapıda bekler ve SLA yanar.", "area": "On-Site & Proje Hizmetleri", "tier": "Proje", "plain": "Uzaktan çözülemeyen arızalar ve donanım işleri için teknik ekibin ofisinize gelmesi.", "flow": ["Destek Kaydı", "iş emri", "Saha Mühendisi", "yerinde müdahale", "Müşteri Ofisi"], "secret_store": "n8n credentials"}, {"name": "MFA Security", "area": "Security Services", "tier": "Professional", "primary_lane": "B", "all_lanes": ["A", "B", "C", "D", "F"], "executor": "Relay'de Duo/privacyIDEA proxy; fortinet.fortios + ansible.windows NPS (Windows giriş doğrulama sunucusu); agent MSI (Windows kurulum paketi)", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] RADIUS (merkezî giriş doğrulama)/MFA proxy container'ını site relay'e kur, AD'ye (Active Directory kullanıcı sistemi) LDAPS (şifreli dizin sorgulama) ile bağla", "[B] FortiGate SSL (şifreli bağlantı)-VPN, NPS ve RD (uzak masaüstü) Gateway'i ona yönlendir (fortinet.fortios, ansible.windows)", "[C] MFA (çok adımlı doğrulama) tenant'ını oluştur, kullanıcıları ve kayıt politikalarını üretici API'siyle (uygulama arayüzü) senkronla", "[A] Windows oturum açma credential-provider MSI'ını bas, önce pilot grup, bypass listesi hazır", "[D] Zabbix proxy sağlık kontrolleri + push yorgunluğu ve ret artışı için SIEM (güvenlik kayıt merkezi) kuralları ekle"], "credential_needed": "AD LDAPS bind hesabı, firewall admin, MFA tenant admin API anahtarı. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Relay'den 5 dakikada bir sentetik RADIUS probu + Zabbix'te kayıtlı/lisanslı oranı", "automation_grade": "ASSISTED", "gotcha": "Tek bir hatalı NPS/RADIUS politikası VPN'i (şifreli uzaktan bağlantı) ve adminleri aynı anda dışarıda bırakır; bypass gruplarını ve eski MFP (çok fonksiyonlu yazıcı) bağlarını önce hazırlayın.", "plain": "Şifreye ek ikinci bir doğrulama adımı kurulması (telefona gelen onay gibi). Şifreniz çalınsa bile hesaba girilemez.", "flow": ["HR Kontrol", "kurulum", "Site Relay", "RADIUS ile doğrular", "VPN / Windows Girişi"], "secret_store": ".env, ansible-vault, n8n credentials"}, {"name": "Penetration Test", "primary_lane": "F", "all_lanes": ["F", "B", "D"], "executor": "Sızma testi ekibi; kapsam ve kanıt ticket sisteminde, bulgular SIEM (güvenlik kayıt merkezi)/ticket'a döner", "automation_grade": "HUMAN", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[F] Kapsamı, kural setini ve test penceresini imzalı yetki mektubuyla belirle", "[B] Test kaynağı IP'lerini (ağ adresi) firewall'da izin listesine al, IPS (saldırı engelleme) bastırma penceresi tanımla", "[D] Bulgu ticket türünü, CVSS (açık tehlike puanı)→SLA (hizmet seviyesi taahhüdü) eşlemesini ve yeniden test kuyruğunu oluştur", "[F] Test sonrası brifingi ve düzeltme sonrası yeniden test randevusunu planla"], "credential_needed": "İmzalı sızma testi yetki mektubu + kapsam ve iletişim matrisi. Bu bilgiler ansible-vault, n8n credentials içinde tutulur.", "health_check": "Her bulgunun bir ticket'ı, SLA saati ve yeniden test kaydı olmalı; açık bulgu yaşı izlenir", "gotcha": "Yetki mektubu olmadan yapılan test suçtur; kapsam dışı bir sistem vurulursa sorumluluk HR'a (Hisar Research) geçer.", "area": "Security Services", "tier": "Proje", "plain": "Sistemlerinize izinli bir saldırı düzenlenip açıkların kötü niyetli birinden önce bulunması.", "flow": ["Yetki Mektubu", "kapsam", "Test Ekibi", "açık bulur", "Bulgu ve Ticket"], "secret_store": "ansible-vault, n8n credentials"}, {"name": "Vulnerability Scan", "area": "Security Services", "tier": "Enterprise", "primary_lane": "E", "all_lanes": ["A", "B", "C", "D", "E"], "executor": "Site relay'de Greenbone GVM (Greenbone tarama motoru) / Nessus; n8n cron'dan GMP (Greenbone yönetim protokolü) + Tenable REST (web tabanlı arayüz) ile sürülür", "day0_tasks": ["[D] Erişim bilgilerini kasaya yaz — makinede çalışan bash/PowerShell script'leri .env dosyasından (gizli değerler dosyası), Ansible adımları ansible-vault'tan (şifreli kasa), n8n iş akışları ve API çağrıları n8n credentials'tan (şifreli kimlik deposu) okur; parola koda gömülmez.", "[B] Greenbone/Nessus tarayıcısını site relay'e kur + FortiGate'te ACL (erişim izin listesi) izin listesi aç", "[C] GMP/Tenable REST ile tarama politikalarını, kimlik setlerini ve hedef gruplarını oluştur", "[A] Kapsamdaki host'larda tarama servis hesabını ve WinRM (Windows uzaktan yönetim)/SSH politikasını hazırla", "[E] Aylık kimlik doğrulamalı iç taramaları + haftalık çevre taramalarını pencere içinde planla", "[D] CVSS (açık tehlike puanı)>=7 için SLA (hizmet seviyesi taahhüdü) saatli otomatik ticket aç; SIEM (güvenlik kayıt merkezi) zafiyet panosunu besle"], "credential_needed": "Salt-okunur tarama hesabı (WinRM/SSH) + imzalı tarama yetki mektubu. Bu bilgiler .env, ansible-vault, n8n credentials içinde tutulur.", "health_check": "Tarama tamamlanması + NetBox host sayısına göre hedef kapsamı; kapsam %95 altındayken alarm", "automation_grade": "ASSISTED", "gotcha": "Kimlik doğrulamasız taramalar OT (endüstriyel kontrol cihazları) cihazlarını ve eski yazıcıları devirir; istisnaları birinin aklında değil NetBox'ta tutun.", "plain": "Sistemlerdeki bilinen güvenlik açıklarının düzenli taranıp önem sırasına göre raporlanması.", "flow": ["Takvim (aylık)", "tetikler", "Relay Tarayıcı", "açık bulur", "Ticket ve Rapor"], "secret_store": ".env, ansible-vault, n8n credentials"}], "critique": {"misclassified": [], "lane_counts": {"A": 2, "B": 13, "C": 10, "D": 1, "E": 3, "F": 10}, "grade_counts": {"FULL": 4, "ASSISTED": 25, "HUMAN": 10}, "day0_credentials": ["Aşağıdaki her kalem, alındığı anda kendi kasasına yazılır ve bir daha açık metin olarak hiçbir yerde durmaz: makinede çalışan script'ler için .env, Ansible adımları için ansible-vault, n8n iş akışları ve API çağrıları için n8n credentials. Devreye alma hattının ilk adımı budur; kasaya yazılmamış bir yetkiyle hiçbir hizmet başlatılmaz.", "Ağ cihazı sınıfı başına yetkili CLI (komut satırı)/enable hesapları ve SNMPv3 (cihaz izleme protokolünün şifreli sürümü) authPriv bilgileri — switch, router, WLC (kablosuz ağ kontrolcüsü), AP (kablosuz erişim noktası) — ve kullanılıyorsa NETCONF (ağ cihazı yapılandırma protokolü). Bu cihazlar asla agent çalıştıramaz; bu kimlik bilgisi B şeridinin tek yürütme yoludur (~8 hizmet).", "Her İKİ HA (yedekli çalışma) düğümünde firewall süper-admin REST (web tabanlı arayüz)/API hesabı (FortiGate/PANOS) ve site relay için yönetim ACL (erişim izin listesi) kaydı — firewall yönetimi, VPN (şifreli uzaktan bağlantı), kurulum, zafiyet taraması izin listeleri, MFA (çok adımlı doğrulama) RADIUS (merkezî giriş doğrulama) yönlendirmesi ve sızma testi penceresi buna dayanır (~7 hizmet).", "Tek hesap değil bir AD (Active Directory kullanıcı sistemi) hesap SETİ: (a) OU (kullanıcı klasörü) bazında yetkilendirilmiş açma/kapatma hesabı, (b) DC (etki alanı denetleyicisi)/GPO/FSMO için Tier-0 Domain Admin servis hesabı, (c) AD entegre DNS'te (alan adı çözümleme) DnsAdmins (DNS yönetici grubu), (d) DHCP (otomatik adres dağıtımı) Administrators + AD yetkilendirme hakkı, (e) GPO (merkezî Windows kuralı) düzenleme yetkisi, (f) MFA (çok adımlı doğrulama) için salt-okunur LDAPS (şifreli dizin sorgulama) bind hesabı (~7 hizmet).", "Her Windows ve Linux sunucuda local Administrator / root yetkisi, artı toplu dağıtım hakkı (GPO (merkezî Windows kuralı) / PsExec (uzaktan komut çalıştırma aracı) / SSH (şifreli uzaktan bağlantı) anahtarı / cloud-init) — HR (Hisar Research) agent, zabbix-agent2 ve rol yapılandırması bunu ister. Aktif katalogda bu sunucu tarafıyla sınırlıdır; yayında bir endpoint yönetimi hizmeti yok (~7 hizmet).", "En az yetkili özel rol taşıyan vCenter / Hyper-V / SCVMM (Microsoft sanal makine yöneticisi) servis hesabı — backup-operator, misafir etkileşimi ve sanal lab port grubu haklarıyla — artı ESXi (VMware sanallaştırma işletim sistemi) host ve iDRAC/iLO/Redfish/IPMI BMC (sunucu uzaktan yönetim kartı) kimlik bilgileri (~6 hizmet).", "Müşterinin gerçekten kullandığı her platform için bulut kontrol düzlemi devri: Azure Lighthouse (Contributor + Monitoring Reader + Cost Management Reader), AWS (Amazon'un bulut platformu) hesaplar arası IAM (AWS yetki sistemi) rol ARN'i (AWS kaynak kimliği) + ExternalId, HRC (Hisar Research'ün kendi bulutu) tenant-admin servis hesabı ve cloud-init anahtar enjeksiyonu (~6 hizmet).", "Veeam B&R REST (web tabanlı arayüz) servis hesabı, yedek repo'su üzerinde tek seferlik root SSH (şifreli uzaktan bağlantı) ve Object Lock destekli S3 anahtarları — yedekleme ailesinin tamamı tek bir kimlik zincirine bağlıdır (~5 hizmet).", "Saha erişim paketi: lokasyon listesi, bina giriş izni, kart/refakat düzeni, kabinet anahtarı, kat planları ve elektrik-iklimlendirme onayı. On-Site & Proje hizmetlerinin tamamı bununla başlar, bu yüzden aktif katalogda en sık unutulan 0. gün kalemidir (~5 hizmet).", "İmzalı mandalar: sızma testi yetki mektubu, zafiyet taraması yetkisi ve istisna listesi, taşıma kesim onayı ve geri dönüş kararı, failover ilanı yetkisi, mesai dışı müdahale mandası (~5 hizmet).", "ISP (internet servis sağlayıcısı) ve devre erişimi: ISP portalı okuma erişimi, devre numaraları ve destek iletişimleri, ayrıca HR'ın (Hisar Research) CPE (operatörün müşterideki cihazı) üzerinde gerçekten enable yetkisi olduğunun 0. günde kanıtlanması — ISP çoğu zaman bunu devretmezken HR o kutunun yönetimi için faturalandırılır (~3 hizmet).", "Üretici lisans ve destek portalı erişimi: firmware/imaj indirmek, cihaz lisansını müşteri hesabına kaydetmek ve yenileme hakkını korumak için. Lisans müşteri adına kayıtlı değilse ilk yenilemede cihaz özelliklerini kaybeder (~3 hizmet).", "Veritabanı motoru sysadmin / superuser yetkisi — bir kez düşük yetkili Zabbix izleme hesabını ve db_backupoperator / REPLICATION (çoğaltma yetkisi) yedek hesabını açmak, ayrıca transaction log truncate sahipliğini netleştirmek için (~2 hizmet).", "Site relay'in yerleşim hakları: rack/VM kapasitesi, yönetim VLAN'ı (sanal ağ bölmesi) ve IP'si (ağ adresi), HR (Hisar Research) kontrol düzlemine giden 443 çıkışı, Zabbix proxy ve syslog/NetFlow toplayıcısı olma izni. Neredeyse her B, C, D ve E şeridi kaleminin ön koşulu.", "Kimlik bilgisi gibi davranan iş kuralı girdileri: mutabık kalınan SLA (hizmet seviyesi taahhüdü) hedefleri, Türkiye mesai saatleri ve resmi tatil takvimi, host sınıfı başına bakım pencereleri, varlık yenileme politikası ve bütçe takvimi, denetim kapsamı ve gizlilik mutabakatı."], "hardest_to_automate": [{"p": "Router Management — ISP (internet servis sağlayıcısı) sıklıkla kendi CPE'sindeki (operatörün müşterideki cihazı) tek enable hesabını elinde tutar; HR (Hisar Research) kimlik doğrulayamadığı bir cihazı yönetmek üzere sözleşmelenir.", "c": "Sözleşmeye “cihaz yönetim erişiminin devri” maddesi koyun ve 0. günde erişimi fiilen test edin. Operatör devretmiyorsa o hizmetin kapsamı sözleşmede “izleme ve operatöre eskalasyon” olarak daraltılıp ayrı fiyatlanır — yönetemediğiniz bir cihaz için tam yönetim taahhüdü verilmez."}, {"p": "Wi-Fi Management — PSK (ortak kablosuz şifre) rotasyonu her yazıcıyı, el terminalini ve IoT (internete bağlı cihazlar) cihazını sessizce dışarı atar ve hiçbir müşteride o PSK'ye neyin bağlı olduğunun envanteri yoktur.", "c": "Ortak şifre yerine kişi bazlı kablosuz kimlik doğrulamaya geçin ve geçişi tek gecede değil çift ağ ile yapın: yeni ağ açılır, eski ağa bağlı cihazlar adres dağıtım kayıtlarından ve bağlantı günlüklerinden envantere çıkarılır, yazıcı ve el terminalleri tek tek taşınır, eski ağ ilan edilmiş bir tarihte kapatılır."}, {"p": "DHCP (otomatik adres dağıtımı) Management — option 43/66, VoIP (internet üzerinden telefon) telefon ve AP (kablosuz erişim noktası) rezervasyonları IPAM'de (ağ adres yönetimi) durmaz; IPAM güdümlü scope yeniden kurulumu telefonu çökertir, bu yüzden mutabakatın yakınsamasına asla izin verilemez.", "c": "Adres yönetimini doğruluk kaynağı ilan etmeden önce mevcut tüm ayarları ve sabit kayıtları içe aktarın. Karşılaştırma üç aşamada ilerler: önce yalnızca fark raporlar, sonra onaylanan farkları uygular, en son kendiliğinden düzeltir. Telefon ve erişim noktası kayıtları içe aktarılmadan ikinci aşamaya geçilmez."}, {"p": "File Server Management — NTFS (Windows dosya izinleri) ACL (erişim izin listesi) ve DFS (dağıtık dosya paylaşımı) durumu organik büyümüştür ve kalıtıma bağlıdır; baseline yeniden uygulanınca canlı erişim kesilir, bu hizmet ancak denetleyebilir, asla zorlayamaz.", "c": "Bu hizmeti zorlayıcı değil denetleyici modda çalıştırın: mevcut izinler raporlanır ve her paylaşıma bir sahip atanır, izin şablonu yalnızca yeni açılan paylaşımlara uygulanır. Böylece yeni olan doğru doğar, eski olan kesintiye uğramadan zamanla düzelir."}, {"p": "Migration Projects ve Cloud Migration — kesim penceresi tek yönlü bir kapıdır; RTO'yu (ayağa kalkma süresi) replikasyon değil DNS (alan adı çözümleme) TTL (önbellek süresi), re-IP ve lisans yeniden aktivasyonu belirler ve geri dönüş kararı insanındır.", "c": "Kesim gecesini provaya bağlayın: izole ortamda otomatik açılış testi, yazılı geri dönüş kriteri ve kaynak sistemin en az bir yedek döngüsü boyunca ayakta tutulması. Uzayan kısım kopyalama değil adres ve isim değişikliğidir — alan adı önbellek sürelerini günler önce düşürün, yeni adres ve güvenlik duvarı kurallarını uygulanmamış şablon olarak hazır bekletin, lisans yeniden aktivasyonlarını önceden deneyin. Geri dönüş kararını kimin vereceği kesim planında isimle yazılır."}, {"p": "Immutable Backup — compliance modundaki saklama süresi geri alınamaz; bu bir paket sorgusu değil, yıllarca maliyet bağlayan hukuk ve finans kararıdır.", "c": "Varsayılanı geri alınamaz kipte değil, yetkili kişinin değiştirebildiği kipte ve kısa sürede tutun. Saklama süresinin uzatılması, hukuk ve finansın onayladığı bir talep olarak destek kaydı üzerinden geçer; böylece yıllarca maliyet bağlayan karar teknik bir varsayılan olmaktan çıkar."}, {"p": "Penetration Test — yetki mektubu, kapsam ve etik sınırlar tasarım gereği insan işidir; otomatikleştirilebilen kısmı zaten Vulnerability Scan olarak ayrı satılıyor.", "c": "Yetki mektubu, kapsam formu ve iletişim matrisi devreye alma paketinde hazır şablon olarak dursun; test ancak imzalı mektupla başlar. Otomatikleşebilen kısmını zaten ayrı bir hizmet olarak satıyorsunuz — düzenli tarama makineye, yorum ve istismar denemesi insana bırakılır."}, {"p": "IT (bilgi teknolojileri) Audit ve IT Roadmap — otomasyon yalnızca kanıtı toplayabilir; puanlama, risk önceliklendirme ve yatırım tavsiyesi danışman muhakemesidir.", "c": "Kanıt toplamayı otomatikleştirin, yorumu insana bırakın: envanter, yama durumu, yedek başarısı ve yetki dökümleri her denetimde aynı işle toplanır. Böylece denetim yıldan yıla karşılaştırılabilir hâle gelir, danışmanın zamanı veri toplamaya değil risk sıralamaya gider. Yol haritasının her maddesi de bir veriye bağlanır; dayanağı olmayan madde listeye girmez."}, {"p": "Yerinde Destek ve L1 Network Setup — fiziksel iş; darboğaz teknik değil, bina giriş izni ve saha erişim hakkıdır.", "c": "Bina erişimini teknik bir konu gibi değil, 0. gün kontrol listesinin maddesi gibi ele alın: lokasyon listesi, giriş izni, kart veya refakat düzeni ve kabinet anahtarı sözleşme ekinde yer alır, erişim paketi tamamlanmadan saha hizmeti başlatılmaz. Etiketleme standardı da envanterden üretilir; saha ekibi kendi bulduğu ismi değil basılı etiketi takar."}], "cross_cutting_gaps": [{"p": "Çıkış (offboarding) omurgası yok. 39 kalemin tamamı 0. günde eklemeli iş olarak yazılmış. Sözleşme feshini hiçbir şey tarif etmiyor: agent kaldırma ve kayıt iptali, müşteri kimlik bilgilerinin iadesi ve rotasyonu, Zabbix/NetBox/Grafana/SIEM tenant'larının sökümü, Veeam işleri ve repo'larının akıbeti, logların KVKK (Kişisel Verileri Koruma Kanunu) uyumlu imhası ve Object Lock süresi sözleşmeden uzun olan değişmez yedeklerin ne olacağı.", "c": "Çıkış hattını, giriş hattının aynadaki hâli olarak kurun: hak seti boşaltıldığında derlenen tanım çıkarmalı çalışır. Her katalog kaydına, kurulum görevinin yanına bir söküm görevi yazılır — aracı yazılımın kaldırılması, kaydın iptali, müşteri alanının silinmesi, kasa anahtarlarının iptali ve değiştirilmesi, kayıtların yasaya uygun imhası. Saklama süresi sözleşmeden uzun olan değişmez yedekler, süre dolduğunda kapanan ayrı bir görev olarak kalır."}, {"p": "Paket yükseltme/düşürme yolu yok. Hak seti tek seferlik bir girdi gibi ele alınmış. Enterprise'dan Professional'a düşüldüğünde hiçbir şey Immutable Backup saklamasını, offsite kopya işlerini, 7/24 nöbet üyeliğini veya zafiyet tarama planını geri almıyor — derlenen arzu edilen durum çıkarmalı da olmalı, bugün hiçbir şerit silmeyi modellemiyor.", "c": "Derlenen tanımı baştan çıkarmalı tasarlayın: paket düşünce fark hesaplanır ve kaldırılması gerekenler söküm görevi olarak sıraya girer. Tek ön koşulu, her katalog kaydının bir söküm tanımı taşıması — yukarıdaki çıkış hattıyla aynı alan."}, {"p": "Geri alma modeli yok. Son bilinen sağlam spec sürümü yok, başarısız yakınsamada otomatik geri dönüş yok, hatalı bir manifestin kaç cihazı vurabileceğine dair etki sınırı yok ve B şeridi için commit-confirm karşılığı hiçbir şey yok — Switch Management notu hatalı bir basımın relay'in kendi yolunu kestiğini zaten kabul ediyor. Aktif katalog ağırlıklı olarak B şeridi olduğundan bu, en büyük tek operasyonel risk.", "c": "Her tanımı sürümleyin ve son sağlam sürümü saklayın. Üç koruma yeter: bir uygulama en fazla belirlenen orandaki cihaza dokunabilir, sağlık kontrolü yeşile dönmezse kendiliğinden son sağlam sürüme döner, ağ cihazlarına “onaylanmazsa geri al” düzeniyle basılır. Böylece hatalı bir basım tüm sahayı değil küçük bir dilimi etkiler."}, {"p": "Durum bildiremeyen cihazlarda drift. Aktif kataloğun çoğunluğu (switch, router, firewall, AP (kablosuz erişim noktası), hipervizör) sürekli bir durum kanalına sahip değil; yalnızca gecelik config farkı işleriyle kapsanıyorlar. Fark alma anında kapalı olan ya da değişip geri alınan bir cihaz görünmez ve hiçbir hizmet tespit edilen drift'i kimin otomatik geri alabileceğini tanımlamıyor.", "c": "Durum bildiremeyen cihazlarda gecelik yapılandırma farkını tek doğrulama yolu kabul edin ve farkın sonucunu katalogda alan hâline getirin: “yalnız uyar”, “onayla geri al” veya “kendiliğinden geri al”. Böylece sapmaya kimin müdahale edeceği tartışma konusu olmaktan çıkar."}, {"p": "Sır yaşam döngüsü ve çok kiracılı ayrışma. Sırların nerede duracağı nettir — script'ler .env, Ansible ansible-vault, n8n ise n8n credentials kullanır ve hiçbir parola koda gömülmez. Eksik olan, bu kasaların yaşam döngüsü: site relay tasarım gereği Tier-0 Domain Admin, güvenlik duvarı süper-admin, BMC (sunucu uzaktan yönetim kartı) ve vCenter bilgilerini aynı anda taşır; modelde rotasyon aralığı, kısa ömürlü veya tam zamanında kimlik üretimi, acil erişim prosedürü ve A kiracısı için koşan bir playbook'un B kiracısının kasa alanına erişemeyeceğinin kanıtı yok.", "c": "Kasalar tanımlı; eksik olan yaşam döngüsü. Üç şey ekleyin: her kimlik için değiştirme takvimi ve son kullanma tarihi, uzun ömürlü parola yerine iş anında üretilen kısa ömürlü erişim, ve kayıt altına alınan bir acil erişim yolu. Müşteri ayrışmasını da test edin: bir müşteri için çalışan iş akışı bilerek başka müşterinin kasa alanını istesin ve reddedildiği kanıtlansın."}, {"p": "Proje hizmetleri ile yönetilen hizmetler arasında devir yok. Server Installation, Network Installation, Firewall Installation ve Migration Projects bir kurulum bırakıyor; Windows Server Yönetimi, Switch Management ve Firewall Management onu devralıyor. Hiçbir şey devir anını, kabul kriterini veya kurulumun yönetilen duruma ne zaman dönüştüğünü modellemiyor — aktif katalogdaki en büyük yapısal boşluk bu, çünkü 10 proje hizmeti doğrudan 29 yönetilen hizmeti besliyor.", "c": "Proje hizmetleri ile yönetilen hizmetler arasına bir kabul adımı koyun: kurulum işi, devralacak hizmetin ilk sağlık kontrolü yeşile dönmeden kapanmaz. Böylece “kuruldu ama izlenmiyor”, “teslim edildi ama yedeği yok” boşluğu yapısal olarak kapanır ve devir tarihi kayıt altına girer."}, {"p": "Hizmet bağımlılık ve sıralama grafiği yok. 0. gün görev listeleri relay'in ayakta, kasanın dolu, NetBox'ın kayıtlı ve agent'ın kayıtlı olduğunu varsayıyor ama hiçbir kalem ön koşulunu beyan etmiyor. Derlenen bir spec bu yüzden Zabbix host'unu türetildiği NetBox kaydından önce, Veeam işini proxy VM'i (sanal makine) var olmadan önce sıralayabilir.", "c": "Her katalog kaydına bir ön koşul alanı ekleyin; derleyici görevleri bu bağımlılığa göre sıralar. Aktarıcı sunucu ayakta değilse, kasa boşsa veya envanter kaydı yoksa ona bağlı görevler hata vermek yerine sırada bekler."}, {"p": "Bakım penceresi takvimi birinci sınıf bir nesne değil. Sunucu yakınsaması, Ansible restart sırası, firmware pencereleri ve 7/24 izleme bir pencereye birbirinden bağımsız atıfta bulunuyor. Windows Server notu (agent 14:00'te DC'yi (etki alanı denetleyicisi) yeniden başlatıyor) bu eksik nesnenin doğrudan sonucu.", "c": "Bakım penceresini ayrı bir nesne yapın ve bütün şeritler ondan okusun: yama turları, yeniden başlatma sırası, cihaz yazılımı güncellemeleri ve hizmet seviyesi hesabı aynı takvimi görsün. Tek yerde tanımlanan pencere, hem mesai ortasında sunucu yeniden başlatmayı hem de yama gecesinin ihlal sayılmasını aynı anda çözer."}, {"p": "Bekçileri kimse izlemiyor. Her hizmet kendi sağlık kontrolünü tanımlıyor ama paylaşılan altyapı için üst düzey bir sağlık modeli yok: relay canlılığı, Zabbix proxy kuyruğu ve NVPS (saniyedeki izleme değeri), n8n iş hatası, kasa erişilebilirliği. Birkaç hizmet 'yeşil arızalanıyor' — susturulmuş alarmlı bir iş çalışan yedek gibi okunuyor.", "c": "Paylaşılan altyapı için ayrı bir sağlık panosu kurun: aktarıcı sunucu canlılığı, izleme kuyruğu doluluğu, iş akışı hataları, kasa erişilebilirliği ve kayıt kaynaklarının akışı. Buna vardiya başına insan onayı isteyen bir kontrol ekleyin; böylece sessizlik iyi haber sanılmaz."}, {"p": "Bulut dışında kimlik bilgisi canlılık kanaryası yok. Yalnızca Azure ve AWS'de (Amazon'un bulut platformu) var. Müşteri tarafında parola rotasyonu, süresi dolmuş bir SNMPv3 (cihaz izleme protokolünün şifreli sürümü) kullanıcısı, devre dışı bırakılmış bir AD (Active Directory kullanıcı sistemi) servis hesabı veya iptal edilmiş bir firewall API (uygulama arayüzü) anahtarı B ve C şeritlerini sessizce öldürür; arıza haftalar sonra eksik bir rapor olarak ortaya çıkar.", "c": "Her kimlik bilgisi için düzenli canlılık kontrolü koşun: haftada bir test bağlantısı kurulur, başarısızsa destek kaydı açılır. Böylece müşteri tarafında değişen bir parola aylar sonra eksik bir raporla değil ertesi gün fark edilir."}, {"p": "Yetki/onay nesnesi yok. Failover'ı kimin ilan edebileceği, kesimi kimin onaylayabileceği, rightsizing önerisini kimin kabul edebileceği, saklama süresini kimin uzatabileceği ve tarama istisnasını kimin verebileceği modellenmek yerine notlara dağılmış durumda. Otomasyon derecesi şişmesinin en büyük kaynağı bu.", "c": "Yetkiyi de bir nesne hâline getirin: hangi işlemi kimin onaylayabileceği tabloda dursun ve otomatik her aksiyon çalışmadan önce oraya baksın. Onaycısı tanımlı olan işlem gerçekten otomatik çalışır, tanımlı olmayan bekler — böylece otomasyon derecesi gerçeği yansıtır."}, {"p": "Veri yerleşimi ve KVKK (Kişisel Verileri Koruma Kanunu) eşlemesi yok. SIEM (güvenlik kayıt merkezi) logları, denetim kanıtları, ticket içeriği ve saha ziyareti fotoğrafları HR (Hisar Research) platformuna geçiyor ama veri sınıfı başına yerleşim, saklama katmanı veya hukuki dayanak eşlemesi belirtilmemiş.", "c": "Veri sınıfı başına bir tablo çıkarın: hangi veri, nerede saklanıyor, ne kadar süreyle, hangi hukuki dayanakla. Kayıtlar, denetim kanıtları, destek kayıtları ve saha fotoğrafları bu tabloya girer ve tablo devreye alma paketinin parçası olur; sonradan eklenmeye çalışılınca kimse hatırlamaz."}], "first_service_to_build": "Envanter Yönetim Sistemi (NetBox CMDB (merkezî envanter veritabanı) + HR (Hisar Research) agent kaydı + relay SNMP (cihaz izleme protokolü) keşfi) — her şeyden önce omurganın tamamını uçtan uca bu tek hizmet için kurun. Neredeyse hiçbir şeye bağımlı olmadan tüm yapısal parçaları aynı anda çalıştıran tek kalem bu: site relay'in var olmasını ve erişilebilir olmasını, agent kayıt ile PKI (sertifika altyapısı)/token üretim yolunun çalışmasını, vault'un ilk iki müşteri kimlik bilgisini tutmasını (agent basımı için local admin, keşif için SNMPv3 (cihaz izleme protokolünün şifreli sürümü) salt-okunur), A şeridini (agent SMBIOS (donanım kimlik bilgisi) envanteri), B şeridini (relay'den SNMPv3/LLDP keşfi), D şeridini (NetBox tenant, saha, rol, özel alanlar, Zabbix host grubu senkronu) ve E şeridini (gecelik mutabakat) diyagram olmaktan çıkarıp gerçek koda dönüştürmeye zorlar. Ayrıca aşağıdaki her şeyin okuduğu zorunlu bağımlılıktır: Zabbix host oluşturma, Veeam kapsam taramaları, VLAN (sanal ağ bölmesi) ve firmware niyeti, lisans ve garanti mutabakatı, yaşam döngüsü durumu ve her 'beklenen kapsam' sağlık kontrolü NetBox'a karşı çözümlenir. Başka bir hizmetle başlarsanız onun sağlık kontrolü — ki her zaman 'var olanı CMDB ile karşılaştır'dır — yazılamaz. En zor dersi en ucuza öğrenmenin yeri de burasıdır: klonlanmış VM'lerin (sanal makine) mükerrer seri numarası sorunu, 73 hizmet bozuk bir anahtarı devralmadan önce doğru kimlik modelini (hostname veya MAC (ağ kartı kimliği) değil, agent UUID (benzersiz kimlik) + seri no) kurmaya zorlar."}, "glossary": [["0. gün", "Yeni müşterinin devreye alındığı ilk gün; tüm erişimlerin ve kurulumların yapıldığı an."], ["Agent", "Aracı yazılım. Bilgisayara veya sunucuya kurulan, durumu merkeze bildiren ve merkezden gelen ayarları uygulayan küçük program."], ["Ansible", "Sunucu ve ağ cihazlarına, üzerlerine hiçbir şey kurmadan uzaktan ayar basmaya yarayan otomasyon aracı."], ["ansible-vault", "Ansible'ın kendi şifreli kasası. Playbook içinde geçen parolalar şifreli saklanır, çalışma anında çözülür."], ["API", "Uygulama Programlama Arayüzü. İki yazılımın insan araya girmeden birbiriyle konuşmasını sağlayan bağlantı noktası."], ["Backup", "Yedek / yedekleme."], ["Baseline", "Temel ayar seti. Her cihazda olması gereken asgari güvenlik ve yapılandırma düzeni."], ["Bootstrap", "İlk kurulum adımı. Sistemin kendi kendini yönetebilir hâle geldiği ilk andan önceki elle yapılan iş."], ["CMDB", "Yapılandırma Yönetim Veritabanı. Şirketteki tüm cihaz ve yazılımların kayıtlı olduğu merkezî envanter."], ["CVE", "Bilinen güvenlik açıklarının dünya genelinde ortak numaralandırıldığı kayıt sistemi."], ["CVSS", "Bir güvenlik açığının ne kadar tehlikeli olduğunu 0-10 arası puanlayan uluslararası ölçek."], ["Drift", "Sapma. Cihazın ayarlarının, olması gereken hâlden zamanla uzaklaşması."], ["EDR", "Uç Nokta Tespit ve Müdahale. Antivirüsün bir üstü: sadece virüsü engellemez, saldırganın bilgisayarda ne yaptığını da kaydeder ve durdurur."], ["Endpoint", "Uç cihaz. Çalışanların kullandığı masaüstü bilgisayar, dizüstü ve benzeri son kullanıcı cihazları."], [".env", "Parola ve anahtar gibi gizli değerlerin, kodun dışında ayrı bir dosyada tutulması. Script kodu bu dosyadan okur, böylece parola kaynak koda hiç girmez."], ["EOL", "Kullanım Ömrü Sonu. Üreticinin artık güncelleme ve destek vermediği donanım veya yazılım."], ["Firewall", "Güvenlik duvarı. Şirket ağı ile internet arasında durup hangi trafiğe izin verileceğine karar veren cihaz."], ["GPO", "Grup İlkesi. Windows ağında tüm bilgisayarlara tek merkezden kural dağıtma yöntemi."], ["HA", "Yüksek Erişilebilirlik. Cihazın veya servisin yedeğiyle birlikte çalışıp biri arızalanınca diğerinin devralması."], ["HRC", "Hisar Research Cloud. Hisar Research'ün kendi bulut bilişim platformu."], ["IPAM", "IP Adres Yönetimi. Ağdaki adreslerin kim tarafından kullanıldığının kayıt altında tutulması."], ["KVKK", "Kişisel Verileri Koruma Kanunu. Kişiye ait verilerin nasıl toplanıp saklanacağını düzenleyen Türkiye mevzuatı."], ["LLDP", "Ağ cihazlarının hangi kabloyla hangi cihaza bağlı olduğunu kendiliğinden bildirdiği protokol."], ["Log", "Kayıt. Sistemlerin her olayı zaman damgasıyla yazdığı hareket dökümü."], ["MFA", "Çok Faktörlü Kimlik Doğrulama. Şifreye ek olarak ikinci bir onay adımı (telefona gelen kod gibi)."], ["MSP", "Yönetilen Hizmet Sağlayıcı. Bir şirketin bilgi teknolojileri altyapısını dışarıdan, sözleşmeyle üstlenen firma."], ["MTTR", "Ortalama Onarım Süresi. Bir arızanın başlamasından çözülmesine kadar geçen ortalama zaman."], ["n8n", "Farklı sistemleri birbirine bağlayıp iş akışlarını otomatik çalıştıran araç."], ["n8n credentials", "n8n'in şifreli kimlik deposu. İş akışı bir sisteme bağlanırken parolayı buradan alır; akışın içinde açık metin parola bulunmaz."], ["NetBox", "Ağ ve cihaz envanterinin tutulduğu, hangi cihazın nerede ve hangi ayarda olduğunu gösteren kayıt sistemi."], ["NOC", "Ağ İşletim Merkezi. Sistemleri 7/24 izleyip arızalara müdahale eden nöbetçi ekip."], ["Offboarding", "Çıkış süreci. Sözleşme bittiğinde erişimlerin kapatılması, verilerin iadesi ve sistemlerin sökülmesi."], ["Onboarding", "Devreye alma. Yeni bir müşterinin altyapısının teslim alınıp hizmete hazır hâle getirilmesi."], ["OU", "Kuruluş Birimi. Active Directory içinde kullanıcı ve bilgisayarların departmana göre gruplandığı klasör yapısı."], ["Patch", "Yama. Üreticinin yayınladığı güvenlik ve hata düzeltme güncellemesi."], ["PSK", "Ortak Şifre. Kablosuz ağa bağlanmak için herkesin kullandığı tek parola."], ["Pull", "Çekme. Aracı yazılımın merkeze kendisinin bağlanıp ayarlarını alması. Tersi 'push', yani merkezin cihaza bağlanması."], ["RADIUS", "Kullanıcı adı ve şifreyi merkezden doğrulayan sistem. VPN ve kablosuz ağ girişlerinde kullanılır."], ["RBAC", "Rol Bazlı Yetkilendirme. Kişiye değil görevine göre yetki verme düzeni."], ["Relay", "Aktarıcı. Müşterinin binasına konan, merkez ile cihazlar arasında köprü kuran küçük sunucu."], ["RPO", "Kabul Edilebilir Veri Kaybı. Bir felakette en fazla kaç saatlik verinin kaybedilmesine razı olunduğu."], ["RTO", "Ayağa Kalkma Süresi. Bir felaketten sonra sistemin en geç ne kadar sürede çalışır hâle gelmesi gerektiği."], ["SIEM", "Güvenlik Olay Yönetimi. Tüm sistemlerin kayıtlarını tek yerde toplayıp saldırı belirtisi arayan sistem."], ["SLA", "Hizmet Seviyesi Taahhüdü. Sözleşmede yazan 'şu kadar sürede yanıt veririm, şu kadar çalışır tutarım' sözü."], ["SNMP", "Ağ cihazlarının durumunu (çalışıyor mu, ne kadar yüklü) uzaktan sormaya yarayan protokol."], ["SOC", "Güvenlik Operasyon Merkezi. Siber saldırıları izleyen ve müdahale eden uzman ekip."], ["Spec", "Tanım. Bir cihazın olması gereken ayarlarının makine tarafından okunabilir listesi."], ["SSH / WinRM", "Bir sunucuya uzaktan bağlanıp komut çalıştırmayı sağlayan standart yöntemler (sırasıyla Linux ve Windows tarafı)."], ["Switch", "Ağ anahtarı. Ofisteki cihazları birbirine bağlayan kutu."], ["Sır (secret)", "Parola, API anahtarı, sertifika gibi gizli kalması gereken her değer."], ["Tenant", "Müşteri alanı. Ortak bir sistemde her müşterinin verisinin birbirinden ayrıldığı bölme."], ["Ticket", "Destek kaydı. Her talebin ve arızanın numaralandırılıp takip edildiği kayıt."], ["Trigger", "Uyarı kuralı. 'Disk %90 dolarsa alarm ver' gibi önceden tanımlanmış koşul."], ["Vault", "Kasa. Şifrelerin ve erişim anahtarlarının şifreli olarak saklandığı güvenli depo."], ["Veeam", "Sunucu ve sanal makine yedeklemesinde kullanılan yazılım."], ["VLAN", "Sanal Ağ. Aynı kablolama üzerinde departmanları birbirinden ayıran mantıksal bölme."], ["VPN", "Sanal Özel Ağ. İnternet üzerinden şirket ağına şifreli ve güvenli bağlanma yöntemi."], ["Yakınsama", "Cihazın mevcut ayarlarının, olması gereken ayarlara otomatik olarak getirilmesi."], ["Zabbix", "Sunucuların ve ağ cihazlarının sürekli izlenip arızada alarm üreten sistem."]]};
+
+const LANES = {
+  A:{name:'Endpoint agent', short:'agent', color:'var(--A)', hex:'#2F6FED',
+     exec:'HR agent · dışa doğru pull',
+     desc:'Üzerine program kurulabilen makinelere — Windows ve Linux sunucular ile çalışan bilgisayarları — küçük bir aracı yazılım kurulur. Bu yazılım makinenin durumunu merkeze bildirir ve merkezden gelen ayarları uygular. Kendi başına karar vermez. Çalıştırdığı bash ve PowerShell script’leri parolayı içinde taşımaz; değerleri .env dosyasından okur.'},
+  B:{name:'Ansible / yapılandırma yönetimi', short:'ansible', color:'var(--B)', hex:'#7A4CD0',
+     exec:'Site relay\u2019den SSH · WinRM · NETCONF',
+     desc:'Üzerine hiçbir program kurmadan, uzaktan bağlanıp ayar basma. Ağ anahtarları, yönlendiriciler, güvenlik duvarları, kablosuz ağ kontrolcüleri ve sanallaştırma sunucuları hiçbir zaman aracı yazılım çalıştıramaz; tek yol budur. Bağlantı parolaları playbook’un içinde değil, ansible-vault’ta şifreli durur.'},
+  C:{name:'Bulut ve üretici API\u2019si', short:'api', color:'var(--C)', hex:'#0C8F84',
+     exec:'Dış kontrol düzlemlerine REST / SDK',
+     desc:'Ayarlar müşterinin binasında değil, sağlayıcının kendi sisteminde durur — Amazon, Microsoft, HRC bulutu, sanallaştırma ve yedekleme platformları gibi. Müşteri tarafına hiçbir şey kurulmaz, müşterinin ağına hiç girilmez. Sağlayıcı anahtarları n8n credentials içinde tutulur.'},
+  D:{name:'HR platform kurulumu', short:'platform', color:'var(--D)', hex:'#AD6A0C',
+     exec:'Zabbix · NetBox · SIEM · ticket nesneleri',
+     desc:'İş tamamen sizin tarafınızda yapılır: izleme kayıtlarını, uyarı kurallarını, panoları, destek kuyruklarını ve söz verdiğiniz yanıt sürelerini kendi sistemlerinizde oluşturmak. Müşteri bunu hiç görmez; bu yüzden en sık unutulan şerittir. Bu sistemlere bağlanan kimlikler de n8n credentials üzerinden gelir.'},
+  E:{name:'n8n zamanlı iş akışı', short:'zamanlı', color:'var(--E)', hex:'#B93B74',
+     exec:'zaman güdümlü tekrar eden teslim',
+     desc:'Bir kerelik kurulum değil, tekrar eden işler: aylık raporlar, yedekten geri dönme testleri, güvenlik taramaları, garanti ve lisans takibi. Devreye alırken bir kez ayarlanır, sonra kendi takviminde çalışır. Her zamanlanmış iş, bağlanacağı sistemin bilgisini n8n credentials’tan alır.'},
+  F:{name:'İnsan iş emri', short:'insan', color:'var(--F)', hex:'#657279',
+     exec:'atanır · nöbete yazılır · SLA ile izlenir',
+     desc:'Hiçbir şekilde otomatikleşmeyen işler: sahaya giden teknisyen, gece gündüz nöbet tutan ekip, danışmanlık, sızma testi, eğitim. İşi insan yapsa da otomasyon yine devreye girer — nöbeti kurar, kaydı açar, süreyi takip eder. İnsana açılan erişimler kayıt altına alınır, kalıcı parola paylaşılmaz.'}
+};
+const ORDER = ['A','B','C','D','E','F'];
+const GRADE = {FULL:'TAM', ASSISTED:'ONAYLI', HUMAN:'İNSAN'};
+const TIER_RANK = {Essential:1, Professional:2, Enterprise:3};
+
+const state = {tier:'all', lane:'all', q:''};
+const items = (DATA.items||[]).slice();
+const crit = DATA.critique||{};
+
+// eleştiri turunun düzeltmeleri veriye kalıcı işlendi
+
+const inTier = it => state.tier==='all' ? true : (state.tier==='Proje' ? it.tier==='Proje' : TIER_RANK[it.tier] <= TIER_RANK[state.tier]);
+const visible = () => items.filter(inTier);
+const matches = it => {
+  if(!inTier(it)) return false;
+  if(state.lane!=='all' && it.primary_lane!==state.lane) return false;
+  if(state.q){
+    const h = (it.name+' '+it.area+' '+it.executor+' '+(it.day0_tasks||[]).join(' ')).toLowerCase();
+    if(!h.includes(state.q)) return false;
+  }
+  return true;
+};
+const el = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function laneCounts(list){
+  const c = {}; ORDER.forEach(k=>c[k]=0);
+  list.forEach(i=>{ if(c[i.primary_lane]!=null) c[i.primary_lane]++; });
+  return c;
+}
+
+function renderDist(){
+  const list = visible(), c = laneCounts(list), total = list.length || 1;
+  el('#distBar').innerHTML = ORDER.map(k=>{
+    const n = c[k], pct = (n/total*100);
+    return `<button type="button" class="dist-seg" data-lane="${k}" aria-pressed="${state.lane===k}"
+      style="flex:${n} 1 0;background:${LANES[k].hex};${n===0?'display:none':''}"
+      title="${esc(LANES[k].name)} — ${n} items">
+      <b>${k} · ${n}</b><span>${esc(LANES[k].short)} · ${pct.toFixed(0)}%</span></button>`;
+  }).join('');
+  const a = c.A;
+  el('#distNote').textContent = state.tier==='all'
+    ? `A şeridi ${list.length} kalemin ${a} tanesini kapsıyor — sattığınız her şeyin %${(a/list.length*100).toFixed(0)}\u2019i.`
+    : `${state.tier}: ${list.length} kalem, bunların ${a} tanesi agent ile teslim edilebilir.`;
+  el('#distBar').querySelectorAll('.dist-seg').forEach(b=>{
+    b.onclick = ()=>{ state.lane = state.lane===b.dataset.lane ? 'all' : b.dataset.lane; renderAll(); };
+  });
+}
+
+function renderBoard(){
+  const list = visible(), c = laneCounts(list);
+  el('#board').innerHTML = ORDER.map(k=>{
+    const L = LANES[k], mine = list.filter(i=>i.primary_lane===k);
+    return `<div class="lane">
+      <div class="lane-rail" style="background:${L.hex}"><b>${k}</b><span>${c[k]}</span></div>
+      <div class="lane-body">
+        <div class="lane-title"><h3>${esc(L.name)}</h3><em>${esc(L.exec)}</em></div>
+        <p class="lane-desc">${esc(L.desc)}</p>
+        <div class="chips">${mine.map(i=>`<span class="chip" title="${esc(i.plain||"")}">${esc(i.name)}</span>`).join('') || '<span class="chip dim">nothing in this tier</span>'}</div>
+      </div></div>`;
+  }).join('');
+  el('#tally').textContent = state.tier==='all'
+    ? `${list.length} hizmet kalemi`
+    : `${state.tier==='Proje'?'Proje bazlı':state.tier} — ${items.length} hizmetin ${list.length} tanesi`;
+}
+
+function renderLaneSeg(){
+  el('#laneSeg').innerHTML = `<button type="button" data-lane="all" aria-pressed="${state.lane==='all'}">Tüm şeritler</button>` +
+    ORDER.map(k=>`<button type="button" data-lane="${k}" aria-pressed="${state.lane===k}">${k}</button>`).join('');
+  el('#laneSeg').querySelectorAll('button').forEach(b=>{
+    b.onclick = ()=>{ state.lane = b.dataset.lane; renderAll(); };
+  });
+}
+
+/* akış şeması: [düğüm, ok, düğüm, ok, düğüm] */
+function flowSvg(f, hex){
+  if(!Array.isArray(f) || f.length < 5) return '';
+  const N=[f[0],f[2],f[4]], E=[f[1],f[3]];
+  const Y=[0,61,122], AR=[[32,58],[93,119]], LY=[49,110];
+  const box=i=>`<rect class="fn" x="0" y="${Y[i]}" width="296" height="30" rx="5"${i===1?` style="stroke:${hex};stroke-width:1.6"`:''}/>`
+    +`<text class="ft${i===1?' ft-mid':''}" x="12" y="${Y[i]+19}">${esc(N[i])}</text>`;
+  const arrow=k=>{const a=AR[k][0], b=AR[k][1];
+    return `<line class="fl" x1="22" y1="${a}" x2="22" y2="${b}"/>`
+      +`<polygon class="fh" points="18.5,${b} 25.5,${b} 22,${b+3.5}"/>`
+      +`<text class="fe" x="34" y="${LY[k]}">${esc(E[k])}</text>`
+      +`<circle class="fd" cx="22" cy="${a}" r="3.2" fill="${hex}">`
+      +`<animate attributeName="cy" values="${a};${b-1}" dur="1.7s" begin="${(k*0.85).toFixed(2)}s" repeatCount="indefinite"/>`
+      +`<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="1.7s" begin="${(k*0.85).toFixed(2)}s" repeatCount="indefinite"/></circle>`;};
+  const lbl=`${N[0]} — ${E[0]} → ${N[1]} — ${E[1]} → ${N[2]}`;
+  return `<svg class="flow" viewBox="0 0 300 152" role="img" aria-label="${esc(lbl)}">`
+    +arrow(0)+arrow(1)+box(0)+box(1)+box(2)+`</svg>`;
+}
+
+function renderTable(){
+  const rows = items.filter(matches).sort((a,b)=>
+    ORDER.indexOf(a.primary_lane)-ORDER.indexOf(b.primary_lane) || a.name.localeCompare(b.name));
+  el('#empty').hidden = rows.length>0;
+  el('#tbody').innerHTML = rows.map((it,ix)=>{
+    const L = LANES[it.primary_lane]||LANES.F;
+    const also = (it.all_lanes||[]).filter(x=>x!==it.primary_lane);
+    return `<tr class="row" data-ix="${ix}" tabindex="0" aria-expanded="false">
+      <td class="svc">${esc(it.name)}<span class="plain">${esc(it.plain||"")}</span><small>${esc(it.area)}</small></td>
+      <td><span class="lanepill" style="background:${L.hex}">${esc(it.primary_lane)}</span>${also.length?`<span class="also">+${also.join('')}</span>`:''}</td>
+      <td class="exec">${esc(it.executor)}${flowSvg(it.flow, L.hex)}</td>
+      <td><span class="grade g-${esc(it.automation_grade)}">${esc(GRADE[it.automation_grade]||it.automation_grade)}</span></td>
+      <td class="tier">${it.tier==='Proje'?'Proje bazlı':esc(it.tier)}</td>
+    </tr>
+    <tr class="detail" hidden><td colspan="5"><div class="detail-in">
+      <div class="dblock"><h4>İlk gün çalıştırılan adımlar <span style="text-transform:none;letter-spacing:0;color:var(--muted)">— teknik detay</span></h4>
+        <ul>${(it.day0_tasks||[]).map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>
+      <div class="dblock">
+        <h4>Müşteriden gereken yetki</h4><p>${esc(it.credential_needed)}</p>
+        <h4 style="margin-top:13px">Çalıştığı nasıl kanıtlanıyor</h4><p>${esc(it.health_check)}</p>
+        <div class="gotcha"><strong>Dikkat</strong><p>${esc(it.gotcha)}</p></div>
+      </div>
+    </div></td></tr>`;
+  }).join('');
+  el('#tbody').querySelectorAll('tr.row').forEach(r=>{
+    const toggle = ()=>{
+      const d = r.nextElementSibling;
+      d.hidden = !d.hidden;
+      r.setAttribute('aria-expanded', String(!d.hidden));
+    };
+    r.onclick = toggle;
+    r.onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } };
+  });
+}
+
+function renderStatic(){
+  const c = laneCounts(items);
+  const g = crit.grade_counts||{};
+  document.querySelectorAll('[data-stat="total"]').forEach(n=>n.textContent=items.length);
+  const pct = g.FULL ? Math.round(g.FULL/items.length*100)+'%' : '—';
+  document.querySelectorAll('[data-stat="fullpct"]').forEach(n=>n.textContent=pct);
+
+  el('#creds').innerHTML = (crit.day0_credentials||[]).map((s,i)=>
+    `<div class="cred"><b>${String(i+1).padStart(2,'0')}</b><span>${esc(s)}</span></div>`).join('');
+  const pcList = arr => (arr||[]).map(o=>{
+    const pr = (typeof o==='string') ? o : o.p, so = (typeof o==='string') ? '' : (o.c||'');
+    return `<div class="pc"><p class="pc-p">${esc(pr)}</p>`
+      + (so ? `<p class="pc-c"><b>Çözüm</b>${esc(so)}</p>` : '') + `</div>`;
+  }).join('');
+  el('#hardest').innerHTML = pcList(crit.hardest_to_automate);
+  el('#gaps').innerHTML = pcList(crit.cross_cutting_gaps);
+  el('#firstBuild').textContent = crit.first_service_to_build || '';
+  el('#glos').innerHTML = (DATA.glossary||[]).map(g=>`<div class="gl"><b>${esc(g[0])}</b><span>${esc(g[1])}</span></div>`).join('');
+
+  const ex = items.find(i=>i.name==='Server Monitoring') || items[0];
+  if(ex){
+    el('#decomp').innerHTML = `<div class="decomp-h">TEK KALEM · <b>${esc(ex.name)}</b> · ${esc(ex.area)} · ${esc(ex.tier)} paketinden itibaren</div>` +
+      (ex.day0_tasks||[]).map((t,i)=>{
+        const m = t.match(/^\s*\[?([A-F])\]?\s*[:\-]?\s*(.*)$/);
+        const k = m ? m[1] : ex.primary_lane, txt = m ? m[2] : t;
+        return `<div class="task" style="animation-delay:${0.06*i+0.1}s"><span class="lm" style="background:${(LANES[k]||LANES.F).hex}">${k}</span><p>${esc(txt)}</p></div>`;
+      }).join('') +
+      `<div class="task" style="border-top:1px solid var(--rule);margin-top:6px;padding-top:12px;animation-delay:.6s">
+        <span class="lm" style="background:var(--accent)">✓</span>
+        <p>${esc(ex.health_check)}</p></div>`;
+  }
+}
+
+function renderAll(){
+  renderDist(); renderBoard(); renderLaneSeg(); renderTable();
+  document.querySelectorAll('.seg button[data-tier]').forEach(b=>
+    b.setAttribute('aria-pressed', String(b.dataset.tier===state.tier)));
+}
+
+document.querySelectorAll('.seg button[data-tier]').forEach(b=>{
+  b.onclick = ()=>{ state.tier = b.dataset.tier; renderAll(); };
+});
+el('#q').oninput = e=>{ state.q = e.target.value.trim().toLowerCase(); renderTable(); };
+
+renderStatic();
+renderAll();
+
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.documentElement.classList.add('anim');
+  const rev=[...document.querySelectorAll('section > .sec-head, section > .sec-sub, figure, .decomp, .tbl-wrap, .creds, .tools, .callout, .gaps, .glos, #dist .prose, #decompose .prose, #bootstrap .prose, #start .prose')];
+  rev.forEach(el=>el.classList.add('reveal'));
+  const showAll=()=>{rev.forEach(el=>el.classList.add('in'));};
+  if(reduce){showAll();}
+  else{
+    const io=new IntersectionObserver((es,o)=>{es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');o.unobserve(en.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    rev.forEach(el=>io.observe(el));
+    setTimeout(showAll,2200);
+  }
+  if(!reduce){
+    document.querySelectorAll('.fact b').forEach((el,i)=>{
+      const m=el.textContent.trim().match(/^(%?)(\d+)$/); if(!m) return;
+      const pre=m[1],end=+m[2],dur=900+i*90; let t0=null; el.textContent=pre+'0';
+      const step=(t)=>{if(!t0)t0=t;const p=Math.min(1,(t-t0)/dur);
+        el.textContent=pre+Math.round(end*(1-Math.pow(1-p,3))); if(p<1)requestAnimationFrame(step);};
+      setTimeout(()=>requestAnimationFrame(step),260+i*90);
+    });
+  }
+})();
+
+(function(){var b=document.getElementById('distBar'); if(b){b.classList.add('intro'); setTimeout(()=>b.classList.remove('intro'),1400);}})();
+</script>
