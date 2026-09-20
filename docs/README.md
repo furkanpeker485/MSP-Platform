@@ -22,6 +22,25 @@ sağlık kontrolü. Sorunların yanında çözümleri, beş aşamalı kurulum s�
 | `hizmet-seritleri/hizmet-seritleri-animasyonlu.html` | Aynı içeriğin hareketli sürümü; sunum için |
 | `hizmet-seritleri/hizmet-seritleri.pdf` | Baskı ve paylaşım (45 sayfa) |
 | `hizmet-seritleri/baski-kaynagi.html` | PDF'in üretildiği kaynak |
+| `hizmet-seritleri/build.py` | Baskı kaynağını `data.json`'dan yeniden üretir |
+| `hizmet-seritleri/animate.py` | Hareketli sürümü haritadan yeniden üretir |
+| `hizmet-seritleri/data.json` | Belgenin veri kaynağı: 39 hizmet, çözümler, sözlük |
+| `hizmet-seritleri/abbr.py` | Kısaltma → günlük Türkçe karşılık eşlemesi (180 terim) |
+| `hizmet-seritleri/assets/` | Baskı stili ve şema dosyaları |
+
+### Belgeyi güncellemek
+
+İçerik `data.json` içinde durur; HTML ve PDF ondan üretilir. Bir hizmetin açıklaması
+veya bir çözüm değişecekse önce `data.json` güncellenir, sonra:
+
+```bash
+python3 docs/hizmet-seritleri/build.py      # baski-kaynagi.html
+python3 docs/hizmet-seritleri/animate.py    # hareketli sürüm
+```
+
+`animate.py`, `hizmet-seritleri.html` dosyasına hareket katmanını ekler; giriş
+animasyonları opaklık değil yalnızca konum değiştirir, böylece animasyon hiç
+çalışmasa bile içerik tam görünür kalır.
 
 ## Kod Haritası — bu deponun topolojisi
 

@@ -1,0 +1,45 @@
+<svg class="dia" color="#37474A" viewBox="0 0 900 250" role="img" aria-label="Beş aşamalı kurulum sırası: omurga, uzaktan ayar basma, sağlayıcı arayüzleri, aracı yazılım ve takvimli işler, proje devri; altta her aşamada geçerli olan kasa, sürümlü tanım, bakım penceresi ve yetki tablosu">
+        <defs><marker id="pra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+        <g font-family="IBM Plex Mono, monospace">
+          <rect x="8" y="40" width="156" height="92" rx="7" fill="none" stroke="#0B6970" stroke-width="1.8"/>
+          <text x="22" y="62" font-size="9" fill="#0B6970" letter-spacing="1.2">AŞAMA 0</text>
+          <text x="22" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Omurga</text>
+          <text x="22" y="101" font-size="10.5" fill="currentColor" opacity=".8">1 hizmet</text>
+          <text x="22" y="119" font-size="9.5" fill="currentColor" opacity=".65">relay · kasa · envanter</text>
+          <line x1="166" y1="86" x2="186" y2="86" stroke="currentColor" stroke-width="1.4" marker-end="url(#pra)"/>
+
+          <rect x="190" y="40" width="156" height="92" rx="7" fill="none" stroke="#7A4CD0" stroke-width="1.8"/>
+          <text x="204" y="62" font-size="9" fill="#7A4CD0" letter-spacing="1.2">AŞAMA 1</text>
+          <text x="204" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Uzaktan ayar</text>
+          <text x="204" y="101" font-size="10.5" fill="currentColor" opacity=".8">13 hizmet</text>
+          <text x="204" y="119" font-size="9.5" fill="currentColor" opacity=".65">sunucu ve ağ cihazları</text>
+          <line x1="348" y1="86" x2="368" y2="86" stroke="currentColor" stroke-width="1.4" marker-end="url(#pra)"/>
+
+          <rect x="372" y="40" width="156" height="92" rx="7" fill="none" stroke="#0C8F84" stroke-width="1.8"/>
+          <text x="386" y="62" font-size="9" fill="#0C8F84" letter-spacing="1.2">AŞAMA 2</text>
+          <text x="386" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Sağlayıcı arayüzü</text>
+          <text x="386" y="101" font-size="10.5" fill="currentColor" opacity=".8">10 hizmet</text>
+          <text x="386" y="119" font-size="9.5" fill="currentColor" opacity=".65">bulut ve yedekleme</text>
+          <line x1="530" y1="86" x2="550" y2="86" stroke="currentColor" stroke-width="1.4" marker-end="url(#pra)"/>
+
+          <rect x="554" y="40" width="156" height="92" rx="7" fill="none" stroke="#2F6FED" stroke-width="1.8"/>
+          <text x="568" y="62" font-size="9" fill="#2F6FED" letter-spacing="1.2">AŞAMA 3</text>
+          <text x="568" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Ajan ve takvim</text>
+          <text x="568" y="101" font-size="10.5" fill="currentColor" opacity=".8">5 hizmet</text>
+          <text x="568" y="119" font-size="9.5" fill="currentColor" opacity=".65">sunucu ajanı, raporlar</text>
+          <line x1="712" y1="86" x2="732" y2="86" stroke="currentColor" stroke-width="1.4" marker-end="url(#pra)"/>
+
+          <rect x="736" y="40" width="156" height="92" rx="7" fill="none" stroke="#657279" stroke-width="1.8"/>
+          <text x="750" y="62" font-size="9" fill="#657279" letter-spacing="1.2">AŞAMA 4</text>
+          <text x="750" y="82" font-size="12.5" font-family="Archivo, sans-serif" font-weight="600" fill="currentColor">Proje devri</text>
+          <text x="750" y="101" font-size="10.5" fill="currentColor" opacity=".8">10 hizmet</text>
+          <text x="750" y="119" font-size="9.5" fill="currentColor" opacity=".65">kurulum → yönetilen</text>
+
+          <rect x="8" y="170" width="884" height="62" rx="7" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="5 4" opacity=".6"/>
+          <text x="24" y="192" font-size="9" fill="currentColor" opacity=".7" letter-spacing="1.2">HER AŞAMADA GEÇERLİ</text>
+          <text x="24" y="215" font-size="10.5" fill="currentColor">kasa (.env · ansible-vault · n8n credentials)</text>
+          <text x="300" y="215" font-size="10.5" fill="currentColor">sürümlü tanım + geri alma</text>
+          <text x="520" y="215" font-size="10.5" fill="currentColor">bakım penceresi</text>
+          <text x="680" y="215" font-size="10.5" fill="currentColor">yetki tablosu</text>
+        </g>
+      </svg>
