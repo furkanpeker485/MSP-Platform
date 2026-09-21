@@ -4,8 +4,8 @@ set -euo pipefail
 
 DEMO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO_DIR="$(cd "$DEMO_DIR/.." && pwd)"
-LAB="$DEMO_DIR/topology/hisar-msp.clab.yml"
-LAB_NAME="hisar-msp"
+LAB="$DEMO_DIR/topology/msp-platform.clab.yml"
+LAB_NAME="msp-platform"
 
 mavi()  { printf '\033[36m%s\033[0m\n' "$*"; }
 yesil() { printf '\033[32m%s\033[0m\n' "$*"; }

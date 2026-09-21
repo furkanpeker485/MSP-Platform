@@ -3,7 +3,7 @@
 
     python3 docs/demo/build.py
 
-Girdi : demo/assets/kanit-cikti.txt (son doğrulama koşusunun çıktısı)
+Girdi : demo/assets/kanit-cikti.txt (son doğrulama koşusunun ham çıktısı)
 Çıktı : docs/demo/emulasyon.html · docs/demo/baski-kaynagi.html
 """
 from __future__ import annotations
@@ -17,9 +17,216 @@ ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 e = html.escape
 
-veri = json.loads((HERE / "_veri.json").read_text(encoding="utf-8"))
-LEG, NODES = veri["legs"], veri["nodes"]
-GECEN, DUSEN, KANIT = veri["gecen"], veri["dusen"], veri["kanit"]
+# Ağ bacakları ve düğümler topolojiyle birlikte değişir; burada tanımlıdır.
+LEG = [
+    [
+        "1",
+        "hr-core",
+        "10.10.0.0/24",
+        "#AD6A0C",
+        "HR kontrol düzlemi",
+        "platform · orkestratör · hop düğümü · izleme · veritabanı · kasa"
+    ],
+    [
+        "2",
+        "wan",
+        "100.64.0.0/30",
+        "#0B6970",
+        "WAN geçişi",
+        "HR kenarı ile müşteri arası"
+    ],
+    [
+        "3",
+        "cust-dmz",
+        "172.31.0.0/29",
+        "#B93B74",
+        "Müşteri DMZ",
+        "güvenlik duvarının iç ayağı"
+    ],
+    [
+        "4",
+        "cust-mgmt",
+        "192.168.10.0/24",
+        "#7A4CD0",
+        "Yönetim VLAN'ı",
+        "site relay · yürütme düğümü · izleme vekili · önbellek"
+    ],
+    [
+        "5",
+        "cust-srv",
+        "192.168.20.0/24",
+        "#2F6FED",
+        "Sunucu VLAN'ı",
+        "ajan çalıştıran Linux sunucular"
+    ],
+    [
+        "6",
+        "cust-usr",
+        "192.168.30.0/24",
+        "#0C8F84",
+        "Kullanıcı VLAN'ı",
+        "ajan çalıştıran uç cihazlar"
+    ]
+]
+
+NODES = [
+    [
+        "hr-sw",
+        "hr-core",
+        "10.10.0.1",
+        "FRR 10.2.1",
+        "HR çekirdek anahtarı",
+        "cihaz"
+    ],
+    [
+        "hr-platform",
+        "hr-core",
+        "10.10.0.10",
+        "msp/platform",
+        "2 · HR Platformu",
+        "kod"
+    ],
+    [
+        "hr-n8n",
+        "hr-core",
+        "10.10.0.11",
+        "msp/platform",
+        "1 · Orkestratör",
+        "kod"
+    ],
+    [
+        "hr-awx",
+        "hr-core",
+        "10.10.0.12",
+        "receptor 1.6.9",
+        "AWX hop düğümü",
+        "kod"
+    ],
+    [
+        "hr-zabbix",
+        "hr-core",
+        "10.10.0.13",
+        "Zabbix 7.4",
+        "İzleme sunucusu",
+        "kod"
+    ],
+    [
+        "hr-db",
+        "hr-core",
+        "10.10.0.14",
+        "postgres 18",
+        "Veritabanı",
+        "kod"
+    ],
+    [
+        "hr-vault",
+        "hr-core",
+        "10.10.0.15",
+        "msp/platform",
+        "Kasa",
+        "kod"
+    ],
+    [
+        "hr-edge",
+        "wan",
+        "100.64.0.1",
+        "FRR 10.2.1",
+        "HR kenar yönlendiricisi",
+        "cihaz"
+    ],
+    [
+        "cust-fw",
+        "cust-dmz",
+        "100.64.0.2 · 172.31.0.1",
+        "nftables 1.1.6",
+        "Güvenlik duvarı",
+        "cihaz"
+    ],
+    [
+        "cust-core",
+        "cust-mgmt",
+        "172.31.0.2 · üç VLAN",
+        "FRR 10.2.1",
+        "Müşteri çekirdek anahtarı",
+        "cihaz"
+    ],
+    [
+        "cust-sw-access",
+        "cust-mgmt",
+        "192.168.10.3",
+        "nftables 1.1.6",
+        "Erişim anahtarı",
+        "cihaz"
+    ],
+    [
+        "relay",
+        "cust-mgmt",
+        "192.168.10.10",
+        "msp/relay",
+        "3 · Site Relay",
+        "kod"
+    ],
+    [
+        "relay-receptor",
+        "cust-mgmt",
+        "192.168.10.11",
+        "receptor 1.6.9",
+        "Yürütme düğümü",
+        "kod"
+    ],
+    [
+        "relay-zbxproxy",
+        "cust-mgmt",
+        "192.168.10.12",
+        "Zabbix 7.4",
+        "İzleme vekili",
+        "kod"
+    ],
+    [
+        "relay-cache",
+        "cust-mgmt",
+        "192.168.10.13",
+        "nginx",
+        "Paket önbelleği",
+        "kod"
+    ],
+    [
+        "srv-01",
+        "cust-srv",
+        "192.168.20.21",
+        "msp/agent",
+        "Sunucu · ajan var",
+        "ajan"
+    ],
+    [
+        "srv-02",
+        "cust-srv",
+        "192.168.20.22",
+        "msp/agent",
+        "Sunucu · ajan var",
+        "ajan"
+    ],
+    [
+        "pc-01",
+        "cust-usr",
+        "192.168.30.31",
+        "msp/agent",
+        "Uç cihaz · ajan var",
+        "ajan"
+    ],
+    [
+        "pc-02",
+        "cust-usr",
+        "192.168.30.32",
+        "msp/agent",
+        "Uç cihaz · ajan var",
+        "ajan"
+    ]
+]
+
+# Kanıt, son doğrulama koşusunun ham çıktısından okunur — elle girilmez.
+KANIT = (ROOT / "demo/assets/kanit-cikti.txt").read_text(encoding="utf-8")
+GECEN, DUSEN = KANIT.count("\u2713"), KANIT.count("\u2717")
 LEGHEX = {l[1]: l[3] for l in LEG}
 
 # ── topoloji şeması: altı bacak, soldan sağa HR → WAN → müşteri ──────────────
@@ -231,7 +438,7 @@ def sayfa(animasyonlu: bool) -> str:
 <style>{CSS}</style>
 <div class="wrap">
 <header>
-  <p class="eyebrow">Hisar Delivery Platform · uçtan uca emülasyon</p>
+  <p class="eyebrow">MSP-Platform · uçtan uca emülasyon</p>
   <h1>Topolojinin tamamı, gerçek cihazlarla ayakta.</h1>
   <p class="lead">Beş bileşen, altı ağ bacağı ve 19 düğüm containerlab ile kuruldu.
   Kutuların içinde deponun <strong>gerçek kodu</strong> koşuyor: platform 39 hizmetlik kataloğu

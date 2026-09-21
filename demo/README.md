@@ -73,7 +73,7 @@ karşılığıdır ve emülasyonda ölçülerek doğrulanır.
 
 ```
 demo/
-├── topology/hisar-msp.clab.yml   19 düğüm, 18 bağlantı, 6 bacak
+├── topology/msp-platform.clab.yml   19 düğüm, 18 bağlantı, 6 bacak
 ├── images/                       platform · agent · relay · appliance imajları
 ├── nodes/
 │   ├── router/                   FRR yapılandırmaları (hr-sw, hr-edge, cust-core)

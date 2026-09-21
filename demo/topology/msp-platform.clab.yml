@@ -1,4 +1,4 @@
-# Hisar MSP — uçtan uca emülasyon topolojisi
+# MSP-Platform — uçtan uca emülasyon topolojisi
 #
 # Altı ağ bacağı açıkça emüle edilir:
 #   1) hr-core     10.10.0.0/24     HR kontrol düzlemi
@@ -12,13 +12,13 @@
 #   * ajan ÇALIŞTIRAN  → srv-01, srv-02, pc-01, pc-02        (A şeridi)
 #   * ajan ÇALIŞTIRAMAYAN → cust-fw, cust-sw-access, yönlendiriciler (B şeridi)
 #
-# Çalıştırma:  sudo containerlab deploy -t topology/hisar-msp.clab.yml
+# Çalıştırma:  sudo containerlab deploy -t topology/msp-platform.clab.yml
 # Apple Silicon'da Colima sanal makinesi içinde koşar; bkz. demo/README.md
 
-name: hisar-msp
+name: msp-platform
 
 mgmt:
-  network: hisar-clab-mgmt
+  network: msp-clab-mgmt
   ipv4-subnet: 172.28.28.0/24
 
 topology:
@@ -49,7 +49,7 @@ topology:
         rol: HR çekirdek anahtarı
 
     hr-platform:
-      image: hisar/platform:demo
+      image: msp/platform:demo
       mgmt-ipv4: 172.28.28.12
       env:
         HR_AGENT_ENROLL_SECRET: demo-enroll-secret
@@ -63,7 +63,7 @@ topology:
         rol: 2 · HR Platformu (kontrol düzlemi)
 
     hr-n8n:
-      image: hisar/platform:demo
+      image: msp/platform:demo
       mgmt-ipv4: 172.28.28.13
       binds:
         - ../nodes/platform/orchestrator.py:/app/orchestrator.py:ro
@@ -119,7 +119,7 @@ topology:
         rol: Veritabanı
 
     hr-vault:
-      image: hisar/platform:demo
+      image: msp/platform:demo
       mgmt-ipv4: 172.28.28.17
       binds:
         - ../nodes/platform/vault_stub.py:/app/vault_stub.py:ro
@@ -156,7 +156,7 @@ topology:
     # BACAK 3 — müşteri DMZ (172.31.0.0/29) · ajan çalıştıramaz
     # ─────────────────────────────────────────────────────────────
     cust-fw:
-      image: hisar/appliance:demo
+      image: msp/appliance:demo
       mgmt-ipv4: 172.28.28.31
       binds:
         - ../nodes/firewall/nftables.conf:/etc/nftables.conf:ro
@@ -207,7 +207,7 @@ topology:
         rol: Müşteri çekirdek anahtarı (L3)
 
     cust-sw-access:
-      image: hisar/appliance:demo
+      image: msp/appliance:demo
       mgmt-ipv4: 172.28.28.33
       exec:
         - ip link add br0 type bridge
@@ -221,7 +221,7 @@ topology:
 
     # ── yönetim VLAN'ındaki Site Relay bileşenleri ──
     relay:
-      image: hisar/relay:demo
+      image: msp/relay:demo
       mgmt-ipv4: 172.28.28.41
       env:
         RELAY_TENANT: acme
@@ -276,7 +276,7 @@ topology:
 
     # ── sunucu VLAN'ı: ajan çalıştıran düğümler ──
     srv-01:
-      image: hisar/agent:demo
+      image: msp/agent:demo
       mgmt-ipv4: 172.28.28.51
       env:
         HRAGENT_PLATFORM_URL: http://192.168.10.10:8080
@@ -291,7 +291,7 @@ topology:
         rol: Linux sunucu — ajan çalıştırır (A şeridi)
 
     srv-02:
-      image: hisar/agent:demo
+      image: msp/agent:demo
       mgmt-ipv4: 172.28.28.52
       env:
         HRAGENT_PLATFORM_URL: http://192.168.10.10:8080
@@ -307,7 +307,7 @@ topology:
 
     # ── kullanıcı VLAN'ı ──
     pc-01:
-      image: hisar/agent:demo
+      image: msp/agent:demo
       mgmt-ipv4: 172.28.28.61
       env:
         HRAGENT_PLATFORM_URL: http://192.168.10.10:8080
@@ -322,7 +322,7 @@ topology:
         rol: Kullanıcı bilgisayarı — ajan çalıştırır
 
     pc-02:
-      image: hisar/agent:demo
+      image: msp/agent:demo
       mgmt-ipv4: 172.28.28.62
       env:
         HRAGENT_PLATFORM_URL: http://192.168.10.10:8080

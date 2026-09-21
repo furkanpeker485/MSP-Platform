@@ -9,8 +9,8 @@
    ✓ hr-edge → cust-fw (WAN karşı ucu)
    ✓ cust-fw → hr-edge
    WAN bacağındaki adresler:
-     hr-edge  eth2@if235       UP             100.64.0.1/30 fe80::a8c1:abff:fec5:f4f8/64 
-     cust-fw  eth1@if236       UP             100.64.0.2/30 fe80::a8c1:abff:fe2e:4b8e/64 
+     hr-edge  eth2@if322       UP             100.64.0.1/30 fe80::a8c1:abff:febb:23da/64 
+     cust-fw  eth1@if321       UP             100.64.0.2/30 fe80::a8c1:abff:feca:8096/64 
 
 ━━ BACAK 3 — müşteri DMZ (172.31.0.0/29)
    ✓ cust-fw → cust-core
@@ -41,9 +41,9 @@
    ✓ farklı VLAN'a giden paket yönlendiriciden geçiyor (TTL düştü)
    ✓ WAN ötesine giden paket birden çok yönlendiriciden geçiyor
    Çekirdek anahtardaki VLAN köprüleri:
-     br-mgmt          UP             192.168.10.1/24 fe80::2064:5ff:fed2:1d4c/64 
-     br-srv           UP             192.168.20.1/24 fe80::386e:38ff:fe3f:e74f/64 
-     br-usr           UP             192.168.30.1/24 fe80::109e:d1ff:fe95:4537/64 
+     br-mgmt          UP             192.168.10.1/24 fe80::e49b:2ff:fe47:4175/64 
+     br-srv           UP             192.168.20.1/24 fe80::84f9:3dff:fe0d:88dd/64 
+     br-usr           UP             192.168.30.1/24 fe80::9065:4cff:fe1a:7d62/64 
 
 ━━ YÖN KURALI — dışarıdan içeri kapalı
    Tasarımın özü: müşteri ağına giden her bağlantı içeriden başlatılır.

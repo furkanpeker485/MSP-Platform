@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 300" width="880" height="300" role="img" aria-label="Beş bileşenin kod topolojisi ve aralarındaki akış">
 <style>text{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif} .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}</style>
 <text x="0" y="16" font-size="13" font-weight="600" fill="#1F2328">Beş bileşen</text>
-<text x="0" y="34" font-size="11" fill="#59636E" class="m">depoda 147 dosya · haritada 49 tanesi açılabilir</text>
+<text x="0" y="34" font-size="11" fill="#59636E" class="m">depoda 185 dosya · haritada 49 tanesi açılabilir</text>
 <rect x="0" y="58" width="284" height="52" rx="8" fill="#FFFFFF" stroke="#DB2777" stroke-width="1.6"/>
 <rect x="0" y="58" width="4" height="52" rx="2" fill="#DB2777"/>
 <text x="16" y="80" font-size="12.5" font-weight="600" fill="#1F2328">1 · Orkestratör</text>

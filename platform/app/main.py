@@ -11,7 +11,7 @@ from app.config import settings
 log = structlog.get_logger(__name__)
 
 app = FastAPI(
-    title="Hisar Delivery Platform",
+    title="MSP-Platform",
     version="0.1.0",
     description="Katalog, hak seti, tanım derleyici ve şerit dağıtıcısı",
 )

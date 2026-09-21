@@ -43,9 +43,9 @@ pre{margin:0;padding:2.5mm 3mm;background:#F7F9F9;border:1px solid #E3EAEA;borde
   <h1>Hangi kod, hangi bileşende, hangi şeritte.</h1>
   <p class="lead">Beş bileşenin kaynak kodu tek belgede. Önce topoloji, sonra dosya envanteri,
   ardından haritadaki her dosyanın kodunun tamamı. Bu belgedeki kod örnek değildir — deponun
-  <code>main</code> dalındaki gerçek içeriktir (179a0ca).</p>
+  <code>main</code> dalındaki gerçek içeriktir (d6c534f).</p>
   <div class="facts">
-   <div><b>187</b><span>depodaki dosya</span></div>
+   <div><b>185</b><span>depodaki dosya</span></div>
    <div><b>49</b><span>belgede tam kod</span></div>
    <div><b>3,100</b><span>satır</span></div>
    <div><b>5</b><span>bileşen</span></div>
@@ -725,7 +725,7 @@ from app.config import settings
 log = structlog.get_logger(__name__)
 
 app = FastAPI(
-    title=&quot;Hisar Delivery Platform&quot;,
+    title=&quot;MSP-Platform&quot;,
     version=&quot;0.1.0&quot;,
     description=&quot;Katalog, hak seti, tanım derleyici ve şerit dağıtıcısı&quot;,
 )
@@ -2400,7 +2400,7 @@ from pydantic import BaseModel
 import jobqueue  # stdlib &#x27;queue&#x27; ile çakışmaması için bilerek bu ad
 
 log = structlog.get_logger(__name__)
-app = FastAPI(title=&quot;Hisar Site Relay&quot;, version=&quot;0.1.0&quot;)
+app = FastAPI(title=&quot;MSP Site Relay&quot;, version=&quot;0.1.0&quot;)
 
 TENANT = os.environ.get(&quot;RELAY_TENANT&quot;, &quot;&quot;)
 RELAY_TOKEN = os.environ.get(&quot;RELAY_TOKEN&quot;, &quot;&quot;)

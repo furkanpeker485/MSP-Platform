@@ -21,3 +21,7 @@ venv/
 # Araçlar
 .DS_Store
 node_modules/
+
+# containerlab çalışma anı durumu — mutlak yollar ve üretilmiş sertifikalar içerir
+demo/topology/clab-*/
+demo/topology/.*.clab.yml.bak

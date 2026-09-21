@@ -14,7 +14,7 @@ from pydantic import BaseModel
 import jobqueue  # stdlib 'queue' ile çakışmaması için bilerek bu ad
 
 log = structlog.get_logger(__name__)
-app = FastAPI(title="Hisar Site Relay", version="0.1.0")
+app = FastAPI(title="MSP Site Relay", version="0.1.0")
 
 TENANT = os.environ.get("RELAY_TENANT", "")
 RELAY_TOKEN = os.environ.get("RELAY_TOKEN", "")

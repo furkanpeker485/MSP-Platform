@@ -1,5 +1,5 @@
 [project]
-name = "hisar-platform"
+name = "msp-platform"
 version = "0.1.0"
 description = "HR Platformu — katalog, hak seti, tanım derleyici ve şerit dağıtıcısı"
 requires-python = ">=3.11"

@@ -17,7 +17,7 @@ PATH_RE = re.compile(r"^/v1/secret/data/tenants/(?P<tenant>[a-z0-9-]+)/(?P<key>.
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "hisar-demo-vault/1.0"
+    server_version = "msp-demo-vault/1.0"
 
     def _json(self, code: int, body: dict) -> None:
         raw = json.dumps(body, ensure_ascii=False).encode()
