@@ -1,0 +1,71 @@
+name: ci
+
+on:
+  push: {branches: [main]}
+  pull_request: {}
+
+jobs:
+  secret-scan:
+    name: Sır taraması
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Şifresiz ansible-vault dosyası var mı
+        run: |
+          fail=0
+          while IFS= read -r f; do
+            head -1 "$f" | grep -q '^\$ANSIBLE_VAULT' || { echo "ŞİFRESİZ: $f"; fail=1; }
+          done < <(find . -path '*/group_vars/*' -name 'vault*.yml')
+          exit $fail
+
+      - name: Depoya girmiş .env dosyası var mı
+        run: |
+          found=$(git ls-files | grep -E '(^|/)\.env$' || true)
+          [ -z "$found" ] || { echo "DEPODA .env: $found"; exit 1; }
+
+      - name: Kaynak kodda açık metin sır kalıbı
+        run: |
+          if git ls-files -- '*.py' '*.yml' '*.yaml' '*.json' \
+             | xargs grep -nEi "(password|secret|api[_-]?key|token)[\"']?\s*[:=]\s*[\"'][A-Za-z0-9/+=._-]{12,}[\"']" \
+             | grep -v -e example -e CHANGEME -e '{{' -e '\$env' -e lookup ; then
+            echo "Açık metin sır bulundu"; exit 1
+          fi
+
+  platform:
+    name: Platform testleri
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - working-directory: platform
+        run: |
+          pip install -e ".[dev]"
+          python -m pytest -q
+          ruff check .
+
+  agent:
+    name: Ajan testleri
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - working-directory: agent
+        run: |
+          pip install -e ".[dev]"
+          python -m pytest -q
+          ruff check .
+
+  catalog:
+    name: Katalog bütünlüğü
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - working-directory: platform
+        run: |
+          pip install -e ".[dev]"
+          python -m pytest tests/test_catalog.py -q
