@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 330" width="880" height="330" role="img" aria-label="Yayındaki 39 hizmetin altı yürütme şeridine dağılımı">
+<style>text{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif} .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}</style>
+<text x="0" y="16" font-size="13" font-weight="600" fill="#E6EDF3">Altı yürütme şeridi</text>
+<text x="0" y="34" font-size="11" fill="#8B949E" class="m">yayındaki 39 hizmet · her biri onu fiilen yapan şeride bağlı</text>
+<rect x="0" y="54" width="26" height="26" rx="5" fill="#2F6FED"/>
+<text x="13" y="72" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" class="m">A</text>
+<text x="36" y="66" font-size="12" font-weight="600" fill="#E6EDF3">Aracı yazılım</text>
+<text x="36" y="79" font-size="10" fill="#8B949E" class="m">uç cihaz ajanı</text>
+<rect x="210" y="59" width="86" height="16" rx="8" fill="#2F6FED" opacity=".18"/>
+<rect x="210" y="59" width="86" height="16" rx="8" fill="#2F6FED"><animate attributeName="width" values="0;86" dur="0.9s" begin="0.0s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1" keyTimes="0;1"/></rect>
+<circle r="3.2" fill="#2F6FED" opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.6s" begin="1.0s" repeatCount="indefinite"/><animateMotion dur="2.6s" begin="1.0s" repeatCount="indefinite" path="M216,67 L290,67"/></circle>
+<text x="306" y="72" font-size="12" font-weight="700" fill="#E6EDF3" class="m">2</text>
+<rect x="0" y="96" width="26" height="26" rx="5" fill="#8B5CF6"/>
+<text x="13" y="114" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" class="m">B</text>
+<text x="36" y="108" font-size="12" font-weight="600" fill="#E6EDF3">Uzaktan ayar</text>
+<text x="36" y="121" font-size="10" fill="#8B949E" class="m">Ansible · SSH/WinRM</text>
+<rect x="210" y="101" width="560" height="16" rx="8" fill="#8B5CF6" opacity=".18"/>
+<rect x="210" y="101" width="560" height="16" rx="8" fill="#8B5CF6"><animate attributeName="width" values="0;560" dur="0.9s" begin="0.12s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1" keyTimes="0;1"/></rect>
+<circle r="3.2" fill="#8B5CF6" opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.6s" begin="1.12s" repeatCount="indefinite"/><animateMotion dur="2.6s" begin="1.12s" repeatCount="indefinite" path="M216,109 L764,109"/></circle>
+<text x="780" y="114" font-size="12" font-weight="700" fill="#E6EDF3" class="m">13</text>
+<rect x="0" y="138" width="26" height="26" rx="5" fill="#0F9B8E"/>
+<text x="13" y="156" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" class="m">C</text>
+<text x="36" y="150" font-size="12" font-weight="600" fill="#E6EDF3">Sağlayıcı arayüzü</text>
+<text x="36" y="163" font-size="10" fill="#8B949E" class="m">bulut ve üretici API'si</text>
+<rect x="210" y="143" width="430" height="16" rx="8" fill="#0F9B8E" opacity=".18"/>
+<rect x="210" y="143" width="430" height="16" rx="8" fill="#0F9B8E"><animate attributeName="width" values="0;430" dur="0.9s" begin="0.24s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1" keyTimes="0;1"/></rect>
+<circle r="3.2" fill="#0F9B8E" opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.6s" begin="1.24s" repeatCount="indefinite"/><animateMotion dur="2.6s" begin="1.24s" repeatCount="indefinite" path="M216,151 L634,151"/></circle>
+<text x="650" y="156" font-size="12" font-weight="700" fill="#E6EDF3" class="m">10</text>
+<rect x="0" y="180" width="26" height="26" rx="5" fill="#D08700"/>
+<text x="13" y="198" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" class="m">D</text>
+<text x="36" y="192" font-size="12" font-weight="600" fill="#E6EDF3">Platform kurulumu</text>
+<text x="36" y="205" font-size="10" fill="#8B949E" class="m">Zabbix · NetBox · SIEM</text>
+<rect x="210" y="185" width="43" height="16" rx="8" fill="#D08700" opacity=".18"/>
+<rect x="210" y="185" width="43" height="16" rx="8" fill="#D08700"><animate attributeName="width" values="0;43" dur="0.9s" begin="0.36s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1" keyTimes="0;1"/></rect>
+<circle r="3.2" fill="#D08700" opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.6s" begin="1.3599999999999999s" repeatCount="indefinite"/><animateMotion dur="2.6s" begin="1.3599999999999999s" repeatCount="indefinite" path="M216,193 L247,193"/></circle>
+<text x="263" y="198" font-size="12" font-weight="700" fill="#E6EDF3" class="m">1</text>
+<rect x="0" y="222" width="26" height="26" rx="5" fill="#DB2777"/>
+<text x="13" y="240" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" class="m">E</text>
+<text x="36" y="234" font-size="12" font-weight="600" fill="#E6EDF3">Takvimli iş</text>
+<text x="36" y="247" font-size="10" fill="#8B949E" class="m">n8n zamanlanmış akış</text>
+<rect x="210" y="227" width="129" height="16" rx="8" fill="#DB2777" opacity=".18"/>
+<rect x="210" y="227" width="129" height="16" rx="8" fill="#DB2777"><animate attributeName="width" values="0;129" dur="0.9s" begin="0.48s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1" keyTimes="0;1"/></rect>
+<circle r="3.2" fill="#DB2777" opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.6s" begin="1.48s" repeatCount="indefinite"/><animateMotion dur="2.6s" begin="1.48s" repeatCount="indefinite" path="M216,235 L333,235"/></circle>
+<text x="349" y="240" font-size="12" font-weight="700" fill="#E6EDF3" class="m">3</text>
+<rect x="0" y="264" width="26" height="26" rx="5" fill="#6B7280"/>
+<text x="13" y="282" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" class="m">F</text>
+<text x="36" y="276" font-size="12" font-weight="600" fill="#E6EDF3">İnsan işi</text>
+<text x="36" y="289" font-size="10" fill="#8B949E" class="m">saha · nöbet · danışman</text>
+<rect x="210" y="269" width="430" height="16" rx="8" fill="#6B7280" opacity=".18"/>
+<rect x="210" y="269" width="430" height="16" rx="8" fill="#6B7280"><animate attributeName="width" values="0;430" dur="0.9s" begin="0.6s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1" keyTimes="0;1"/></rect>
+<circle r="3.2" fill="#6B7280" opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.6s" begin="1.6s" repeatCount="indefinite"/><animateMotion dur="2.6s" begin="1.6s" repeatCount="indefinite" path="M216,277 L634,277"/></circle>
+<text x="650" y="282" font-size="12" font-weight="700" fill="#E6EDF3" class="m">10</text>
+<text x="0" y="322" font-size="10" fill="#8B949E" class="m">A yalnız 2 hizmet taşır — ağırlık merkezi uzaktan ayar (B) ve insan işi (F) tarafında</text>
+</svg>

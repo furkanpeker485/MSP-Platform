@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 280" width="880" height="280" role="img" aria-label="Emülasyon topolojisi: altı ağ bacağı">
+<style>text{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif} .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}</style>
+<text x="0" y="16" font-size="13" font-weight="600" fill="#1F2328">Emüle edilen altı ağ bacağı</text>
+<text x="0" y="34" font-size="11" fill="#59636E" class="m">19 düğüm · 18 sanal kablo · 33 kontrolün 33'ü geçti</text>
+<rect x="0" y="52" width="200" height="74" rx="8" fill="#FFFFFF" stroke="#D08700" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="12" y="71" font-size="9.5" fill="#D08700" class="m" letter-spacing="1">BACAK 1</text>
+<text x="12" y="90" font-size="12" font-weight="600" fill="#1F2328" class="m">hr-core</text>
+<text x="12" y="106" font-size="10" fill="#59636E" class="m">10.10.0.0/24</text>
+<text x="12" y="120" font-size="9.5" fill="#59636E">HR kontrol düzlemi</text>
+<rect x="218" y="52" width="118" height="74" rx="8" fill="#FFFFFF" stroke="#0F9B8E" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="230" y="71" font-size="9.5" fill="#0F9B8E" class="m" letter-spacing="1">BACAK 2</text>
+<text x="230" y="90" font-size="12" font-weight="600" fill="#1F2328" class="m">wan</text>
+<text x="230" y="106" font-size="10" fill="#59636E" class="m">100.64.0.0/30</text>
+<text x="230" y="120" font-size="9.5" fill="#59636E">WAN geçişi</text>
+<rect x="354" y="52" width="118" height="74" rx="8" fill="#FFFFFF" stroke="#DB2777" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="366" y="71" font-size="9.5" fill="#DB2777" class="m" letter-spacing="1">BACAK 3</text>
+<text x="366" y="90" font-size="12" font-weight="600" fill="#1F2328" class="m">cust-dmz</text>
+<text x="366" y="106" font-size="10" fill="#59636E" class="m">172.31.0.0/29</text>
+<text x="366" y="120" font-size="9.5" fill="#59636E">güvenlik duvarı</text>
+<rect x="490" y="52" width="190" height="74" rx="8" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="502" y="71" font-size="9.5" fill="#8B5CF6" class="m" letter-spacing="1">BACAK 4</text>
+<text x="502" y="90" font-size="12" font-weight="600" fill="#1F2328" class="m">cust-mgmt</text>
+<text x="502" y="106" font-size="10" fill="#59636E" class="m">192.168.10.0/24</text>
+<text x="502" y="120" font-size="9.5" fill="#59636E">yönetim VLAN'ı</text>
+<rect x="466" y="152" width="190" height="74" rx="8" fill="#FFFFFF" stroke="#2F6FED" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="478" y="171" font-size="9.5" fill="#2F6FED" class="m" letter-spacing="1">BACAK 5</text>
+<text x="478" y="190" font-size="12" font-weight="600" fill="#1F2328" class="m">cust-srv</text>
+<text x="478" y="206" font-size="10" fill="#59636E" class="m">192.168.20.0/24</text>
+<text x="478" y="220" font-size="9.5" fill="#59636E">sunucu VLAN'ı</text>
+<rect x="672" y="152" width="190" height="74" rx="8" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="684" y="171" font-size="9.5" fill="#16A34A" class="m" letter-spacing="1">BACAK 6</text>
+<text x="684" y="190" font-size="12" font-weight="600" fill="#1F2328" class="m">cust-usr</text>
+<text x="684" y="206" font-size="10" fill="#59636E" class="m">192.168.30.0/24</text>
+<text x="684" y="220" font-size="9.5" fill="#59636E">kullanıcı VLAN'ı</text>
+<path d="M200,89 L216,89" fill="none" stroke="#0F9B8E" stroke-width="1.6" opacity=".5"/>
+<circle r="3.4" fill="#0F9B8E" opacity="0"><animateMotion dur="1.4s" begin="0s" repeatCount="indefinite" path="M200,89 L216,89"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="1.4s" begin="0s" repeatCount="indefinite"/></circle>
+<path d="M334,89 L350,89" fill="none" stroke="#0F9B8E" stroke-width="1.6" opacity=".5"/>
+<circle r="3.4" fill="#0F9B8E" opacity="0"><animateMotion dur="1.4s" begin="0.4s" repeatCount="indefinite" path="M334,89 L350,89"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="1.4s" begin="0.4s" repeatCount="indefinite"/></circle>
+<path d="M468,89 L484,89" fill="none" stroke="#DB2777" stroke-width="1.6" opacity=".5"/>
+<circle r="3.4" fill="#DB2777" opacity="0"><animateMotion dur="1.4s" begin="0.8s" repeatCount="indefinite" path="M468,89 L484,89"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="1.4s" begin="0.8s" repeatCount="indefinite"/></circle>
+<path d="M561,126 L561,152" fill="none" stroke="#2F6FED" stroke-width="1.6" opacity=".5"/>
+<circle r="3.4" fill="#2F6FED" opacity="0"><animateMotion dur="1.6s" begin="1.2s" repeatCount="indefinite" path="M561,126 L561,152"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="1.6s" begin="1.2s" repeatCount="indefinite"/></circle>
+<path d="M620,126 L767,152" fill="none" stroke="#16A34A" stroke-width="1.6" opacity=".5"/>
+<circle r="3.4" fill="#16A34A" opacity="0"><animateMotion dur="1.8s" begin="1.5s" repeatCount="indefinite" path="M620,126 L767,152"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="1.8s" begin="1.5s" repeatCount="indefinite"/></circle>
+<text x="0" y="272" font-size="10" fill="#59636E" class="m">VLAN'lar ayrı yayın alanı: aynı VLAN TTL 64 · farklı VLAN 63 · WAN ötesi 61</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 300" width="880" height="300" role="img" aria-label="Beş bileşenin kod topolojisi ve aralarındaki akış">
+<style>text{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif} .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}</style>
+<text x="0" y="16" font-size="13" font-weight="600" fill="#E6EDF3">Beş bileşen</text>
+<text x="0" y="34" font-size="11" fill="#8B949E" class="m">depoda 147 dosya · haritada 49 tanesi açılabilir</text>
+<rect x="0" y="58" width="284" height="52" rx="8" fill="#161B22" stroke="#DB2777" stroke-width="1.6"/>
+<rect x="0" y="58" width="4" height="52" rx="2" fill="#DB2777"/>
+<text x="16" y="80" font-size="12.5" font-weight="600" fill="#E6EDF3">1 · Orkestratör</text>
+<text x="16" y="97" font-size="10.5" fill="#8B949E" class="m">orchestrator/</text>
+<text x="270" y="90" font-size="12" font-weight="700" fill="#DB2777" text-anchor="end" class="m">4</text>
+<rect x="0" y="130" width="284" height="52" rx="8" fill="#161B22" stroke="#D08700" stroke-width="1.6"/>
+<rect x="0" y="130" width="4" height="52" rx="2" fill="#D08700"/>
+<text x="16" y="152" font-size="12.5" font-weight="600" fill="#E6EDF3">2 · HR Platformu</text>
+<text x="16" y="169" font-size="10.5" fill="#8B949E" class="m">platform/</text>
+<text x="270" y="162" font-size="12" font-weight="700" fill="#D08700" text-anchor="end" class="m">22</text>
+<rect x="326" y="130" width="284" height="52" rx="8" fill="#161B22" stroke="#8B5CF6" stroke-width="1.6"/>
+<rect x="326" y="130" width="4" height="52" rx="2" fill="#8B5CF6"/>
+<text x="342" y="152" font-size="12.5" font-weight="600" fill="#E6EDF3">3 · Site Relay</text>
+<text x="342" y="169" font-size="10.5" fill="#8B949E" class="m">relay/</text>
+<text x="596" y="162" font-size="12" font-weight="700" fill="#8B5CF6" text-anchor="end" class="m">11</text>
+<rect x="326" y="224" width="284" height="52" rx="8" fill="#161B22" stroke="#6B7280" stroke-width="1.6"/>
+<rect x="326" y="224" width="4" height="52" rx="2" fill="#6B7280"/>
+<text x="342" y="246" font-size="12.5" font-weight="600" fill="#E6EDF3">4 · İnsan</text>
+<text x="342" y="263" font-size="10.5" fill="#8B949E" class="m">human/</text>
+<text x="596" y="256" font-size="12" font-weight="700" fill="#6B7280" text-anchor="end" class="m">4</text>
+<rect x="652" y="130" width="228" height="52" rx="8" fill="#161B22" stroke="#2F6FED" stroke-width="1.6"/>
+<rect x="652" y="130" width="4" height="52" rx="2" fill="#2F6FED"/>
+<text x="668" y="152" font-size="12.5" font-weight="600" fill="#E6EDF3">5 · Uç Nokta Ajanı</text>
+<text x="668" y="169" font-size="10.5" fill="#8B949E" class="m">agent/</text>
+<text x="866" y="162" font-size="12" font-weight="700" fill="#2F6FED" text-anchor="end" class="m">8</text>
+<path d="M142,110 L142,130" fill="none" stroke="#DB2777" stroke-width="1.8" opacity=".55"/>
+<circle r="3.6" fill="#DB2777" opacity="0"><animateMotion dur="1.6s" begin="0s" repeatCount="indefinite" path="M142,110 L142,130"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="1.6s" begin="0s" repeatCount="indefinite"/></circle>
+<path d="M284,156 L326,156" fill="none" stroke="#D08700" stroke-width="1.8" opacity=".55"/>
+<circle r="3.6" fill="#D08700" opacity="0"><animateMotion dur="2s" begin="0.3s" repeatCount="indefinite" path="M284,156 L326,156"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="2s" begin="0.3s" repeatCount="indefinite"/></circle>
+<text x="305" y="148" font-size="9.5" fill="#8B949E" class="m" text-anchor="middle">görev</text>
+<path d="M610,156 L652,156" fill="none" stroke="#8B5CF6" stroke-width="1.8" opacity=".55"/>
+<circle r="3.6" fill="#8B5CF6" opacity="0"><animateMotion dur="2s" begin="0.9s" repeatCount="indefinite" path="M610,156 L652,156"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="2s" begin="0.9s" repeatCount="indefinite"/></circle>
+<text x="631" y="148" font-size="9.5" fill="#8B949E" class="m" text-anchor="middle">kuyruk</text>
+<path d="M468,182 L468,224" fill="none" stroke="#6B7280" stroke-width="1.8" opacity=".55"/>
+<circle r="3.6" fill="#6B7280" opacity="0"><animateMotion dur="2.2s" begin="1.4s" repeatCount="indefinite" path="M468,182 L468,224"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="2.2s" begin="1.4s" repeatCount="indefinite"/></circle>
+<text x="476" y="207" font-size="9.5" fill="#8B949E" class="m" text-anchor="middle">iş emri</text>
+<text x="0" y="292" font-size="10" fill="#8B949E" class="m">ok yönü iş akışıdır; ağ bağlantısı her zaman içeriden dışarı kurulur</text>
+</svg>
