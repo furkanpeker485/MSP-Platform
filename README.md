@@ -29,7 +29,7 @@ otomasyon platformunun kaynak kodu.
 | **E** | Takvimli işler | `orchestrator/workflows/scheduled_*.json` |
 | **F** | İnsan iş emri | `human/` + `platform/app/integrations/ticketing.py` |
 
-## Sır yönetimi — istisnasız
+## Secret yönetimi — istisnasız
 
 Hiçbir parola, anahtar veya sertifika kaynak koda yazılmaz.
 
