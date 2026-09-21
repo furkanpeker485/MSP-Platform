@@ -1,7 +1,6 @@
-<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Hisar Kod Haritası</title>
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Kod Haritası</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<style>
-@page{size:A4;margin:14mm 12mm}
+<style>@page{size:A4;margin:14mm 12mm}
 *{box-sizing:border-box}
 body{font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:9pt;line-height:1.5;color:#12191A;margin:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 h1,h2,h3{font-family:Archivo,sans-serif;margin:0;letter-spacing:-.015em;line-height:1.15}
@@ -40,15 +39,15 @@ pre{margin:0;padding:2.5mm 3mm;background:#F7F9F9;border:1px solid #E3EAEA;borde
 </style></head><body>
 <div class="cover">
  <div>
-  <p class="eyebrow">Hisar Delivery Platform · kod topolojisi</p>
+  <p class="eyebrow">MSP-Platform · kod topolojisi</p>
   <h1>Hangi kod, hangi bileşende, hangi şeritte.</h1>
-  <p class="lead">Beş bileşenin kaynak kodu tek belgede. Önce topoloji, sonra dosya envanteri, ardından
-  haritadaki her dosyanın kodunun tamamı. Bu belgedeki kod örnek değildir — deponun <code>main</code>
-  dalındaki gerçek içeriktir (374fbbc).</p>
+  <p class="lead">Beş bileşenin kaynak kodu tek belgede. Önce topoloji, sonra dosya envanteri,
+  ardından haritadaki her dosyanın kodunun tamamı. Bu belgedeki kod örnek değildir — deponun
+  <code>main</code> dalındaki gerçek içeriktir (179a0ca).</p>
   <div class="facts">
-   <div><b>129</b><span>depodaki dosya</span></div>
+   <div><b>187</b><span>depodaki dosya</span></div>
    <div><b>49</b><span>belgede tam kod</span></div>
-   <div><b>2,979</b><span>satır</span></div>
+   <div><b>3,100</b><span>satır</span></div>
    <div><b>5</b><span>bileşen</span></div>
    <div><b>6</b><span>şerit</span></div>
   </div>
@@ -105,18 +104,16 @@ pre{margin:0;padding:2.5mm 3mm;background:#F7F9F9;border:1px solid #E3EAEA;borde
   <div class="callout"><h3>Bağlantı yönü tasarımın tamamıdır</h3>
   <p>Müşteri ağına giren her bağlantı içeriden başlatılır. Relay, AWX automation mesh'te
   <b>listener_port: null</b> ve <b>peers_from_control_nodes: false</b> ile yapılandırılmış bir yürütme
-  düğümüdür; gelen bağlantı dinlemez. Ajan da aynı şekilde yalnız dışarı arar. Müşterinin güvenlik
-  duvarında hizmet sağlayıcı için tek bir gelen kural açılmaz.</p></div>
+  düğümüdür; gelen bağlantı dinlemez. Ajan da aynı şekilde yalnız dışarı arar.</p></div>
  </div>
  <p class="foot">Sır yönetimi: makinede koşan script'ler <b>.env</b>, Ansible adımları <b>ansible-vault</b>,
- n8n iş akışları ve arayüz çağrıları <b>n8n credentials</b> kullanır. Hiçbir dosyada açık metin parola yoktur;
- sürekli tümleştirme hattı şifresiz kasa dosyasını, depoya girmiş .env'i ve açık metin sır kalıplarını reddeder.</p>
+ n8n iş akışları ve arayüz çağrıları <b>n8n credentials</b> kullanır. Hiçbir dosyada açık metin parola yoktur.</p>
 </div>
 
 <h2 style="border-top-color:#0B6970;page-break-before:auto">Dosya envanteri</h2>
 <p class="sub">Her dosyanın hangi bileşende olduğu, ne işe yaradığı ve hangi şeritlere hizmet ettiği.</p>
-<table><thead><tr><th>Dosya</th><th>Rol</th><th style="text-align:center">Şerit</th><th style="text-align:center">Satır</th></tr></thead>
-<tbody><tr class="grp"><td colspan="4" style="border-left:3mm solid #B93B74">1 · Orkestratör (n8n) — 4 dosya</td></tr><tr><td class="p">orchestrator/workflows/onboarding.json</td><td>Sözleşme imzalanınca erişim listesini üretir, formu açar, kanarya testini koşar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">215</td></tr><tr><td class="p">orchestrator/workflows/drift_reconcile.json</td><td>15 dakikada bir sapmaları uzlaştırır; etki sınırı aşılırsa geri alır</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">205</td></tr><tr><td class="p">orchestrator/workflows/scheduled_monthly_report.json</td><td>Ayın 1&#x27;i 06:00&#x27;da aylık raporu üretir</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">160</td></tr><tr><td class="p">orchestrator/README.md</td><td>Akışların nasıl sürümlendiği ve sırların neden akışta durmadığı</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">21</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #AD6A0C">2 · HR Platformu — 22 dosya</td></tr><tr><td class="p">platform/app/main.py</td><td>Giriş noktası; katalog tutarsızsa açılışta patlar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">29</td></tr><tr><td class="p">platform/app/config.py</td><td>Tüm sırlar ortam değişkeninden; kodda sabit değer yok</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">35</td></tr><tr><td class="p">platform/app/models.py</td><td>Kiracı, hak seti, cihaz, sürümlü tanım, görev koşusu, denetim kaydı</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">107</td></tr><tr><td class="p">platform/app/catalog/loader.py</td><td>Katalog yükleyici; &#x27;ilk görev kasa olmalı&#x27; kuralını zorunlu kılar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">143</td></tr><tr><td class="p">platform/app/services/task_graph.py</td><td>Ön koşullara göre sıralama; envanter her şeyden önce gelir</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">52</td></tr><tr><td class="p">platform/app/services/spec_compiler.py</td><td>Hak seti + cihaz rolü → arzu edilen durum; çıkarmalı çalışır</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">120</td></tr><tr><td class="p">platform/app/services/dispatcher.py</td><td>Her görevi kendi şeridinin yürütücüsüne yollar — altı şeridin buluştuğu yer</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span><span class="lp" style="background:#B93B74">E</span><span class="lp" style="background:#657279">F</span></td><td class="c n">119</td></tr><tr><td class="p">platform/app/services/agent_queue.py</td><td>A şeridi: görev relay kuyruğuna yazılır, ajan çeker</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">36</td></tr><tr><td class="p">platform/app/services/drift.py</td><td>Sapma uzlaştırma ve etki sınırı koruması</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">64</td></tr><tr><td class="p">platform/app/security.py</td><td>Ajan kimliği ve kiracı sınırı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">59</td></tr><tr><td class="p">platform/app/integrations/awx.py</td><td>B şeridinin yürütücüsü; relay&#x27;i dışa doğru eşleşen yürütme düğümü olarak kaydeder</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">53</td></tr><tr><td class="p">platform/app/integrations/vault.py</td><td>Kasa; kiracı ayrışması yol düzeyinde zorunlu</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">58</td></tr><tr><td class="p">platform/app/integrations/netbox.py</td><td>Envanter; kimlik anahtarı ajan kimliği + seri no</td><td class="c"><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">62</td></tr><tr><td class="p">platform/app/integrations/zabbix.py</td><td>İzleme; satılan şey host kaydı ve uyarı kuralıdır</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">55</td></tr><tr><td class="p">platform/app/integrations/ticketing.py</td><td>F şeridinin arayüzü; kabul kriteri olmadan iş emri kapanmaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">58</td></tr><tr><td class="p">platform/app/api/routers/agents.py</td><td>Ajan uçları; bağlantıyı her zaman ajan kurar</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">63</td></tr><tr><td class="p">platform/app/api/routers/specs.py</td><td>Tanım derleme, kuru çalıştırma ve dağıtım</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">60</td></tr><tr><td class="p">platform/app/catalog/services/switch-management.yaml</td><td>Örnek katalog kaydı — 39 hizmetin her biri böyle tanımlı</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">47</td></tr><tr><td class="p">platform/tests/test_catalog.py</td><td>Tasarım kurallarını koda bağlayan testler</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">68</td></tr><tr><td class="p">platform/tests/test_spec_compiler.py</td><td>Ön koşul, söküm ve kasa kuralının testleri</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">64</td></tr><tr><td class="p">.github/workflows/ci.yml</td><td>Şifresiz kasa, depoya girmiş .env ve açık metin sır kalıbını reddeder</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">72</td></tr><tr><td class="p">README.md</td><td>Beş bileşen, şerit karşılıkları ve kasa tablosu</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">60</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #7A4CD0">3 · Site Relay — 11 dosya</td></tr><tr><td class="p">relay/docker-compose.yml</td><td>Relay yığını; hiçbiri internete açılmaz</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span></td><td class="c n">57</td></tr><tr><td class="p">relay/receptor/receptor.conf</td><td>Yürütme düğümü: gelen bağlantı dinlemez, kendisi dışarı bağlanır</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">34</td></tr><tr><td class="p">relay/relay_api/main.py</td><td>Ajanların tek muhatabı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">61</td></tr><tr><td class="p">relay/relay_api/queue.py</td><td>İş kuyruğu; cihaz kimliğine göre bölümlenir</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">67</td></tr><tr><td class="p">relay/ansible/ansible.cfg</td><td>Parolalar playbook&#x27;ta değil kasada</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">17</td></tr><tr><td class="p">relay/ansible/inventory/netbox.yml</td><td>Makine listesi elle tutulmaz; envanterden gelir</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">17</td></tr><tr><td class="p">relay/ansible/roles/switch_baseline/tasks/main.yml</td><td>Geri sayımlı yeniden başlatma ile korunan switch ayarı</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">37</td></tr><tr><td class="p">relay/ansible/roles/firewall_baseline/tasks/main.yml</td><td>HA sanal adresine değil birincil düğüme basar</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">35</td></tr><tr><td class="p">relay/ansible/playbooks/site.yml</td><td>Hangi rolün koşacağını envanterdeki cihaz rolü belirler</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">20</td></tr><tr><td class="p">relay/ansible/playbooks/teardown.yml</td><td>Çıkış hattı: giriş hattının aynadaki hâli</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">21</td></tr><tr><td class="p">relay/ansible/group_vars/all/vault.yml</td><td>ansible-vault ile şifreli; şifresiz hâli CI tarafından reddedilir</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">15</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #657279">4 · İnsan — 4 dosya</td></tr><tr><td class="p">human/templates/access_pack.md</td><td>0. gün erişim paketi; liste paketten otomatik üretilir</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">26</td></tr><tr><td class="p">human/templates/acceptance.md</td><td>Proje → yönetilen devri; sağlık yeşil olmadan kapanmaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">21</td></tr><tr><td class="p">human/templates/pentest_authorization.md</td><td>İmzasız test başlamaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">20</td></tr><tr><td class="p">human/runbooks/dr_failover.md</td><td>Failover&#x27;ı kimin ilan edeceği isimle yazılı</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">22</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #2F6FED">5 · Uç Nokta Ajanı — 8 dosya</td></tr><tr><td class="p">agent/hragent/__main__.py</td><td>Ajan döngüsü; ilk gün ile 400. gün aynı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">73</td></tr><tr><td class="p">agent/hragent/client.py</td><td>Bağlantıyı her zaman ajan kurar: giden 443</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">50</td></tr><tr><td class="p">agent/hragent/runner.py</td><td>Yalnız A şeridini yürütür; Ansible işini reddeder</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">41</td></tr><tr><td class="p">agent/hragent/secrets.py</td><td>`.env` okur; fazla açık izinli dosyayı reddeder</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">60</td></tr><tr><td class="p">agent/hragent/inventory.py</td><td>Kimlik anahtarı kalıcı ajan kimliği — klon makineler için</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">79</td></tr><tr><td class="p">agent/hragent/apply/packages.py</td><td>Paketler relay önbelleğinden; kurulu ise dokunmaz</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">55</td></tr><tr><td class="p">agent/hragent/apply/files.py</td><td>Sır dosyaları daima 0600</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">37</td></tr><tr><td class="p">agent/tests/test_runner.py</td><td>Ajanın kendi şeridi dışına çıkmadığının testi</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">29</td></tr></tbody></table>
+<table><thead><tr><th>Dosya</th><th>Rol</th><th style="text-align:center">Şerit</th>
+<th style="text-align:center">Satır</th></tr></thead><tbody><tr class="grp"><td colspan="4" style="border-left:3mm solid #B93B74">1 · Orkestratör (n8n) — 4 dosya</td></tr><tr><td class="p">orchestrator/workflows/onboarding.json</td><td>Sözleşme imzalanınca erişim listesini üretir, formu açar, kanarya testini koşar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">215</td></tr><tr><td class="p">orchestrator/workflows/drift_reconcile.json</td><td>15 dakikada bir sapmaları uzlaştırır; etki sınırı aşılırsa geri alır</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">205</td></tr><tr><td class="p">orchestrator/workflows/scheduled_monthly_report.json</td><td>Ayın 1&#x27;i 06:00&#x27;da aylık raporu üretir</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">160</td></tr><tr><td class="p">orchestrator/README.md</td><td>Akışların nasıl sürümlendiği ve sırların neden akışta durmadığı</td><td class="c"><span class="lp" style="background:#B93B74">E</span></td><td class="c n">21</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #AD6A0C">2 · HR Platformu — 22 dosya</td></tr><tr><td class="p">platform/app/main.py</td><td>Giriş noktası; katalog tutarsızsa açılışta patlar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">29</td></tr><tr><td class="p">platform/app/config.py</td><td>Tüm sırlar ortam değişkeninden; kodda sabit değer yok</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">35</td></tr><tr><td class="p">platform/app/models.py</td><td>Kiracı, hak seti, cihaz, sürümlü tanım, görev koşusu, denetim kaydı</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">107</td></tr><tr><td class="p">platform/app/catalog/loader.py</td><td>Katalog yükleyici; &#x27;ilk görev kasa olmalı&#x27; kuralını zorunlu kılar</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">143</td></tr><tr><td class="p">platform/app/services/task_graph.py</td><td>Ön koşullara göre sıralama; envanter her şeyden önce gelir</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">52</td></tr><tr><td class="p">platform/app/services/spec_compiler.py</td><td>Hak seti + cihaz rolü → arzu edilen durum; çıkarmalı çalışır</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">120</td></tr><tr><td class="p">platform/app/services/dispatcher.py</td><td>Her görevi kendi şeridinin yürütücüsüne yollar — altı şeridin buluştuğu yer</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span><span class="lp" style="background:#B93B74">E</span><span class="lp" style="background:#657279">F</span></td><td class="c n">119</td></tr><tr><td class="p">platform/app/services/agent_queue.py</td><td>A şeridi: görev relay kuyruğuna yazılır, ajan çeker</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">36</td></tr><tr><td class="p">platform/app/services/drift.py</td><td>Sapma uzlaştırma ve etki sınırı koruması</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">64</td></tr><tr><td class="p">platform/app/security.py</td><td>Ajan kimliği ve kiracı sınırı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">59</td></tr><tr><td class="p">platform/app/integrations/awx.py</td><td>B şeridinin yürütücüsü; relay&#x27;i dışa doğru eşleşen yürütme düğümü olarak kaydeder</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">53</td></tr><tr><td class="p">platform/app/integrations/vault.py</td><td>Kasa; kiracı ayrışması yol düzeyinde zorunlu</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">58</td></tr><tr><td class="p">platform/app/integrations/netbox.py</td><td>Envanter; kimlik anahtarı ajan kimliği + seri no</td><td class="c"><span class="lp" style="background:#0C8F84">C</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">62</td></tr><tr><td class="p">platform/app/integrations/zabbix.py</td><td>İzleme; satılan şey host kaydı ve uyarı kuralıdır</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">55</td></tr><tr><td class="p">platform/app/integrations/ticketing.py</td><td>F şeridinin arayüzü; kabul kriteri olmadan iş emri kapanmaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">58</td></tr><tr><td class="p">platform/app/api/routers/agents.py</td><td>Ajan uçları; bağlantıyı her zaman ajan kurar</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">63</td></tr><tr><td class="p">platform/app/api/routers/specs.py</td><td>Tanım derleme, kuru çalıştırma ve dağıtım</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">60</td></tr><tr><td class="p">platform/app/catalog/services/switch-management.yaml</td><td>Örnek katalog kaydı — 39 hizmetin her biri böyle tanımlı</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">47</td></tr><tr><td class="p">platform/tests/test_catalog.py</td><td>Tasarım kurallarını koda bağlayan testler</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">68</td></tr><tr><td class="p">platform/tests/test_spec_compiler.py</td><td>Ön koşul, söküm ve kasa kuralının testleri</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">64</td></tr><tr><td class="p">.github/workflows/ci.yml</td><td>Şifresiz kasa, depoya girmiş .env ve açık metin sır kalıbını reddeder</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">72</td></tr><tr><td class="p">README.md</td><td>Beş bileşen, şerit karşılıkları ve kasa tablosu</td><td class="c"><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">181</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #7A4CD0">3 · Site Relay — 11 dosya</td></tr><tr><td class="p">relay/docker-compose.yml</td><td>Relay yığını; hiçbiri internete açılmaz</td><td class="c"><span class="lp" style="background:#2F6FED">A</span><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#0C8F84">C</span></td><td class="c n">57</td></tr><tr><td class="p">relay/receptor/receptor.conf</td><td>Yürütme düğümü: gelen bağlantı dinlemez, kendisi dışarı bağlanır</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">34</td></tr><tr><td class="p">relay/relay_api/main.py</td><td>Ajanların tek muhatabı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">61</td></tr><tr><td class="p">relay/relay_api/jobqueue.py</td><td>İş kuyruğu; cihaz kimliğine göre bölümlenir</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">67</td></tr><tr><td class="p">relay/ansible/ansible.cfg</td><td>Parolalar playbook&#x27;ta değil kasada</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">17</td></tr><tr><td class="p">relay/ansible/inventory/netbox.yml</td><td>Makine listesi elle tutulmaz; envanterden gelir</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">17</td></tr><tr><td class="p">relay/ansible/roles/switch_baseline/tasks/main.yml</td><td>Geri sayımlı yeniden başlatma ile korunan switch ayarı</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">37</td></tr><tr><td class="p">relay/ansible/roles/firewall_baseline/tasks/main.yml</td><td>HA sanal adresine değil birincil düğüme basar</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">35</td></tr><tr><td class="p">relay/ansible/playbooks/site.yml</td><td>Hangi rolün koşacağını envanterdeki cihaz rolü belirler</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">20</td></tr><tr><td class="p">relay/ansible/playbooks/teardown.yml</td><td>Çıkış hattı: giriş hattının aynadaki hâli</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span><span class="lp" style="background:#AD6A0C">D</span></td><td class="c n">21</td></tr><tr><td class="p">relay/ansible/group_vars/all/vault.yml</td><td>ansible-vault ile şifreli; şifresiz hâli CI tarafından reddedilir</td><td class="c"><span class="lp" style="background:#7A4CD0">B</span></td><td class="c n">15</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #657279">4 · İnsan — 4 dosya</td></tr><tr><td class="p">human/templates/access_pack.md</td><td>0. gün erişim paketi; liste paketten otomatik üretilir</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">26</td></tr><tr><td class="p">human/templates/acceptance.md</td><td>Proje → yönetilen devri; sağlık yeşil olmadan kapanmaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">21</td></tr><tr><td class="p">human/templates/pentest_authorization.md</td><td>İmzasız test başlamaz</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">20</td></tr><tr><td class="p">human/runbooks/dr_failover.md</td><td>Failover&#x27;ı kimin ilan edeceği isimle yazılı</td><td class="c"><span class="lp" style="background:#657279">F</span></td><td class="c n">22</td></tr><tr class="grp"><td colspan="4" style="border-left:3mm solid #2F6FED">5 · Uç Nokta Ajanı — 8 dosya</td></tr><tr><td class="p">agent/hragent/__main__.py</td><td>Ajan döngüsü; ilk gün ile 400. gün aynı</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">73</td></tr><tr><td class="p">agent/hragent/client.py</td><td>Bağlantıyı her zaman ajan kurar: giden 443</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">50</td></tr><tr><td class="p">agent/hragent/runner.py</td><td>Yalnız A şeridini yürütür; Ansible işini reddeder</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">41</td></tr><tr><td class="p">agent/hragent/secrets.py</td><td>`.env` okur; fazla açık izinli dosyayı reddeder</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">60</td></tr><tr><td class="p">agent/hragent/inventory.py</td><td>Kimlik anahtarı kalıcı ajan kimliği — klon makineler için</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">79</td></tr><tr><td class="p">agent/hragent/apply/packages.py</td><td>Paketler relay önbelleğinden; kurulu ise dokunmaz</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">55</td></tr><tr><td class="p">agent/hragent/apply/files.py</td><td>Sır dosyaları daima 0600</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">37</td></tr><tr><td class="p">agent/tests/test_runner.py</td><td>Ajanın kendi şeridi dışına çıkmadığının testi</td><td class="c"><span class="lp" style="background:#2F6FED">A</span></td><td class="c n">29</td></tr></tbody></table>
 
 <h2 style="border-top-color:#B93B74">1 · Orkestratör (n8n)</h2><p class="sub">Sözleşmeden sonra ne olacağını sıraya koyan iş akışları</p><section class="file"><h3>orchestrator/workflows/onboarding.json</h3><p class="role">Sözleşme imzalanınca erişim listesini üretir, formu açar, kanarya testini koşar</p><p class="meta">şerit: D — Platform kurulumu · 215 satır · json</p><pre>{
   &quot;name&quot;: &quot;onboarding&quot;,
@@ -1195,7 +1192,7 @@ def compile_spec(
         services=[s.id for s in ordered],
         removed=removed,
     )
-</pre></section><section class="file"><h3>platform/app/services/dispatcher.py</h3><p class="role">Her görevi kendi şeridinin yürütücüsüne yollar — altı şeridin buluştuğu yer</p><p class="meta">şerit: A — Aracı yazılım B — Uzaktan ayar C — Sağlayıcı arayüzü D — Platform kurulumu E — Takvimli iş F — İnsan işi · 119 satır · python</p><pre>&quot;&quot;&quot;Dağıtıcı: her görevi kendi şeridinin yürütücüsüne yollar.
+</pre></section><section class="file"><h3>platform/app/services/dispatcher.py</h3><p class="role">Her görevi kendi şeridinin yürütücüsüne yollar — altı şeridin buluştuğu yer</p><p class="meta">şerit: A — Aracı yazılım · B — Uzaktan ayar · C — Sağlayıcı arayüzü · D — Platform kurulumu · E — Takvimli iş · F — İnsan işi · 119 satır · python</p><pre>&quot;&quot;&quot;Dağıtıcı: her görevi kendi şeridinin yürütücüsüne yollar.
 
 Şerit → yürütücü eşlemesi tek yerde durur. Yeni bir şerit eklenirse burası genişler,
 katalog dosyalarının hiçbiri değişmez.
@@ -1348,7 +1345,7 @@ async def enqueue(*, tenant: str, task: CompiledTask, device_uuid: str | None = 
 
 def _auth() -&gt; dict[str, str]:
     return {&quot;Authorization&quot;: f&quot;Bearer {settings().awx_token}&quot;}
-</pre></section><section class="file"><h3>platform/app/services/drift.py</h3><p class="role">Sapma uzlaştırma ve etki sınırı koruması</p><p class="meta">şerit: A — Aracı yazılım B — Uzaktan ayar C — Sağlayıcı arayüzü D — Platform kurulumu · 64 satır · python</p><pre>&quot;&quot;&quot;Sapma uzlaştırması.
+</pre></section><section class="file"><h3>platform/app/services/drift.py</h3><p class="role">Sapma uzlaştırma ve etki sınırı koruması</p><p class="meta">şerit: A — Aracı yazılım · B — Uzaktan ayar · C — Sağlayıcı arayüzü · D — Platform kurulumu · 64 satır · python</p><pre>&quot;&quot;&quot;Sapma uzlaştırması.
 
 Devreye alma ile günlük işletme aynı döngüdür: ilk gün ne koşuyorsa 400. gün de o koşar.
 Fark yalnızca şudur — ilk gün her şey eksiktir, sonra yalnız sapanlar uygulanır.
@@ -1578,7 +1575,7 @@ async def revoke(*, tenant: str, key: str = &quot;&quot;, **_) -&gt; dict:
         &quot;DELETE&quot;, f&quot;{settings().vault_addr.rstrip(&#x27;/&#x27;)}/v1/secret/metadata/{_path(tenant, key)}&quot;,
         token=settings().vault_token, header=&quot;X-Vault-Token&quot;, prefix=&quot;&quot;,
     )
-</pre></section><section class="file"><h3>platform/app/integrations/netbox.py</h3><p class="role">Envanter; kimlik anahtarı ajan kimliği + seri no</p><p class="meta">şerit: C — Sağlayıcı arayüzü D — Platform kurulumu · 62 satır · python</p><pre>&quot;&quot;&quot;NetBox — envanter ve doğruluk kaynağı.
+</pre></section><section class="file"><h3>platform/app/integrations/netbox.py</h3><p class="role">Envanter; kimlik anahtarı ajan kimliği + seri no</p><p class="meta">şerit: C — Sağlayıcı arayüzü · D — Platform kurulumu · 62 satır · python</p><pre>&quot;&quot;&quot;NetBox — envanter ve doğruluk kaynağı.
 
 Her şeyin sağlık kontrolü buna karşı çözümlenir: &#x27;var olanı envanterle karşılaştır&#x27;.
 Kimlik anahtarı hostname veya ağ kartı kimliği DEĞİL, ajan kimliği + seri numarasıdır —
@@ -2118,49 +2115,134 @@ jobs:
         run: |
           pip install -e &quot;.[dev]&quot;
           python -m pytest tests/test_catalog.py -q
-</pre></section><section class="file"><h3>README.md</h3><p class="role">Beş bileşen, şerit karşılıkları ve kasa tablosu</p><p class="meta">şerit: D — Platform kurulumu · 60 satır · markdown</p><pre># Hisar Delivery Platform
+</pre></section><section class="file"><h3>README.md</h3><p class="role">Beş bileşen, şerit karşılıkları ve kasa tablosu</p><p class="meta">şerit: D — Platform kurulumu · 181 satır · markdown</p><pre>&lt;div align=&quot;center&quot;&gt;
 
-Hisar Research&#x27;ün yönetilen hizmet kataloğunu (yayında 39 hizmet) uçtan uca teslim eden
-otomasyon platformunun kaynak kodu.
+# MSP-Platform
 
-&gt; **Durum:** Bu depo, `Hisar Hizmet Şeritleri` tasarım belgesinin koda dökülmüş hâlidir.
-&gt; Belgedeki altı yürütme şeridi (A–F) burada çalıştırılabilir bileşenlere karşılık gelir.
+**Hisar Research Managed Service Provider Platform**
 
-## Beş bileşen
+Yayındaki **39 yönetilen hizmeti** uçtan uca teslim eden otomasyon platformu.
+Sözleşme imzalanır, hak seti derlenir, işler altı yürütme şeridine dağıtılır — sahada kimse olmadan.
 
-| # | Bileşen | Klasör | Ne yapar |
-|---|---------|--------|----------|
-| 1 | **Orkestratör (n8n)** | `orchestrator/` | Sözleşme imzalanınca görev listesini derletir, işi şeritlere dağıtır, tekrar eden işleri takvimde koşturur |
-| 2 | **HR Platformu** | `platform/` | Beyin: katalog, hak seti, tanım derleyici, denetim kaydı, Zabbix/NetBox/SIEM/ticket entegrasyonları |
-| 3 | **Site Relay** | `relay/` | Müşteri sahasındaki aracı düğüm: iş kuyruğu, AWX yürütme düğümü, Zabbix proxy, paket önbelleği |
-| 4 | **İnsan** | `human/` | İş emri şablonları, yetki belgeleri, kabul kriterleri, runbook&#x27;lar |
-| 5 | **Aracı yazılım (agent)** | `agent/` | Uç cihaz ve sunucularda koşan Python ajanı: durum bildirir, tanımı çeker, uygular |
+![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&amp;logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-kontrol%20düzlemi-009688?logo=fastapi&amp;logoColor=white)
+![Ansible](https://img.shields.io/badge/Ansible-B%20şeridi-EE0000?logo=ansible&amp;logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-orkestratör-EA4B71?logo=n8n&amp;logoColor=white)
+![containerlab](https://img.shields.io/badge/containerlab-emülasyon-0C9FBE)
+![test](https://img.shields.io/badge/test-32%20geçiyor-2EA043)
+![emülasyon](https://img.shields.io/badge/emülasyon-33%2F33%20kontrol-2EA043)
 
-## Şeritler ve kod karşılıkları
+[Belgeler](docs/) · [Emülasyon demosu](demo/) · [Mimari](docs/architecture.md) · [Secret yönetimi](docs/secrets.md)
+
+&lt;/div&gt;
+
+---
+
+## Altı yürütme şeridi
+
+Katalogdaki her hizmet, onu **fiilen yapan şeye** bağlıdır. Aracı yazılım bunların yalnız
+ikisini taşır; ağırlık merkezi uzaktan yapılandırma ve insan işi tarafındadır.
+
+&lt;picture&gt;
+  &lt;source media=&quot;(prefers-color-scheme: dark)&quot; srcset=&quot;docs/assets/seritler-dark.svg&quot;&gt;
+  &lt;img alt=&quot;Altı yürütme şeridi: A aracı yazılım 2, B uzaktan ayar 13, C sağlayıcı arayüzü 10, D platform kurulumu 1, E takvimli iş 3, F insan işi 10 hizmet&quot; src=&quot;docs/assets/seritler-light.svg&quot; width=&quot;100%&quot;&gt;
+&lt;/picture&gt;
 
 | Şerit | Ne yürütür | Kod |
 |-------|-----------|-----|
-| **A** | Uç cihaz ajanı | `agent/` |
-| **B** | Ansible ile uzaktan ayar | `relay/ansible/` + `platform/app/integrations/awx.py` |
-| **C** | Sağlayıcı arayüzleri | `platform/app/integrations/` (netbox, zabbix, veeam, cloud) |
-| **D** | HR platform kurulumu | `platform/app/services/` + `integrations/{zabbix,netbox,siem,ticketing}.py` |
-| **E** | Takvimli işler | `orchestrator/workflows/scheduled_*.json` |
-| **F** | İnsan iş emri | `human/` + `platform/app/integrations/ticketing.py` |
+| **A** | Uç cihaz ajanı — durum bildirir, tanımı çeker, uygular | [`agent/`](agent/) |
+| **B** | Ansible ile uzaktan ayar — üzerine program kurulamayan cihazlar | [`relay/ansible/`](relay/ansible/) |
+| **C** | Sağlayıcı arayüzleri — bulut, yedekleme, sanallaştırma | [`platform/app/integrations/`](platform/app/integrations/) |
+| **D** | Kendi sistemlerimizde kurulum — izleme, envanter, destek kuyruğu | [`platform/app/services/`](platform/app/services/) |
+| **E** | Takvimli tekrar eden işler — rapor, tarama, geri yükleme testi | [`orchestrator/workflows/`](orchestrator/workflows/) |
+| **F** | İnsan iş emri — saha, nöbet, danışmanlık | [`human/`](human/) |
 
-## Sır yönetimi — istisnasız
+---
+
+## Beş bileşen
+
+&lt;picture&gt;
+  &lt;source media=&quot;(prefers-color-scheme: dark)&quot; srcset=&quot;docs/assets/kod-haritasi-dark.svg&quot;&gt;
+  &lt;img alt=&quot;Beş bileşen: orkestratör n8n, HR Platformu, Site Relay, İnsan ve Uç Nokta Ajanı; aralarındaki görev, kuyruk ve iş emri akışı&quot; src=&quot;docs/assets/kod-haritasi-light.svg&quot; width=&quot;100%&quot;&gt;
+&lt;/picture&gt;
+
+| # | Bileşen | Klasör | Ne yapar |
+|---|---------|--------|----------|
+| 1 | **Orkestratör (n8n)** | [`orchestrator/`](orchestrator/) | Sözleşme imzalanınca görev listesini derletir, işi şeritlere dağıtır, tekrar eden işleri takvimde koşturur |
+| 2 | **HR Platformu** | [`platform/`](platform/) | Beyin: katalog, hak seti, tanım derleyici, denetim kaydı, entegrasyonlar |
+| 3 | **Site Relay** | [`relay/`](relay/) | Müşteri sahasındaki aracı düğüm: iş kuyruğu, AWX yürütme düğümü, izleme vekili, paket önbelleği |
+| 4 | **İnsan** | [`human/`](human/) | İş emri şablonları, yetki belgeleri, kabul kriterleri, runbook&#x27;lar |
+| 5 | **Uç Nokta Ajanı** | [`agent/`](agent/) | Uç cihazda koşan Python ajanı — kendi kararı yok, bağlantıyı hep kendisi kurar |
+
+&gt; **Yön kuralı.** Müşteri ağına giden her bağlantı içeriden başlatılır. Relay ve ajan
+&gt; dışarı arar; dışarıdan içeri kimse aramaz. Müşterinin güvenlik duvarında bizim için
+&gt; tek bir gelen kural açılmaz.
+
+---
+
+## Uçtan uca emülasyon
+
+Platformun tamamı — beş bileşen, altı ağ bacağı, 19 düğüm — gerçek konteynerler ve gerçek
+ağ cihazlarıyla ayağa kalkar. Kutuların içinde **deponun kendi kodu** koşar.
+
+&lt;picture&gt;
+  &lt;source media=&quot;(prefers-color-scheme: dark)&quot; srcset=&quot;docs/assets/topoloji-dark.svg&quot;&gt;
+  &lt;img alt=&quot;Emüle edilen altı ağ bacağı: hr-core, wan, cust-dmz, cust-mgmt, cust-srv ve cust-usr&quot; src=&quot;docs/assets/topoloji-light.svg&quot; width=&quot;100%&quot;&gt;
+&lt;/picture&gt;
+
+```bash
+cd demo
+./scripts/up.sh              # imajları derler, topolojiyi kurar
+./scripts/ag-dogrula.sh      # altı ağ bacağını kanıtlar
+./scripts/demo-uctan-uca.sh  # sözleşmeden çalışan hizmete senaryo
+```
+
+&lt;details&gt;
+&lt;summary&gt;&lt;b&gt;Son koşuda ölçülenler — 33 kontrolün 33&#x27;ü geçti&lt;/b&gt;&lt;/summary&gt;
+
+&lt;br&gt;
+
+| Ölçüm | Sonuç |
+|-------|-------|
+| Site relay → HR platformu (dört bacak üzerinden) | **HTTP 200** |
+| HR platformu → relay API&#x27;si | **engellendi** |
+| HR platformu → sunucu VLAN&#x27;ı | **engellendi** |
+| Receptor mesh | `relay-acme ↔ hr-awx-hop` kuruldu |
+| Kasa, başka kiracının alanı istendiğinde | **403** |
+| Aynı VLAN / farklı VLAN / WAN ötesi | TTL **64 / 63 / 61** |
+| Ajan çalıştıramayan düğümlerde ajan | **yok** (ayrıca denetlendi) |
+
+Emülasyon gerçek bir hata da yakaladı: `relay_api/queue.py` Python&#x27;un standart
+kütüphanesindeki `queue` modülüyle çakışıyordu ve relay API&#x27;si 500 döndürüyordu.
+`jobqueue.py` olarak yeniden adlandırıldı.
+
+Ayrıntı: [`demo/README.md`](demo/README.md) · Görsel demonstrasyon: [`docs/demo/`](docs/demo/)
+
+&lt;/details&gt;
+
+---
+
+## Secret yönetimi — istisnasız
 
 Hiçbir parola, anahtar veya sertifika kaynak koda yazılmaz.
 
 | Nerede çalışıyor | Kasa |
 |------------------|------|
-| Agent ve makinede koşan script&#x27;ler | `.env` (bkz. `agent/.env.example`) |
-| Ansible adımları | `ansible-vault` (bkz. `relay/ansible/group_vars/all/vault.yml`) |
-| n8n iş akışları ve API çağrıları | n8n credentials |
-| Platform arka ucu | ortam değişkeni → `platform/app/config.py` |
+| Agent ve makinede koşan script&#x27;ler | `.env` |
+| Ansible adımları | `ansible-vault` |
+| n8n iş akışları ve arayüz çağrıları | n8n credentials |
+| Platform arka ucu | ortam değişkeni → [`platform/app/config.py`](platform/app/config.py) |
 
-CI, `.env` ve vault dosyalarının şifresiz hâlde depoya girmesini engeller (`.github/workflows/ci.yml`).
+Her hizmetin **ilk görevi** erişim bilgilerinin kasaya yazılmasıdır; katalog yükleyici bunu
+zorunlu tutar ve aksi hâlde platform açılışta hata verir. Sürekli tümleştirme hattı şifresiz
+vault dosyasını, depoya girmiş `.env`&#x27;i ve açık metin sır kalıplarını reddeder.
 
-## Hızlı başlangıç
+---
+
+&lt;details&gt;
+&lt;summary&gt;&lt;b&gt;Hızlı başlangıç&lt;/b&gt;&lt;/summary&gt;
+
+&lt;br&gt;
 
 ```bash
 # Platform
@@ -2176,8 +2258,44 @@ python -m hragent --once
 cd relay &amp;&amp; cp .env.example .env &amp;&amp; docker compose up -d
 ```
 
-Ayrıntı: [`docs/architecture.md`](docs/architecture.md)
-</pre></section><h2 style="border-top-color:#7A4CD0">3 · Site Relay</h2><p class="sub">Müşteri sahasındaki aracı düğüm: kuyruk, yürütme düğümü, izleme vekili</p><section class="file"><h3>relay/docker-compose.yml</h3><p class="role">Relay yığını; hiçbiri internete açılmaz</p><p class="meta">şerit: A — Aracı yazılım B — Uzaktan ayar C — Sağlayıcı arayüzü · 57 satır · yaml</p><pre># Site Relay yığını. Hiçbiri gelen bağlantı için dış dünyaya açılmaz;
+Testler:
+
+```bash
+cd platform &amp;&amp; python -m pytest -q   # 20 test
+cd agent    &amp;&amp; python -m pytest -q   # 12 test
+```
+
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;&lt;b&gt;Belgeler&lt;/b&gt;&lt;/summary&gt;
+
+&lt;br&gt;
+
+| Belge | İçerik |
+|-------|--------|
+| [`docs/architecture.md`](docs/architecture.md) | Kontrol düzlemi / yürütme düzlemi, relay&#x27;in neden n8n worker&#x27;ı olmadığı, emülasyon ölçümleri |
+| [`docs/secrets.md`](docs/secrets.md) | Kasa kullanımı ve sürekli tümleştirme korumaları |
+| [`docs/hizmet-seritleri/`](docs/hizmet-seritleri/) | Teslim mimarisi: 39 hizmetin altı şeride eşlenmesi (etkileşimli + PDF) |
+| [`docs/kod-haritasi/`](docs/kod-haritasi/) | Bu deponun kod topolojisi; `build.py` ile yeniden üretilir |
+| [`docs/demo/`](docs/demo/) | Emülasyonun görsel demonstrasyonu (HTML + PDF) |
+| [`demo/`](demo/) | Emülasyon ortamının kendisi: topoloji, imajlar, betikler |
+
+Bu README&#x27;deki şemalar depodaki veriden üretilir:
+
+```bash
+python3 docs/assets/build_svg.py
+```
+
+&lt;/details&gt;
+
+---
+
+&lt;div align=&quot;center&quot;&gt;
+&lt;sub&gt;Hizmet adları ve paket içerikleri &lt;code&gt;pre-sales.hisarresearch.com&lt;/code&gt; ile aynı kimliklere bağlıdır —
+tek katalog, iki yüz: satış yüzü sitede, teslim yüzü burada.&lt;/sub&gt;
+&lt;/div&gt;
+</pre></section><h2 style="border-top-color:#7A4CD0">3 · Site Relay</h2><p class="sub">Müşteri sahasındaki aracı düğüm: kuyruk, yürütme düğümü, izleme vekili</p><section class="file"><h3>relay/docker-compose.yml</h3><p class="role">Relay yığını; hiçbiri internete açılmaz</p><p class="meta">şerit: A — Aracı yazılım · B — Uzaktan ayar · C — Sağlayıcı arayüzü · 57 satır · yaml</p><pre># Site Relay yığını. Hiçbiri gelen bağlantı için dış dünyaya açılmaz;
 # yalnız müşterinin yerel ağına ve giden 443/27199&#x27;a ihtiyaç duyar.
 services:
   redis:
@@ -2279,7 +2397,7 @@ import structlog
 from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 
-import queue as jobqueue
+import jobqueue  # stdlib &#x27;queue&#x27; ile çakışmaması için bilerek bu ad
 
 log = structlog.get_logger(__name__)
 app = FastAPI(title=&quot;Hisar Site Relay&quot;, version=&quot;0.1.0&quot;)
@@ -2326,7 +2444,7 @@ async def checkin(req: Checkin) -&gt; dict:
     tasks = await jobqueue.pop_all(TENANT, req.device_uuid)
     log.info(&quot;ajan_yoklamasi&quot;, cihaz=req.device_uuid, gorev=len(tasks))
     return {&quot;tasks&quot;: tasks, &quot;next_checkin&quot;: int(os.environ.get(&quot;CHECKIN_SECONDS&quot;, &quot;45&quot;))}
-</pre></section><section class="file"><h3>relay/relay_api/queue.py</h3><p class="role">İş kuyruğu; cihaz kimliğine göre bölümlenir</p><p class="meta">şerit: A — Aracı yazılım · 67 satır · python</p><pre>&quot;&quot;&quot;Relay iş kuyruğu.
+</pre></section><section class="file"><h3>relay/relay_api/jobqueue.py</h3><p class="role">İş kuyruğu; cihaz kimliğine göre bölümlenir</p><p class="meta">şerit: A — Aracı yazılım · 67 satır · python</p><pre>&quot;&quot;&quot;Relay iş kuyruğu.
 
 Platform görevi buraya bırakır; ajan bir sonraki yoklamasında çeker. Ajan hiçbir zaman
 aranmaz — yön her zaman içeriden dışarıdır. Kuyruk cihaz kimliğine göre bölümlenir ki
@@ -2513,7 +2631,7 @@ compose:
   hosts: device_roles_domain_controller
   gather_facts: true
   roles: [ad_baseline]
-</pre></section><section class="file"><h3>relay/ansible/playbooks/teardown.yml</h3><p class="role">Çıkış hattı: giriş hattının aynadaki hâli</p><p class="meta">şerit: B — Uzaktan ayar D — Platform kurulumu · 21 satır · yaml</p><pre>---
+</pre></section><section class="file"><h3>relay/ansible/playbooks/teardown.yml</h3><p class="role">Çıkış hattı: giriş hattının aynadaki hâli</p><p class="meta">şerit: B — Uzaktan ayar · D — Platform kurulumu · 21 satır · yaml</p><pre>---
 # Çıkış hattı: giriş hattının aynadaki hâli. Sözleşme bitince koşar.
 - name: Erişimleri geri al
   hosts: all
@@ -3076,7 +3194,6 @@ yaratıldığında sanal kablo çifti yenilenir ve karşı uçtaki anahtar portu
 <p class="pc-c"><b>Çözüm</b>demo/scripts/ag-onar.sh köprü üyeliğini tekrar çalıştırılabilir biçimde
 yeniden uygular ve kurulumun sonunda kendiliğinden koşar.</p></div>
 </section>
-
 <p class="foot">Şerit kısaltmaları: A — aracı yazılım · B — uzaktan ayar · C — sağlayıcı arayüzü ·
 D — platform kurulumu · E — takvimli iş · F — insan işi.</p>
 </body></html>

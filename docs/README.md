@@ -53,6 +53,7 @@ canlı çizgilerle işaretler.
 | `kod-haritasi/kod-haritasi.html` | Etkileşimli harita |
 | `kod-haritasi/kod-haritasi.pdf` | 49 dosyanın kodunun tamamı (58 sayfa) |
 | `kod-haritasi/build.py` | Haritayı depodaki gerçek koddan yeniden üretir |
+| `kod-haritasi/build_print.py` | Baskı kaynağını `codemap.json`'dan yeniden üretir |
 | `kod-haritasi/template.html` | Harita şablonu (`__DATA__` yer tutuculu) |
 | `kod-haritasi/codemap.json` | Üretilen veri: dosya içerikleri ve şerit eşlemesi |
 

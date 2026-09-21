@@ -1,0 +1,48 @@
+<svg class="dia" viewBox="0 0 900 470" color="#37474A">
+<defs><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5E7075"/></marker></defs>
+<line x1="330" y1="14" x2="330" y2="456" stroke="#8A9A9E" stroke-width="1.2" stroke-dasharray="6 5"/>
+<text transform="translate(322,235) rotate(-90)" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075" letter-spacing="1.4">MÜŞTERİ AĞI SINIRI</text>
+<rect x="14" y="20" width="286" height="96" rx="7" fill="#FCF6F9" stroke="#B93B74" stroke-width="1.5"/>
+<text x="30" y="46" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">1 · Orkestratör (n8n)</text>
+<text x="30" y="66" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">orchestrator/ — 4 dosya</text>
+<text x="30" y="84" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">devreye alma · sapma · takvim</text>
+<line x1="157" y1="118" x2="157" y2="144" stroke="#5E7075" stroke-width="1.3" marker-end="url(#pa)"/>
+<text x="168" y="136" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">görev listesi derlet</text>
+<rect x="14" y="146" width="286" height="150" rx="7" fill="#FDF8F0" stroke="#AD6A0C" stroke-width="1.5"/>
+<text x="30" y="172" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">2 · HR Platformu</text>
+<text x="30" y="192" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">platform/ — 22 dosya</text>
+<text x="30" y="212" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">katalog · tanım derleyici</text>
+<text x="30" y="230" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">şerit dağıtıcısı · kasa</text>
+<text x="30" y="254" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">Zabbix · NetBox · SIEM · ticket</text>
+<text x="30" y="276" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">39 katalog kaydı</text>
+<rect x="14" y="326" width="286" height="96" rx="7" fill="#F5F6F7" stroke="#657279" stroke-width="1.5"/>
+<text x="30" y="352" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">4 · İnsan</text>
+<text x="30" y="372" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">human/ — 4 şablon</text>
+<text x="30" y="392" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">iş emri · yetki · kabul formu</text>
+<line x1="157" y1="298" x2="157" y2="324" stroke="#5E7075" stroke-width="1.3" marker-end="url(#pa)"/>
+<text x="168" y="316" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">iş emri</text>
+<rect x="360" y="80" width="250" height="180" rx="7" fill="#FAF7FE" stroke="#7A4CD0" stroke-width="1.5"/>
+<text x="376" y="106" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">3 · Site Relay</text>
+<text x="376" y="126" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">relay/ — 11 dosya</text>
+<text x="376" y="148" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">iş kuyruğu (Redis)</text>
+<text x="376" y="166" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">AWX yürütme düğümü</text>
+<text x="376" y="184" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">Zabbix vekili</text>
+<text x="376" y="202" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">paket önbelleği</text>
+<text x="376" y="228" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#7A4CD0">gelen bağlantı dinlemez</text>
+<path d="M358,140 L306,196" fill="none" stroke="#0B6970" stroke-width="1.8" marker-end="url(#pa)"/>
+<text x="150" y="112" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#0B6970">giden 443 · bağlantıyı relay kurar</text>
+<rect x="660" y="80" width="226" height="126" rx="7" fill="#F6F9FE" stroke="#2F6FED" stroke-width="1.5"/>
+<text x="676" y="106" font-family="Archivo" font-size="13" font-weight="600" fill="#12191A">5 · Uç Nokta Ajanı</text>
+<text x="676" y="126" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">agent/ — 8 dosya</text>
+<text x="676" y="146" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">durum bildir · tanımı çek</text>
+<text x="676" y="164" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E7075">uygula · raporla</text>
+<text x="676" y="188" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#2F6FED">kendi kararı yok</text>
+<path d="M658,140 L614,140" fill="none" stroke="#0B6970" stroke-width="1.8" marker-end="url(#pa)"/>
+<text x="620" y="128" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#0B6970">yoklama · giden 443</text>
+<rect x="660" y="250" width="226" height="86" rx="7" fill="#FFFFFF" stroke="#8A9A9E" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="676" y="276" font-family="Archivo" font-size="11.5" font-weight="600" fill="#12191A">Agent çalıştıramayan cihazlar</text>
+<text x="676" y="296" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#5E7075">ağ anahtarı · güvenlik duvarı</text>
+<text x="676" y="313" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#5E7075">hipervizör · erişim noktası</text>
+<path d="M612,230 C650,240 655,265 658,285" fill="none" stroke="#5E7075" stroke-width="1.4" marker-end="url(#pa)"/>
+<text x="500" y="268" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#5E7075">Ansible · uzaktan ayar</text>
+</svg>

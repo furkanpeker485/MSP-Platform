@@ -1,6 +1,6 @@
 <div align="center">
 
-# HR-MSP-Platform
+# MSP-Platform
 
 **Hisar Research Managed Service Provider Platform**
 
