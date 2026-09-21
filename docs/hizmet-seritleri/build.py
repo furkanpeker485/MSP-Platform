@@ -79,6 +79,53 @@ bar=''.join(f'<span style="flex:{lc[k]};background:{L[k][1]}"><i>{k}</i>{lc[k]}<
 glos=''.join(f'<div class="gl"><b>{e(a)}</b><span>{e(b)}</span></div>' for a,b in d['glossary'])
 CSS = open(HERE/"assets/print.css", encoding="utf-8").read()
 
+EMULASYON_BOLUM = """
+<section style="page-break-before:always">
+<h2>Emülasyon: bu mimari gerçekten ayakta</h2>
+<p class="sub">Bu belgede anlatılan her şey &mdash; beş bileşen, altı ağ bacağı, ajan çalıştıran
+ve çalıştıramayan cihazlar &mdash; gerçek konteynerler ve gerçek ağ cihazlarıyla kuruldu.
+Kutuların içinde deponun gerçek kodu koşuyor; aşağıdaki sayılar ölçülmüş bir koşudan geliyor.</p>
+
+<h3 class="grp">Emüle edilen altı ağ bacağı</h3>
+<table style="width:100%;border-collapse:collapse;font-size:8.6pt;margin-bottom:5mm">
+<thead><tr><th style="text-align:left">#</th><th style="text-align:left">Bacak</th>
+<th style="text-align:left">Adres bloğu</th><th style="text-align:left">İçinde ne var</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>hr-core</td><td>10.10.0.0/24</td><td>platform · orkestratör · hop düğümü · izleme · veritabanı · kasa</td></tr>
+<tr><td>2</td><td>wan</td><td>100.64.0.0/30</td><td>HR kenarı ile müşteri arasındaki geçiş</td></tr>
+<tr><td>3</td><td>cust-dmz</td><td>172.31.0.0/29</td><td>güvenlik duvarının iç ayağı</td></tr>
+<tr><td>4</td><td>cust-mgmt</td><td>192.168.10.0/24</td><td>site relay · yürütme düğümü · izleme vekili · önbellek</td></tr>
+<tr><td>5</td><td>cust-srv</td><td>192.168.20.0/24</td><td>ajan çalıştıran Linux sunucular</td></tr>
+<tr><td>6</td><td>cust-usr</td><td>192.168.30.0/24</td><td>ajan çalıştıran kullanıcı bilgisayarları</td></tr>
+</tbody></table>
+
+<h3 class="grp">Ölçülen sonuçlar</h3>
+<div class="pc"><p class="pc-p"><b>VLAN'lar gerçekten ayrı yayın alanı.</b> Aynı VLAN'da paket
+yönlendiriciye uğramaz (TTL 64); farklı VLAN'da bir atlama (TTL 63); WAN ötesinde üç atlama (TTL 61).</p>
+<p class="pc-c"><b>Nasıl ölçüldü</b>pc-01 &rarr; pc-02, pc-01 &rarr; srv-01 ve relay &rarr; hr-platform
+arasında TTL karşılaştırması; ayrıca yönlendirme tablosunda farklı VLAN'ın ağ geçidi üzerinden gittiği gösterildi.</p></div>
+
+<div class="pc"><p class="pc-p"><b>Dışarıdan içeri kapalı.</b> relay &rarr; HR platformu HTTP 200 döndü;
+HR platformu &rarr; relay API'si ve HR platformu &rarr; sunucu VLAN'ı engellendi.</p>
+<p class="pc-c"><b>Nasıl ölçüldü</b>Güvenlik duvarının forward zincirinde policy drop var ve dışarıdan
+içeri tek bir kural yok. Her iki yön de ayrı ayrı denendi.</p></div>
+
+<div class="pc"><p class="pc-p"><b>Yürütme düğümü bağlantıyı kendisi kurdu.</b> Receptor mesh
+relay-acme &harr; hr-awx-hop olarak kuruldu; yürütme düğümünde dinleyici port yok.</p>
+<p class="pc-c"><b>Nasıl ölçüldü</b>receptorctl status çıktısında iki düğümün birbirini tanıdığı görüldü.</p></div>
+
+<div class="pc"><p class="pc-p"><b>Kasa kiracı sınırını korudu.</b> Bir kiracı için çalışan iş
+bilerek başka kiracının alanını istedi; kasa 403 döndü.</p>
+<p class="pc-c"><b>Nasıl ölçüldü</b>Orkestratör, kendi kiracı başlığıyla başka kiracının yolunu istedi
+ve reddedildi. Bu, app/integrations/vault.py kuralının ağ üzerindeki karşılığıdır.</p></div>
+
+<p class="sub" style="margin-top:4mm"><b>Son koşu: 33 kontrolün 33'ü geçti, 0'ı düştü.</b>
+Üç komutla çalıştırılır: <code>cd demo &amp;&amp; ./scripts/up.sh</code>,
+<code>./scripts/ag-dogrula.sh</code>, <code>./scripts/demo-uctan-uca.sh</code>.
+Ayrıntılı görsel demonstrasyon docs/demo/emulasyon.pdf dosyasındadır.</p>
+</section>
+"""
+
 doc=f'''<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Hisar Hizmet Şeritleri</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>{CSS}</style></head><body>
@@ -132,6 +179,7 @@ doc=f'''<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Hisar 
 <h3 style="margin:6mm 0 2mm;font-size:11.5pt">Önce tek bir hizmeti uçtan uca kurun</h3>
 <p style="font-size:8.8pt;color:#37474A;margin:0">{e(c['first_service_to_build'])}</p>
 </section>
+{EMULASYON_BOLUM}
 <section style="page-break-before:always">
 <h2>Sözlük</h2>
 <p class="sub">Bu raporda geçen kısaltmaların ve yabancı kökenli terimlerin günlük Türkçe karşılıkları. Ürün adları (Zabbix, Ansible, Veeam gibi) marka olduğu için çevrilmemiştir.</p>

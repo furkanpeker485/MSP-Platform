@@ -1,0 +1,304 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Hisar Emülasyon Demosu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F1F4F4;--surface:#FFFFFF;--surface-2:#E8EDED;--surface-3:#DDE5E5;
+--ink:#0F1718;--ink-2:#37474A;--muted:#5E7075;--rule:#D3DCDC;--rule-2:#BECCCC;
+--accent:#0B6970;--accent-2:#0A585D;--accent-soft:#DAEDED;--ok:#1B7A46;--hata:#B23A2B;
+--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+--body:'IBM Plex Sans',system-ui,sans-serif;--display:'Archivo',Arial,sans-serif;
+--shadow:0 1px 2px rgba(15,23,24,.05),0 8px 24px -16px rgba(15,23,24,.22);
+--grid:rgba(11,105,112,.07)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+--bg:#0C1213;--surface:#141C1E;--surface-2:#1B2528;--surface-3:#243033;
+--ink:#E7EEEE;--ink-2:#C3D0D1;--muted:#8EA0A4;--rule:#24302F;--rule-2:#31403F;
+--accent:#3FB5BB;--accent-2:#7ED3D7;--accent-soft:#0F2A2C;--ok:#46C67E;--hata:#F08070;
+--grid:rgba(63,181,187,.09);--shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -20px rgba(0,0,0,.8)}}
+:root[data-theme="dark"]{--bg:#0C1213;--surface:#141C1E;--surface-2:#1B2528;--surface-3:#243033;
+--ink:#E7EEEE;--ink-2:#C3D0D1;--muted:#8EA0A4;--rule:#24302F;--rule-2:#31403F;
+--accent:#3FB5BB;--accent-2:#7ED3D7;--accent-soft:#0F2A2C;--ok:#46C67E;--hata:#F08070;
+--grid:rgba(63,181,187,.09);--shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -20px rgba(0,0,0,.8)}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.018em;line-height:1.15;text-wrap:balance}
+p{margin:0 0 1em}
+header{padding-block:44px 20px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700}
+.lead{font-size:clamp(15px,2vw,17.5px);color:var(--ink-2);max-width:74ch;margin-top:16px}
+.facts{display:flex;gap:26px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:1px solid var(--rule)}
+.fact b{font-family:var(--display);font-size:24px;font-weight:700;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.fact span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+section{padding-block:38px;border-top:1px solid var(--rule)}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.1em}
+h2{font-size:clamp(21px,3.2vw,28px);font-weight:600}
+.sub{color:var(--muted);margin:0 0 24px;max-width:70ch}
+figure{margin:0;padding:20px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;box-shadow:var(--shadow);overflow-x:auto;
+background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:26px 26px}
+figure svg{display:block;width:100%;min-width:900px;height:auto;color:var(--ink-2)}
+figcaption{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted);min-width:900px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+.tw{border:1px solid var(--rule);border-radius:9px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.ts{overflow-x:auto}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:10px 13px;background:var(--surface-2);border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:9px 13px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.no{font-family:var(--display);font-weight:700;font-size:16px;width:34px}
+td.ad{font-family:var(--mono);font-size:12.5px;font-weight:600;white-space:nowrap}
+td.blk{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+td.ic{color:var(--muted);font-size:12.5px}
+.pip{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:7px}
+.rz{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid;white-space:nowrap}
+.rz-c{color:var(--muted);border-color:var(--rule-2);background:var(--surface-2)}
+.rz-a{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 35%,transparent);background:color-mix(in srgb,var(--ok) 9%,transparent)}
+.rz-k{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 35%,transparent);background:var(--accent-soft)}
+@page{size:A4;margin:14mm 12mm}
+pre{margin:0;padding:18px 20px;font-family:var(--mono);font-size:12px;line-height:1.6;overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:9px;box-shadow:var(--shadow);max-height:none}
+pre .ok{color:var(--ok)} pre .hata{color:var(--hata)} pre .bas{color:var(--accent);font-weight:600}
+pre span{display:block}
+.kutu{background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:0 9px 9px 0;padding:16px 18px;box-shadow:var(--shadow)}
+.kutu h3{font-size:15px;font-weight:600;margin-bottom:7px}
+.kutu p{font-size:13.5px;color:var(--ink-2);margin:0}
+.grid2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);padding:1.5px 5px;border-radius:3px;border:1px solid var(--rule)}
+.akis{filter:drop-shadow(0 0 3px currentColor)}
+footer{padding-block:26px 56px;border-top:1px solid var(--rule);color:var(--muted);font-size:12.5px}
+@media (prefers-reduced-motion:reduce){circle.akis{display:none}}
+</style>
+<div class="wrap">
+<header>
+  <p class="eyebrow">Hisar Delivery Platform · uçtan uca emülasyon</p>
+  <h1>Topolojinin tamamı, gerçek cihazlarla ayakta.</h1>
+  <p class="lead">Beş bileşen, altı ağ bacağı ve 19 düğüm containerlab ile kuruldu.
+  Kutuların içinde deponun <strong>gerçek kodu</strong> koşuyor: platform 39 hizmetlik kataloğu
+  yüklüyor, ajan relay'in iş kuyruğuna bağlanıyor, güvenlik duvarına kural basılıyor.
+  Aşağıdaki her sayı ölçülmüş bir koşudan geliyor.</p>
+  <div class="facts">
+    <div class="fact"><b>19</b><span>düğüm</span></div>
+    <div class="fact"><b>6</b><span>ağ bacağı</span></div>
+    <div class="fact"><b>18</b><span>sanal kablo</span></div>
+    <div class="fact"><b style="color:var(--ok)">33</b><span>geçen kontrol</span></div>
+    <div class="fact"><b>0</b><span>düşen kontrol</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head"><span class="sec-num">01</span><h2>Topoloji</h2></div>
+  <p class="sub">Soldan sağa: HR kontrol düzlemi, WAN geçişi, müşteri güvenlik duvarı ve üç VLAN.
+  Kesikli çerçeveli düğümlere ajan kurulamaz — onlar yalnız uzaktan yapılandırılır.</p>
+  <figure><svg viewBox="0 0 1180 700" role="img" aria-label="Emülasyon topolojisi: altı ağ bacağı, HR kontrol düzlemi, WAN geçişi, müşteri DMZ ve üç VLAN"><defs><marker id="ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="20" y="40" width="300" height="330" rx="9" fill="none" stroke="#AD6A0C" stroke-width="1.6" stroke-dasharray="6 5" opacity=".85"/><text x="32" y="60" font-size="10" font-family="var(--mono)" fill="#AD6A0C" letter-spacing="1.1">BACAK 1 · HR-CORE</text><text x="32" y="74" font-size="9.5" font-family="var(--mono)" fill="currentColor" opacity=".6">10.10.0.0/24</text><rect x="350" y="150" width="150" height="110" rx="9" fill="none" stroke="#0B6970" stroke-width="1.6" stroke-dasharray="6 5" opacity=".85"/><text x="362" y="170" font-size="10" font-family="var(--mono)" fill="#0B6970" letter-spacing="1.1">BACAK 2 · WAN</text><text x="362" y="184" font-size="9.5" font-family="var(--mono)" fill="currentColor" opacity=".6">100.64.0.0/30</text><rect x="530" y="40" width="150" height="330" rx="9" fill="none" stroke="#B93B74" stroke-width="1.6" stroke-dasharray="6 5" opacity=".85"/><text x="542" y="60" font-size="10" font-family="var(--mono)" fill="#B93B74" letter-spacing="1.1">BACAK 3 · CUST-DMZ</text><text x="542" y="74" font-size="9.5" font-family="var(--mono)" fill="currentColor" opacity=".6">172.31.0.0/29</text><rect x="710" y="40" width="440" height="150" rx="9" fill="none" stroke="#7A4CD0" stroke-width="1.6" stroke-dasharray="6 5" opacity=".85"/><text x="722" y="60" font-size="10" font-family="var(--mono)" fill="#7A4CD0" letter-spacing="1.1">BACAK 4 · CUST-MGMT</text><text x="722" y="74" font-size="9.5" font-family="var(--mono)" fill="currentColor" opacity=".6">192.168.10.0/24</text><rect x="710" y="210" width="210" height="160" rx="9" fill="none" stroke="#2F6FED" stroke-width="1.6" stroke-dasharray="6 5" opacity=".85"/><text x="722" y="230" font-size="10" font-family="var(--mono)" fill="#2F6FED" letter-spacing="1.1">BACAK 5 · CUST-SRV</text><text x="722" y="244" font-size="9.5" font-family="var(--mono)" fill="currentColor" opacity=".6">192.168.20.0/24</text><rect x="940" y="210" width="210" height="160" rx="9" fill="none" stroke="#0C8F84" stroke-width="1.6" stroke-dasharray="6 5" opacity=".85"/><text x="952" y="230" font-size="10" font-family="var(--mono)" fill="#0C8F84" letter-spacing="1.1">BACAK 6 · CUST-USR</text><text x="952" y="244" font-size="9.5" font-family="var(--mono)" fill="currentColor" opacity=".6">192.168.30.0/24</text><rect x="34" y="52" width="270" height="26" rx="4" fill="var(--surface)" stroke="#AD6A0C" stroke-width="1.3" stroke-dasharray="4 3"/><rect x="34" y="52" width="3" height="26" rx="1.5" fill="#AD6A0C"/><text x="44" y="69" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">hr-sw</text><text x="296" y="69" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="var(--muted)">ajan YOK</text><rect x="34" y="92" width="270" height="26" rx="4" fill="var(--surface)" stroke="#AD6A0C" stroke-width="1.3"/><rect x="34" y="92" width="3" height="26" rx="1.5" fill="#AD6A0C"/><text x="44" y="109" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">hr-platform</text><rect x="34" y="124" width="270" height="26" rx="4" fill="var(--surface)" stroke="#AD6A0C" stroke-width="1.3"/><rect x="34" y="124" width="3" height="26" rx="1.5" fill="#AD6A0C"/><text x="44" y="141" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">hr-n8n</text><rect x="34" y="156" width="270" height="26" rx="4" fill="var(--surface)" stroke="#AD6A0C" stroke-width="1.3"/><rect x="34" y="156" width="3" height="26" rx="1.5" fill="#AD6A0C"/><text x="44" y="173" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">hr-awx</text><rect x="34" y="188" width="270" height="26" rx="4" fill="var(--surface)" stroke="#AD6A0C" stroke-width="1.3"/><rect x="34" y="188" width="3" height="26" rx="1.5" fill="#AD6A0C"/><text x="44" y="205" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">hr-zabbix</text><rect x="34" y="220" width="270" height="26" rx="4" fill="var(--surface)" stroke="#AD6A0C" stroke-width="1.3"/><rect x="34" y="220" width="3" height="26" rx="1.5" fill="#AD6A0C"/><text x="44" y="237" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">hr-db</text><rect x="34" y="252" width="270" height="26" rx="4" fill="var(--surface)" stroke="#AD6A0C" stroke-width="1.3"/><rect x="34" y="252" width="3" height="26" rx="1.5" fill="#AD6A0C"/><text x="44" y="269" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">hr-vault</text><rect x="34" y="300" width="270" height="26" rx="4" fill="var(--surface)" stroke="#0B6970" stroke-width="1.3" stroke-dasharray="4 3"/><rect x="34" y="300" width="3" height="26" rx="1.5" fill="#0B6970"/><text x="44" y="317" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">hr-edge</text><text x="296" y="317" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="var(--muted)">ajan YOK</text><rect x="544" y="180" width="126" height="26" rx="4" fill="var(--surface)" stroke="#B93B74" stroke-width="1.3" stroke-dasharray="4 3"/><rect x="544" y="180" width="3" height="26" rx="1.5" fill="#B93B74"/><text x="554" y="197" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">cust-fw</text><text x="662" y="197" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="var(--muted)">ajan YOK</text><rect x="724" y="300" width="410" height="26" rx="4" fill="var(--surface)" stroke="#7A4CD0" stroke-width="1.3" stroke-dasharray="4 3"/><rect x="724" y="300" width="3" height="26" rx="1.5" fill="#7A4CD0"/><text x="734" y="317" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">cust-core</text><text x="1126" y="317" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="var(--muted)">ajan YOK</text><rect x="724" y="52" width="200" height="26" rx="4" fill="var(--surface)" stroke="#7A4CD0" stroke-width="1.3" stroke-dasharray="4 3"/><rect x="724" y="52" width="3" height="26" rx="1.5" fill="#7A4CD0"/><text x="734" y="69" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">cust-sw-access</text><text x="916" y="69" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="var(--muted)">ajan YOK</text><rect x="724" y="92" width="200" height="26" rx="4" fill="var(--surface)" stroke="#7A4CD0" stroke-width="1.3"/><rect x="724" y="92" width="3" height="26" rx="1.5" fill="#7A4CD0"/><text x="734" y="109" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">relay</text><rect x="724" y="124" width="200" height="26" rx="4" fill="var(--surface)" stroke="#7A4CD0" stroke-width="1.3"/><rect x="724" y="124" width="3" height="26" rx="1.5" fill="#7A4CD0"/><text x="734" y="141" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">relay-receptor</text><rect x="950" y="92" width="186" height="26" rx="4" fill="var(--surface)" stroke="#7A4CD0" stroke-width="1.3"/><rect x="950" y="92" width="3" height="26" rx="1.5" fill="#7A4CD0"/><text x="960" y="109" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">relay-zbxproxy</text><rect x="950" y="124" width="186" height="26" rx="4" fill="var(--surface)" stroke="#7A4CD0" stroke-width="1.3"/><rect x="950" y="124" width="3" height="26" rx="1.5" fill="#7A4CD0"/><text x="960" y="141" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">relay-cache</text><rect x="724" y="250" width="180" height="26" rx="4" fill="var(--surface)" stroke="#2F6FED" stroke-width="1.3"/><rect x="724" y="250" width="3" height="26" rx="1.5" fill="#2F6FED"/><text x="734" y="267" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">srv-01</text><text x="896" y="267" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="#2F6FED">ajan VAR</text><rect x="724" y="282" width="180" height="26" rx="4" fill="var(--surface)" stroke="#2F6FED" stroke-width="1.3"/><rect x="724" y="282" width="3" height="26" rx="1.5" fill="#2F6FED"/><text x="734" y="299" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">srv-02</text><text x="896" y="299" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="#2F6FED">ajan VAR</text><rect x="954" y="250" width="180" height="26" rx="4" fill="var(--surface)" stroke="#0C8F84" stroke-width="1.3"/><rect x="954" y="250" width="3" height="26" rx="1.5" fill="#0C8F84"/><text x="964" y="267" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">pc-01</text><text x="1126" y="267" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="#0C8F84">ajan VAR</text><rect x="954" y="282" width="180" height="26" rx="4" fill="var(--surface)" stroke="#0C8F84" stroke-width="1.3"/><rect x="954" y="282" width="3" height="26" rx="1.5" fill="#0C8F84"/><text x="964" y="299" font-size="10.5" font-family="var(--mono)" fill="var(--ink)">pc-02</text><text x="1126" y="299" font-size="8.5" font-family="var(--mono)" text-anchor="end" fill="#0C8F84">ajan VAR</text><path d="M304,313 L360,205" fill="none" stroke="#0B6970" stroke-width="1.8" marker-end="url(#ok)" opacity=".8"/><path d="M440,205 L544,193" fill="none" stroke="#0B6970" stroke-width="1.8" marker-end="url(#ok)" opacity=".8"/><path d="M606,206 L606,300 L724,313" fill="none" stroke="#B93B74" stroke-width="1.8" marker-end="url(#ok)" opacity=".8"/><path d="M800,300 L800,120" fill="none" stroke="#7A4CD0" stroke-width="1.8" marker-end="url(#ok)" opacity=".8"/><path d="M860,300 L860,278" fill="none" stroke="#2F6FED" stroke-width="1.8" marker-end="url(#ok)" opacity=".8"/><path d="M1040,300 L1040,278" fill="none" stroke="#0C8F84" stroke-width="1.8" marker-end="url(#ok)" opacity=".8"/><text x="360" y="390" font-size="10.5" font-family="var(--mono)" fill="var(--muted)">kesikli çerçeve = ajan çalıştıramayan cihaz · düz çerçeve = deponun kodu koşuyor</text></svg>
+  <figcaption>Her bağlantı gerçek bir sanal kablo çiftidir; VLAN'lar çekirdek anahtarda ayrı
+  köprü arayüzleridir. Bu yüzden farklı VLAN'lar arasındaki trafik gerçekten yönlendiriciden geçer.</figcaption></figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num">02</span><h2>Altı ağ bacağı</h2></div>
+  <p class="sub">İstenen ayrım burada: her bacak kendi adres bloğuna ve kendi yayın alanına sahip.</p>
+  <div class="tw"><div class="ts"><table>
+  <thead><tr><th>#</th><th>Bacak</th><th>Adres bloğu</th><th>Ne</th><th>İçinde ne var</th></tr></thead>
+  <tbody><tr><td class="no" style="color:#AD6A0C">1</td><td class="ad"><span class="pip" style="background:#AD6A0C"></span>hr-core</td><td class="blk">10.10.0.0/24</td><td>HR kontrol düzlemi</td><td class="ic">platform · orkestratör · hop düğümü · izleme · veritabanı · kasa</td></tr><tr><td class="no" style="color:#0B6970">2</td><td class="ad"><span class="pip" style="background:#0B6970"></span>wan</td><td class="blk">100.64.0.0/30</td><td>WAN geçişi</td><td class="ic">HR kenarı ile müşteri arası</td></tr><tr><td class="no" style="color:#B93B74">3</td><td class="ad"><span class="pip" style="background:#B93B74"></span>cust-dmz</td><td class="blk">172.31.0.0/29</td><td>Müşteri DMZ</td><td class="ic">güvenlik duvarının iç ayağı</td></tr><tr><td class="no" style="color:#7A4CD0">4</td><td class="ad"><span class="pip" style="background:#7A4CD0"></span>cust-mgmt</td><td class="blk">192.168.10.0/24</td><td>Yönetim VLAN&#x27;ı</td><td class="ic">site relay · yürütme düğümü · izleme vekili · önbellek</td></tr><tr><td class="no" style="color:#2F6FED">5</td><td class="ad"><span class="pip" style="background:#2F6FED"></span>cust-srv</td><td class="blk">192.168.20.0/24</td><td>Sunucu VLAN&#x27;ı</td><td class="ic">ajan çalıştıran Linux sunucular</td></tr><tr><td class="no" style="color:#0C8F84">6</td><td class="ad"><span class="pip" style="background:#0C8F84"></span>cust-usr</td><td class="blk">192.168.30.0/24</td><td>Kullanıcı VLAN&#x27;ı</td><td class="ic">ajan çalıştıran uç cihazlar</td></tr></tbody></table></div></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num">03</span><h2>VLAN'lar gerçekten ayrı mı</h2></div>
+  <p class="sub">İddia değil ölçüm: aynı VLAN'da paket yönlendiriciye uğramaz, farklı VLAN'da uğrar.
+  Her atlama TTL değerini bir düşürür.</p>
+  <div class="tw"><div class="ts"><table>
+  <thead><tr><th>Durum</th><th>Ölçüm</th><th>Sonuç</th><th>Anlamı</th></tr></thead>
+  <tbody><tr><td class="ad">aynı VLAN</td><td class="blk">pc-01 → pc-02</td><td class="blk" style="color:var(--accent);font-weight:600">TTL 64</td><td class="ic">doğrudan, yönlendirici yok</td></tr><tr><td class="ad">farklı VLAN</td><td class="blk">pc-01 → srv-01</td><td class="blk" style="color:var(--accent);font-weight:600">TTL 63</td><td class="ic">bir yönlendirici atlaması</td></tr><tr><td class="ad">WAN ötesi</td><td class="blk">relay → hr-platform</td><td class="blk" style="color:var(--accent);font-weight:600">TTL 61</td><td class="ic">üç yönlendirici atlaması</td></tr></tbody></table></div></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num">04</span><h2>Yön kuralı</h2></div>
+  <p class="sub">Tasarımın özü: müşteri ağına giden her bağlantı içeriden başlatılır.
+  Güvenlik duvarında dışarıdan içeri tek bir kural yoktur — ve bu ölçülerek doğrulanır.</p>
+  <div class="tw"><div class="ts"><table>
+  <thead><tr><th>Yön</th><th>Ölçüm</th><th>Sonuç</th></tr></thead>
+  <tbody><tr><td class="ad">içeriden dışarı</td><td class="blk">relay → HR platformu</td><td><span class="rz rz-a">HTTP 200</span></td></tr><tr><td class="ad">içeriden dışarı</td><td class="blk">yürütme düğümü → hop düğümü</td><td><span class="rz rz-a">mesh kuruldu</span></td></tr><tr><td class="ad">dışarıdan içeri</td><td class="blk">HR platformu → relay API&#x27;si</td><td><span class="rz rz-c">engellendi</span></td></tr><tr><td class="ad">dışarıdan içeri</td><td class="blk">HR platformu → sunucu VLAN&#x27;ı</td><td><span class="rz rz-c">engellendi</span></td></tr></tbody></table></div></div>
+  <div class="grid2" style="margin-top:18px">
+    <div class="kutu"><h3>Receptor mesh dışa doğru kuruldu</h3>
+    <p>Yürütme düğümünde <code>listener_port</code> yoktur; bağlantıyı kendisi hop düğümüne kurar.
+    Koşuda mesh <code>relay-acme ↔ hr-awx-hop</code> olarak göründü.</p></div>
+    <div class="kutu"><h3>Kasa kiracı sınırını korudu</h3>
+    <p>Bir kiracı için çalışan iş bilerek başka kiracının alanını istedi; kasa <code>403</code> döndü.
+    Bu, <code>app/integrations/vault.py</code> kuralının ağ üzerindeki karşılığıdır.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num">05</span><h2>Düğümler</h2></div>
+  <p class="sub">Ajan çalıştıran ve çalıştıramayan düğümler emülasyonda da fiziksel olarak ayrıdır.</p>
+  <div class="tw"><div class="ts"><table>
+  <thead><tr><th>Düğüm</th><th>Bacak</th><th>Adres</th><th>İmaj</th><th>Rol</th><th>Ajan</th></tr></thead>
+  <tbody><tr><td class="ad"><span class="pip" style="background:#AD6A0C"></span>hr-sw</td><td class="blk">hr-core</td><td class="blk">10.10.0.1</td><td class="blk">FRR 10.2.1</td><td>HR çekirdek anahtarı</td><td><span class="rz rz-c">ajan YOK</span></td></tr><tr><td class="ad"><span class="pip" style="background:#AD6A0C"></span>hr-platform</td><td class="blk">hr-core</td><td class="blk">10.10.0.10</td><td class="blk">hisar/platform</td><td>2 · HR Platformu</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#AD6A0C"></span>hr-n8n</td><td class="blk">hr-core</td><td class="blk">10.10.0.11</td><td class="blk">hisar/platform</td><td>1 · Orkestratör</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#AD6A0C"></span>hr-awx</td><td class="blk">hr-core</td><td class="blk">10.10.0.12</td><td class="blk">receptor 1.6.9</td><td>AWX hop düğümü</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#AD6A0C"></span>hr-zabbix</td><td class="blk">hr-core</td><td class="blk">10.10.0.13</td><td class="blk">Zabbix 7.4</td><td>İzleme sunucusu</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#AD6A0C"></span>hr-db</td><td class="blk">hr-core</td><td class="blk">10.10.0.14</td><td class="blk">postgres 18</td><td>Veritabanı</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#AD6A0C"></span>hr-vault</td><td class="blk">hr-core</td><td class="blk">10.10.0.15</td><td class="blk">hisar/platform</td><td>Kasa</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#0B6970"></span>hr-edge</td><td class="blk">wan</td><td class="blk">100.64.0.1</td><td class="blk">FRR 10.2.1</td><td>HR kenar yönlendiricisi</td><td><span class="rz rz-c">ajan YOK</span></td></tr><tr><td class="ad"><span class="pip" style="background:#B93B74"></span>cust-fw</td><td class="blk">cust-dmz</td><td class="blk">100.64.0.2 · 172.31.0.1</td><td class="blk">nftables 1.1.6</td><td>Güvenlik duvarı</td><td><span class="rz rz-c">ajan YOK</span></td></tr><tr><td class="ad"><span class="pip" style="background:#7A4CD0"></span>cust-core</td><td class="blk">cust-mgmt</td><td class="blk">172.31.0.2 · üç VLAN</td><td class="blk">FRR 10.2.1</td><td>Müşteri çekirdek anahtarı</td><td><span class="rz rz-c">ajan YOK</span></td></tr><tr><td class="ad"><span class="pip" style="background:#7A4CD0"></span>cust-sw-access</td><td class="blk">cust-mgmt</td><td class="blk">192.168.10.3</td><td class="blk">nftables 1.1.6</td><td>Erişim anahtarı</td><td><span class="rz rz-c">ajan YOK</span></td></tr><tr><td class="ad"><span class="pip" style="background:#7A4CD0"></span>relay</td><td class="blk">cust-mgmt</td><td class="blk">192.168.10.10</td><td class="blk">hisar/relay</td><td>3 · Site Relay</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#7A4CD0"></span>relay-receptor</td><td class="blk">cust-mgmt</td><td class="blk">192.168.10.11</td><td class="blk">receptor 1.6.9</td><td>Yürütme düğümü</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#7A4CD0"></span>relay-zbxproxy</td><td class="blk">cust-mgmt</td><td class="blk">192.168.10.12</td><td class="blk">Zabbix 7.4</td><td>İzleme vekili</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#7A4CD0"></span>relay-cache</td><td class="blk">cust-mgmt</td><td class="blk">192.168.10.13</td><td class="blk">nginx</td><td>Paket önbelleği</td><td><span class="rz rz-k">kod</span></td></tr><tr><td class="ad"><span class="pip" style="background:#2F6FED"></span>srv-01</td><td class="blk">cust-srv</td><td class="blk">192.168.20.21</td><td class="blk">hisar/agent</td><td>Sunucu · ajan var</td><td><span class="rz rz-a">ajan VAR</span></td></tr><tr><td class="ad"><span class="pip" style="background:#2F6FED"></span>srv-02</td><td class="blk">cust-srv</td><td class="blk">192.168.20.22</td><td class="blk">hisar/agent</td><td>Sunucu · ajan var</td><td><span class="rz rz-a">ajan VAR</span></td></tr><tr><td class="ad"><span class="pip" style="background:#0C8F84"></span>pc-01</td><td class="blk">cust-usr</td><td class="blk">192.168.30.31</td><td class="blk">hisar/agent</td><td>Uç cihaz · ajan var</td><td><span class="rz rz-a">ajan VAR</span></td></tr><tr><td class="ad"><span class="pip" style="background:#0C8F84"></span>pc-02</td><td class="blk">cust-usr</td><td class="blk">192.168.30.32</td><td class="blk">hisar/agent</td><td>Uç cihaz · ajan var</td><td><span class="rz rz-a">ajan VAR</span></td></tr></tbody></table></div></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num">06</span><h2>Koşu çıktısı</h2></div>
+  <p class="sub">Aşağısı <code>demo/scripts/ag-dogrula.sh</code> ve <code>demo/scripts/demo-uctan-uca.sh</code>
+  betiklerinin gerçek çıktısıdır; düzenlenmemiştir.</p>
+  <pre><span class=""></span>
+<span class="bas">━━ BACAK 1 — HR kontrol düzlemi (10.10.0.0/24)</span>
+<span class="ok">   ✓ hr-platform → hr-sw ağ geçidi</span>
+<span class="ok">   ✓ hr-platform → hr-vault (kasa)</span>
+<span class="ok">   ✓ hr-platform → hr-awx (hop düğümü)</span>
+<span class="ok">   ✓ hr-n8n → hr-platform</span>
+<span class=""></span>
+<span class="bas">━━ BACAK 2 — WAN geçişi (100.64.0.0/30)</span>
+<span class="ok">   ✓ hr-edge → cust-fw (WAN karşı ucu)</span>
+<span class="ok">   ✓ cust-fw → hr-edge</span>
+<span class="">   WAN bacağındaki adresler:</span>
+<span class="">     hr-edge  eth2@if235       UP             100.64.0.1/30 fe80::a8c1:abff:fec5:f4f8/64 </span>
+<span class="">     cust-fw  eth1@if236       UP             100.64.0.2/30 fe80::a8c1:abff:fe2e:4b8e/64 </span>
+<span class=""></span>
+<span class="bas">━━ BACAK 3 — müşteri DMZ (172.31.0.0/29)</span>
+<span class="ok">   ✓ cust-fw → cust-core</span>
+<span class="ok">   ✓ cust-core → cust-fw</span>
+<span class=""></span>
+<span class="bas">━━ BACAK 4 — yönetim VLAN&#x27;ı (192.168.10.0/24)</span>
+<span class="ok">   ✓ relay → ağ geçidi</span>
+<span class="ok">   ✓ relay → erişim anahtarı</span>
+<span class="ok">   ✓ relay → izleme vekili</span>
+<span class="ok">   ✓ relay → paket önbelleği</span>
+<span class=""></span>
+<span class="bas">━━ BACAK 5 — sunucu VLAN&#x27;ı (192.168.20.0/24)</span>
+<span class="ok">   ✓ srv-01 → ağ geçidi</span>
+<span class="ok">   ✓ srv-01 → srv-02 (aynı yayın alanı)</span>
+<span class="ok">   ✓ srv-01 → relay (VLAN&#x27;lar arası)</span>
+<span class=""></span>
+<span class="bas">━━ BACAK 6 — kullanıcı VLAN&#x27;ı (192.168.30.0/24)</span>
+<span class="ok">   ✓ pc-01 → ağ geçidi</span>
+<span class="ok">   ✓ pc-01 → pc-02 (aynı yayın alanı)</span>
+<span class="ok">   ✓ pc-01 → relay (VLAN&#x27;lar arası)</span>
+<span class=""></span>
+<span class="bas">━━ YAYIN ALANI AYRIMI — VLAN&#x27;lar gerçekten ayrı mı</span>
+<span class="">   Aynı VLAN doğrudan, farklı VLAN ağ geçidi üzerinden gider. TTL bunu kanıtlar.</span>
+<span class="ok">   ✓ pc-01 → pc-02 doğrudan, pc-01 → srv-01 ağ geçidi üzerinden</span>
+<span class="">     aynı VLAN : 192.168.30.32 dev eth1 src 192.168.30.31 uid 0 </span>
+<span class="">     farklı VLAN: 192.168.20.21 via 192.168.30.1 dev eth1 src 192.168.30.31 uid 0 </span>
+<span class="">   TTL: aynı VLAN=64  farklı VLAN=63  WAN ötesi=61</span>
+<span class="ok">   ✓ farklı VLAN&#x27;a giden paket yönlendiriciden geçiyor (TTL düştü)</span>
+<span class="ok">   ✓ WAN ötesine giden paket birden çok yönlendiriciden geçiyor</span>
+<span class="">   Çekirdek anahtardaki VLAN köprüleri:</span>
+<span class="">     br-mgmt          UP             192.168.10.1/24 fe80::2064:5ff:fed2:1d4c/64 </span>
+<span class="">     br-srv           UP             192.168.20.1/24 fe80::386e:38ff:fe3f:e74f/64 </span>
+<span class="">     br-usr           UP             192.168.30.1/24 fe80::109e:d1ff:fe95:4537/64 </span>
+<span class=""></span>
+<span class="bas">━━ YÖN KURALI — dışarıdan içeri kapalı</span>
+<span class="">   Tasarımın özü: müşteri ağına giden her bağlantı içeriden başlatılır.</span>
+<span class="ok">   ✓ içeriden dışarı: relay → HR platformu (izinli)</span>
+<span class="ok">   ✓ dışarıdan içeri: HR platformu → relay API&#x27;si (engellenmeli)</span>
+<span class="ok">   ✓ dışarıdan içeri: HR platformu → sunucu VLAN&#x27;ı (engellenmeli)</span>
+<span class=""></span>
+<span class="bas">━━ GÜVENLİK DUVARI KURAL SAYAÇLARI</span>
+<span class="">   	chain input {</span>
+<span class="">   		type filter hook input priority filter; policy drop;</span>
+<span class="">   		ip saddr 192.168.10.0/24 tcp dport 22 accept comment &quot;yonetim VLAN&#x27;indan SSH&quot;</span>
+<span class="">   		ip saddr 10.10.0.0/24 tcp dport 22 accept comment &quot;HR kontrol duzleminden SSH&quot;</span>
+<span class="">   	chain forward {</span>
+<span class="">   		type filter hook forward priority filter; policy drop;</span>
+<span class="">   		ip saddr 192.168.0.0/16 ip daddr 10.10.0.0/24 tcp dport { 443, 8000, 10051, 27199 } accept comment &quot;musteri agindan HR kontrol duzlemine giden baglantilar&quot;</span>
+<span class="">   		ip saddr 192.168.0.0/16 ip daddr 0.0.0.0/0 ct state new accept comment &quot;internete cikis&quot;</span>
+<span class="">   		ip saddr 192.168.20.0/24 ip daddr 10.10.0.13 tcp dport 10051 accept comment &quot;izleme vekili trafigi&quot;</span>
+<span class="">   		type filter hook output priority filter; policy accept;</span>
+<span class="">   		type nat hook postrouting priority srcnat; policy accept;</span>
+<span class=""></span>
+<span class="bas">━━ AJAN ÇALIŞTIRAMAYAN DÜĞÜMLER</span>
+<span class="ok">   ✓ cust-fw üzerinde ajan yok (yalnız uzaktan yapılandırılır — B şeridi)</span>
+<span class="ok">   ✓ cust-sw-access üzerinde ajan yok (yalnız uzaktan yapılandırılır — B şeridi)</span>
+<span class="ok">   ✓ srv-01 üzerinde ajan var (A şeridi)</span>
+<span class="ok">   ✓ pc-01 üzerinde ajan var (A şeridi)</span>
+<span class=""></span>
+<span class="bas">━━ SONUÇ</span>
+<span class="">   geçen: 28   düşen: 0</span>
+<span class="">   Altı bacak da doğrulandı.</span>
+<span class=""></span>
+<span class="">================</span>
+<span class=""></span>
+<span class=""></span>
+<span class="bas">━━ 1 · Kontrol düzlemi ayakta mı</span>
+<span class="">   HR Platformu yanıt veriyor (HTTP 200)</span>
+<span class="">   Katalogda 39 hizmet yüklü</span>
+<span class=""></span>
+<span class="bas">━━ 2 · Müşteri sahasından kontrol düzlemine erişim (içeriden dışarı)</span>
+<span class="">   Relay, HR&#x27;a kendisi bağlanır. Güvenlik duvarında gelen kural yoktur.</span>
+<span class="">   relay → HR platformu: HTTP 200 (dört bacak üzerinden)</span>
+<span class=""></span>
+<span class="bas">━━ 3 · Ters yön kapalı mı</span>
+<span class="">   HR → relay bağlantısı engellendi (beklenen)</span>
+<span class=""></span>
+<span class="bas">━━ 4 · Orkestratör: sözleşme → tanım → kasa → dağıtım</span>
+<span class="">   Orkestratör başlıyor · kiracı=acme · platform=http://10.10.0.10:8000</span>
+<span class="">   </span>
+<span class="">   ── 1. Sözleşme imzalandı — hak seti</span>
+<span class="">      4 hizmet: envanter-yonetim-sistemi, switch-management, firewall-management, windows-server-yonetimi</span>
+<span class="">   </span>
+<span class="">   ── 2. Erişim listesi üretiliyor (kuru çalıştırma)</span>
+<span class="">      4 hizmet → 23 görev</span>
+<span class="">      şeritlere dağılım: {&#x27;A&#x27;: 3, &#x27;B&#x27;: 5, &#x27;C&#x27;: 0, &#x27;D&#x27;: 12, &#x27;E&#x27;: 3, &#x27;F&#x27;: 0}</span>
+<span class="">   </span>
+<span class="">   ── 3. Erişim bilgileri kasaya yazılıyor</span>
+<span class="ok">      ✓ envanter-yonetim-sistemi         → [&#x27;.env&#x27;, &#x27;ansible-vault&#x27;, &#x27;n8n-credentials&#x27;]</span>
+<span class="ok">      ✓ firewall-management              → [&#x27;ansible-vault&#x27;, &#x27;n8n-credentials&#x27;]</span>
+<span class="ok">      ✓ switch-management                → [&#x27;ansible-vault&#x27;, &#x27;n8n-credentials&#x27;]</span>
+<span class="ok">      ✓ windows-server-yonetimi          → [&#x27;.env&#x27;, &#x27;ansible-vault&#x27;, &#x27;n8n-credentials&#x27;]</span>
+<span class="">   </span>
+<span class="">   ── 4. Kiracı sınırı sınanıyor (başka kiracının alanı isteniyor)</span>
+<span class="ok">      ✓ kasa 403 döndü — kiracı ayrışması çalışıyor</span>
+<span class="">   </span>
+<span class="">   ── 5. Tanım uygulanıyor — görevler şeritlere dağıtılıyor</span>
+<span class="">      23 görev dağıtıldı: {&#x27;D&#x27;: 12, &#x27;A&#x27;: 3, &#x27;B&#x27;: 5, &#x27;E&#x27;: 3}</span>
+<span class="">   </span>
+<span class="">   Orkestrasyon tamamlandı.</span>
+<span class=""></span>
+<span class="bas">━━ 5 · B şeridi: ajan çalıştıramayan cihaza uzaktan yapılandırma</span>
+<span class="">   Güvenlik duvarına ajan kurulamaz; kural yalnız SSH ile basılır.</span>
+<span class="">   ansible [core 2.21.0]</span>
+<span class="">   basımdan önce kural sayısı: 13</span>
+<span class="">   yeni kural basıldı (izleme trafiğine izin)</span>
+<span class="">   basımdan sonra kural sayısı: 14</span>
+<span class=""></span>
+<span class="bas">━━ 6 · A şeridi: ajan çalıştıran düğümler</span>
+<span class="">   srv-01 (192.168.20.21/24) → relay iş kuyruğu: HTTP 200</span>
+<span class="">   srv-02 (192.168.20.22/24) → relay iş kuyruğu: HTTP 200</span>
+<span class="">   pc-01 (192.168.30.31/24) → relay iş kuyruğu: HTTP 200</span>
+<span class="">   pc-02 (192.168.30.32/24) → relay iş kuyruğu: HTTP 200</span>
+<span class=""></span>
+<span class="bas">━━ 7 · Receptor mesh: yürütme düğümü dışa doğru bağlandı mı</span>
+<span class="">   Node ID: relay-acme</span>
+<span class="">   Version: 1.6.9</span>
+<span class="">   System CPU Count: 4</span>
+<span class="">   System Memory MiB: 7922</span>
+<span class="">   </span>
+<span class="">   Connection   Cost</span>
+<span class="">   hr-awx-hop   1</span>
+<span class="">   </span>
+<span class="">   Known Node   Known Connections</span>
+<span class="">   hr-awx-hop   relay-acme: 1 </span>
+<span class="">   relay-acme   hr-awx-hop: 1 </span>
+<span class="">   </span>
+<span class=""></span>
+<span class="bas">━━ 8 · İzleme vekili merkeze bağlanıyor mu</span>
+<span class=""></span>
+<span class="bas">━━ Senaryo tamamlandı</span></pre>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num">07</span><h2>Nasıl çalıştırılır</h2></div>
+  <div class="grid2">
+    <div class="kutu"><h3>Üç komut</h3><p><code>cd demo &amp;&amp; ./scripts/up.sh</code><br>
+    <code>./scripts/ag-dogrula.sh</code><br><code>./scripts/demo-uctan-uca.sh</code></p></div>
+    <div class="kutu"><h3>Gereken</h3><p>Docker ve containerlab. Apple Silicon macOS'ta
+    containerlab Colima sanal makinesi içinde koşar; betikler bu farkı kendileri halleder.</p></div>
+    <div class="kutu"><h3>Bilinen tuzak</h3><p>Bir düğümü tek başına yeniden yaratmak, karşı
+    uçtaki anahtar portunu köprüden düşürür. <code>ag-onar.sh</code> bunu tekrar çalıştırılabilir
+    biçimde düzeltir ve kurulumun sonunda kendiliğinden koşar.</p></div>
+  </div>
+</section>
+
+<footer>Kapsam: containerlab 0.79 · FRRouting 10.2.1 · nftables 1.1.6 · receptor 1.6.9 ·
+Zabbix 7.4 · tüm imajlar arm64 üzerinde doğrulandı. Ayrıntı: <code>demo/README.md</code>.</footer>
+</div></body></html>

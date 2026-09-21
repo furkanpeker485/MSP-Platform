@@ -11,7 +11,7 @@ import structlog
 from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 
-import queue as jobqueue
+import jobqueue  # stdlib 'queue' ile çakışmaması için bilerek bu ad
 
 log = structlog.get_logger(__name__)
 app = FastAPI(title="Hisar Site Relay", version="0.1.0")

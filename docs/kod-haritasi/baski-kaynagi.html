@@ -32,6 +32,11 @@ pre{margin:0;padding:2.5mm 3mm;background:#F7F9F9;border:1px solid #E3EAEA;borde
 .callout h3{font-size:11pt;color:#0A585D;margin-bottom:2mm}
 .callout p{margin:0;font-size:9pt;color:#37474A}
 .dia{display:block;width:100%;max-width:170mm;height:auto;margin:5mm 0}
+
+.pc{border:1px solid #D3DCDC;border-radius:2mm;padding:3mm 4mm;margin-bottom:2.5mm;page-break-inside:avoid}
+.pc-p{margin:0;font-size:9pt;color:#12191A;line-height:1.5}
+.pc-c{margin:2.2mm 0 0;padding-top:2mm;border-top:1px solid #E8EDED;font-size:8.6pt;color:#37474A;line-height:1.55}
+.pc-c b{display:block;font-family:'IBM Plex Mono',monospace;font-size:6.8pt;letter-spacing:.11em;text-transform:uppercase;color:#0B6970;margin-bottom:1mm}
 </style></head><body>
 <div class="cover">
  <div>
@@ -3044,6 +3049,34 @@ def test_dosya_gorevi_uygulanir(tmp_path):
     assert result[&quot;state&quot;] == &quot;ok&quot; and result[&quot;changed&quot;] is True
     assert target.read_text(encoding=&quot;utf-8&quot;) == &quot;ServerActive=relay\n&quot;
 </pre></section>
+<section style="page-break-before:always">
+<h2 style="border-top-color:#0C8F84">Emülasyon: bu haritadaki kod gerçekten koşuyor</h2>
+<p class="sub">Bu belgedeki dosyalar <code>demo/</code> altındaki emülasyon ortamında, gerçek
+konteynerler ve gerçek ağ cihazlarıyla kurulan 19 düğümlük bir topolojide çalıştırıldı.
+Altı ağ bacağı ayrı ayrı emüle edildi: HR kontrol düzlemi (10.10.0.0/24), WAN geçişi
+(100.64.0.0/30), müşteri DMZ'si (172.31.0.0/29) ve üç VLAN (yönetim 192.168.10.0/24,
+sunucu 192.168.20.0/24, kullanıcı 192.168.30.0/24).</p>
+
+<div class="pc"><p class="pc-p"><b>Son koşuda 33 kontrolün 33'ü geçti.</b> Platform 39 hizmetlik
+kataloğu yükledi; site relay dört ağ bacağı üzerinden HR platformuna HTTP 200 aldı; ters yön
+engellendi; receptor mesh relay-acme &harr; hr-awx-hop olarak kuruldu; kasa başka kiracının alanı
+istendiğinde 403 döndü; ajan çalıştıramayan düğümlerde ajan bulunmadığı ayrıca denetlendi.</p>
+<p class="pc-c"><b>Nerede</b>Görsel demonstrasyon docs/demo/emulasyon.pdf; ortamın kendisi
+demo/README.md; çalıştırma: cd demo &amp;&amp; ./scripts/up.sh, ./scripts/ag-dogrula.sh,
+./scripts/demo-uctan-uca.sh.</p></div>
+
+<div class="pc"><p class="pc-p"><b>Emülasyon bir hata yakaladı.</b> relay/relay_api/ içindeki iş
+kuyruğu modülü önce queue.py adındaydı ve Python'un standart kütüphanesindeki queue modülüyle
+çakışıyordu. Konteynerde stdlib kazandı ve relay API'si 500 döndürdü.</p>
+<p class="pc-c"><b>Düzeltme</b>Modül jobqueue.py olarak yeniden adlandırıldı. Bu hata yalnız kod
+okunarak değil, çalıştırılarak görülebilirdi.</p></div>
+
+<div class="pc"><p class="pc-p"><b>Emülasyonun kendi kırılganlığı.</b> Bir düğüm tek başına yeniden
+yaratıldığında sanal kablo çifti yenilenir ve karşı uçtaki anahtar portu köprüden düşer.</p>
+<p class="pc-c"><b>Çözüm</b>demo/scripts/ag-onar.sh köprü üyeliğini tekrar çalıştırılabilir biçimde
+yeniden uygular ve kurulumun sonunda kendiliğinden koşar.</p></div>
+</section>
+
 <p class="foot">Şerit kısaltmaları: A — aracı yazılım · B — uzaktan ayar · C — sağlayıcı arayüzü ·
 D — platform kurulumu · E — takvimli iş · F — insan işi.</p>
 </body></html>

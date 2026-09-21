@@ -1,0 +1,363 @@
+# Hisar MSP — uçtan uca emülasyon topolojisi
+#
+# Altı ağ bacağı açıkça emüle edilir:
+#   1) hr-core     10.10.0.0/24     HR kontrol düzlemi
+#   2) wan        100.64.0.0/30     HR kenarı ile müşteri arası geçiş
+#   3) cust-dmz   172.31.0.0/29     güvenlik duvarının iç ayağı
+#   4) cust-mgmt  192.168.10.0/24   yönetim VLAN'ı — relay ve cihaz yönetim arayüzleri
+#   5) cust-srv   192.168.20.0/24   sunucu VLAN'ı — ajan çalıştıran Linux sunucular
+#   6) cust-usr   192.168.30.0/24   kullanıcı VLAN'ı — uç cihazlar
+#
+# Düğümler bilinçli olarak ikiye ayrılır:
+#   * ajan ÇALIŞTIRAN  → srv-01, srv-02, pc-01, pc-02        (A şeridi)
+#   * ajan ÇALIŞTIRAMAYAN → cust-fw, cust-sw-access, yönlendiriciler (B şeridi)
+#
+# Çalıştırma:  sudo containerlab deploy -t topology/hisar-msp.clab.yml
+# Apple Silicon'da Colima sanal makinesi içinde koşar; bkz. demo/README.md
+
+name: hisar-msp
+
+mgmt:
+  network: hisar-clab-mgmt
+  ipv4-subnet: 172.28.28.0/24
+
+topology:
+  defaults:
+    kind: linux
+
+  kinds:
+    linux:
+      image: ghcr.io/srl-labs/network-multitool
+
+  nodes:
+    # ─────────────────────────────────────────────────────────────
+    # BACAK 1 — HR kontrol düzlemi (10.10.0.0/24)
+    # ─────────────────────────────────────────────────────────────
+    hr-sw:
+      image: quay.io/frrouting/frr:10.2.1
+      mgmt-ipv4: 172.28.28.11
+      binds:
+        - ../nodes/router/daemons:/etc/frr/daemons
+        - ../nodes/router/hr-sw.frr.conf:/etc/frr/frr.conf
+      exec:
+        - ip link add br-core type bridge
+        - ip link set br-core up
+        - sh -c 'for i in 1 2 3 4 5 6 7; do ip link set eth$i master br-core 2>/dev/null; ip link set eth$i up; done'
+        - ip addr add 10.10.0.1/24 dev br-core
+      labels:
+        bacak: hr-core
+        rol: HR çekirdek anahtarı
+
+    hr-platform:
+      image: hisar/platform:demo
+      mgmt-ipv4: 172.28.28.12
+      env:
+        HR_AGENT_ENROLL_SECRET: demo-enroll-secret
+        HR_CATALOG_DIR: app/catalog/services
+      exec:
+        - ip addr add 10.10.0.10/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.10.0.254
+      labels:
+        bacak: hr-core
+        rol: 2 · HR Platformu (kontrol düzlemi)
+
+    hr-n8n:
+      image: hisar/platform:demo
+      mgmt-ipv4: 172.28.28.13
+      binds:
+        - ../nodes/platform/orchestrator.py:/app/orchestrator.py:ro
+      cmd: /bin/sh -c "sleep infinity"
+      exec:
+        - ip addr add 10.10.0.11/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.10.0.254
+      labels:
+        bacak: hr-core
+        rol: 1 · Orkestratör (n8n yerine demo koşucusu)
+
+    hr-awx:
+      image: quay.io/ansible/receptor:v1.6.9
+      mgmt-ipv4: 172.28.28.14
+      binds:
+        - ../nodes/receptor/hop.conf:/etc/receptor/receptor.conf:ro
+      exec:
+        - ip addr add 10.10.0.12/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.10.0.254
+      labels:
+        bacak: hr-core
+        rol: AWX hop düğümü (receptor mesh)
+
+    hr-zabbix:
+      image: zabbix/zabbix-server-pgsql:alpine-7.4-latest
+      mgmt-ipv4: 172.28.28.15
+      env:
+        DB_SERVER_HOST: 10.10.0.14
+        POSTGRES_USER: zabbix
+        POSTGRES_PASSWORD: demo-zabbix
+        POSTGRES_DB: zabbix
+      exec:
+        - ip addr add 10.10.0.13/24 dev eth1
+        - ip link set eth1 up
+      labels:
+        bacak: hr-core
+        rol: İzleme sunucusu
+
+    hr-db:
+      image: postgres:18-alpine
+      mgmt-ipv4: 172.28.28.16
+      env:
+        POSTGRES_USER: zabbix
+        POSTGRES_PASSWORD: demo-zabbix
+        POSTGRES_DB: zabbix
+      exec:
+        - ip addr add 10.10.0.14/24 dev eth1
+        - ip link set eth1 up
+      labels:
+        bacak: hr-core
+        rol: Veritabanı
+
+    hr-vault:
+      image: hisar/platform:demo
+      mgmt-ipv4: 172.28.28.17
+      binds:
+        - ../nodes/platform/vault_stub.py:/app/vault_stub.py:ro
+      cmd: /bin/sh -c "python3 /app/vault_stub.py"
+      exec:
+        - ip addr add 10.10.0.15/24 dev eth1
+        - ip link set eth1 up
+      labels:
+        bacak: hr-core
+        rol: Kasa (sır deposu)
+
+    # ─────────────────────────────────────────────────────────────
+    # BACAK 2 — WAN (100.64.0.0/30)
+    # ─────────────────────────────────────────────────────────────
+    hr-edge:
+      image: quay.io/frrouting/frr:10.2.1
+      mgmt-ipv4: 172.28.28.21
+      binds:
+        - ../nodes/router/daemons:/etc/frr/daemons
+        - ../nodes/router/hr-edge.frr.conf:/etc/frr/frr.conf
+      exec:
+        - ip addr add 10.10.0.254/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 100.64.0.1/30 dev eth2
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+        - ip route replace 192.168.0.0/16 via 100.64.0.2
+        - ip route replace 172.31.0.0/29 via 100.64.0.2
+      labels:
+        bacak: hr-core + wan
+        rol: HR kenar yönlendiricisi
+
+    # ─────────────────────────────────────────────────────────────
+    # BACAK 3 — müşteri DMZ (172.31.0.0/29) · ajan çalıştıramaz
+    # ─────────────────────────────────────────────────────────────
+    cust-fw:
+      image: hisar/appliance:demo
+      mgmt-ipv4: 172.28.28.31
+      binds:
+        - ../nodes/firewall/nftables.conf:/etc/nftables.conf:ro
+      exec:
+        - ip addr add 100.64.0.2/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 172.31.0.1/29 dev eth2
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+        - ip route replace 10.10.0.0/24 via 100.64.0.1
+        - ip route replace 192.168.0.0/16 via 172.31.0.2
+        - nft -f /etc/nftables.conf
+      labels:
+        bacak: wan + cust-dmz
+        rol: Güvenlik duvarı — ajan YOK, yalnız uzaktan yapılandırılır
+
+    # ─────────────────────────────────────────────────────────────
+    # BACAK 4/5/6 — müşteri çekirdek anahtarı, üç VLAN köprüsü
+    # ─────────────────────────────────────────────────────────────
+    cust-core:
+      image: quay.io/frrouting/frr:10.2.1
+      mgmt-ipv4: 172.28.28.32
+      binds:
+        - ../nodes/router/daemons:/etc/frr/daemons
+        - ../nodes/router/cust-core.frr.conf:/etc/frr/frr.conf
+      exec:
+        - ip addr add 172.31.0.2/29 dev eth1
+        - ip link set eth1 up
+        - sysctl -w net.ipv4.ip_forward=1
+        # VLAN 10 — yönetim
+        - ip link add br-mgmt type bridge
+        - ip link set br-mgmt up
+        - sh -c 'ip link set eth2 master br-mgmt; ip link set eth2 up'
+        - ip addr add 192.168.10.1/24 dev br-mgmt
+        # VLAN 20 — sunucular
+        - ip link add br-srv type bridge
+        - ip link set br-srv up
+        - sh -c 'ip link set eth3 master br-srv; ip link set eth4 master br-srv; ip link set eth3 up; ip link set eth4 up'
+        - ip addr add 192.168.20.1/24 dev br-srv
+        # VLAN 30 — kullanıcılar
+        - ip link add br-usr type bridge
+        - ip link set br-usr up
+        - sh -c 'ip link set eth5 master br-usr; ip link set eth6 master br-usr; ip link set eth5 up; ip link set eth6 up'
+        - ip addr add 192.168.30.1/24 dev br-usr
+        - ip route replace default via 172.31.0.1
+      labels:
+        bacak: cust-dmz + mgmt + srv + usr
+        rol: Müşteri çekirdek anahtarı (L3)
+
+    cust-sw-access:
+      image: hisar/appliance:demo
+      mgmt-ipv4: 172.28.28.33
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - sh -c 'for i in 1 2 3 4 5; do ip link set eth$i master br0 2>/dev/null; ip link set eth$i up; done'
+        - ip addr add 192.168.10.3/24 dev br0
+        - ip route replace default via 192.168.10.1
+      labels:
+        bacak: cust-mgmt
+        rol: Erişim anahtarı — ajan YOK
+
+    # ── yönetim VLAN'ındaki Site Relay bileşenleri ──
+    relay:
+      image: hisar/relay:demo
+      mgmt-ipv4: 172.28.28.41
+      env:
+        RELAY_TENANT: acme
+        RELAY_TOKEN: demo-relay-token
+        RELAY_PLATFORM_URL: http://10.10.0.10:8000
+      exec:
+        - ip addr add 192.168.10.10/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 192.168.10.1
+      labels:
+        bacak: cust-mgmt
+        rol: 3 · Site Relay — iş kuyruğu ve API
+
+    relay-receptor:
+      image: quay.io/ansible/receptor:v1.6.9
+      mgmt-ipv4: 172.28.28.42
+      binds:
+        - ../nodes/receptor/execution.conf:/etc/receptor/receptor.conf:ro
+      exec:
+        - ip addr add 192.168.10.11/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 192.168.10.1
+      labels:
+        bacak: cust-mgmt
+        rol: AWX yürütme düğümü — bağlantıyı kendisi dışarı kurar
+
+    relay-zbxproxy:
+      image: zabbix/zabbix-proxy-sqlite3:alpine-7.4-latest
+      mgmt-ipv4: 172.28.28.43
+      env:
+        ZBX_SERVER_HOST: 10.10.0.13
+        ZBX_HOSTNAME: relay-acme
+        ZBX_PROXYMODE: "0"
+      exec:
+        - ip addr add 192.168.10.12/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 192.168.10.1
+      labels:
+        bacak: cust-mgmt
+        rol: İzleme vekili — merkeze kendisi bağlanır
+
+    relay-cache:
+      image: nginx:alpine
+      mgmt-ipv4: 172.28.28.44
+      exec:
+        - ip addr add 192.168.10.13/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 192.168.10.1
+      labels:
+        bacak: cust-mgmt
+        rol: Paket önbelleği
+
+    # ── sunucu VLAN'ı: ajan çalıştıran düğümler ──
+    srv-01:
+      image: hisar/agent:demo
+      mgmt-ipv4: 172.28.28.51
+      env:
+        HRAGENT_PLATFORM_URL: http://192.168.10.10:8080
+        HRAGENT_TENANT: acme
+        HRAGENT_ENROLLMENT_CODE: demo-enroll-code
+      exec:
+        - ip addr add 192.168.20.21/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 192.168.20.1
+      labels:
+        bacak: cust-srv
+        rol: Linux sunucu — ajan çalıştırır (A şeridi)
+
+    srv-02:
+      image: hisar/agent:demo
+      mgmt-ipv4: 172.28.28.52
+      env:
+        HRAGENT_PLATFORM_URL: http://192.168.10.10:8080
+        HRAGENT_TENANT: acme
+        HRAGENT_ENROLLMENT_CODE: demo-enroll-code
+      exec:
+        - ip addr add 192.168.20.22/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 192.168.20.1
+      labels:
+        bacak: cust-srv
+        rol: Linux sunucu — ajan çalıştırır (A şeridi)
+
+    # ── kullanıcı VLAN'ı ──
+    pc-01:
+      image: hisar/agent:demo
+      mgmt-ipv4: 172.28.28.61
+      env:
+        HRAGENT_PLATFORM_URL: http://192.168.10.10:8080
+        HRAGENT_TENANT: acme
+        HRAGENT_ENROLLMENT_CODE: demo-enroll-code
+      exec:
+        - ip addr add 192.168.30.31/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 192.168.30.1
+      labels:
+        bacak: cust-usr
+        rol: Kullanıcı bilgisayarı — ajan çalıştırır
+
+    pc-02:
+      image: hisar/agent:demo
+      mgmt-ipv4: 172.28.28.62
+      env:
+        HRAGENT_PLATFORM_URL: http://192.168.10.10:8080
+        HRAGENT_TENANT: acme
+        HRAGENT_ENROLLMENT_CODE: demo-enroll-code
+      exec:
+        - ip addr add 192.168.30.32/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 192.168.30.1
+      labels:
+        bacak: cust-usr
+        rol: Kullanıcı bilgisayarı — ajan çalıştırır
+
+  links:
+    # BACAK 1 — HR kontrol düzlemi
+    - endpoints: ["hr-sw:eth1", "hr-platform:eth1"]
+    - endpoints: ["hr-sw:eth2", "hr-n8n:eth1"]
+    - endpoints: ["hr-sw:eth3", "hr-awx:eth1"]
+    - endpoints: ["hr-sw:eth4", "hr-zabbix:eth1"]
+    - endpoints: ["hr-sw:eth5", "hr-db:eth1"]
+    - endpoints: ["hr-sw:eth6", "hr-vault:eth1"]
+    - endpoints: ["hr-sw:eth7", "hr-edge:eth1"]
+    # BACAK 2 — WAN geçişi
+    - endpoints: ["hr-edge:eth2", "cust-fw:eth1"]
+    # BACAK 3 — müşteri DMZ
+    - endpoints: ["cust-fw:eth2", "cust-core:eth1"]
+    # BACAK 4 — yönetim VLAN'ı
+    - endpoints: ["cust-core:eth2", "cust-sw-access:eth1"]
+    - endpoints: ["cust-sw-access:eth2", "relay:eth1"]
+    - endpoints: ["cust-sw-access:eth3", "relay-receptor:eth1"]
+    - endpoints: ["cust-sw-access:eth4", "relay-zbxproxy:eth1"]
+    - endpoints: ["cust-sw-access:eth5", "relay-cache:eth1"]
+    # BACAK 5 — sunucu VLAN'ı
+    - endpoints: ["cust-core:eth3", "srv-01:eth1"]
+    - endpoints: ["cust-core:eth4", "srv-02:eth1"]
+    # BACAK 6 — kullanıcı VLAN'ı
+    - endpoints: ["cust-core:eth5", "pc-01:eth1"]
+    - endpoints: ["cust-core:eth6", "pc-02:eth1"]

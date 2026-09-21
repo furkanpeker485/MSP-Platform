@@ -1,0 +1,144 @@
+
+━━ BACAK 1 — HR kontrol düzlemi (10.10.0.0/24)
+   ✓ hr-platform → hr-sw ağ geçidi
+   ✓ hr-platform → hr-vault (kasa)
+   ✓ hr-platform → hr-awx (hop düğümü)
+   ✓ hr-n8n → hr-platform
+
+━━ BACAK 2 — WAN geçişi (100.64.0.0/30)
+   ✓ hr-edge → cust-fw (WAN karşı ucu)
+   ✓ cust-fw → hr-edge
+   WAN bacağındaki adresler:
+     hr-edge  eth2@if235       UP             100.64.0.1/30 fe80::a8c1:abff:fec5:f4f8/64 
+     cust-fw  eth1@if236       UP             100.64.0.2/30 fe80::a8c1:abff:fe2e:4b8e/64 
+
+━━ BACAK 3 — müşteri DMZ (172.31.0.0/29)
+   ✓ cust-fw → cust-core
+   ✓ cust-core → cust-fw
+
+━━ BACAK 4 — yönetim VLAN'ı (192.168.10.0/24)
+   ✓ relay → ağ geçidi
+   ✓ relay → erişim anahtarı
+   ✓ relay → izleme vekili
+   ✓ relay → paket önbelleği
+
+━━ BACAK 5 — sunucu VLAN'ı (192.168.20.0/24)
+   ✓ srv-01 → ağ geçidi
+   ✓ srv-01 → srv-02 (aynı yayın alanı)
+   ✓ srv-01 → relay (VLAN'lar arası)
+
+━━ BACAK 6 — kullanıcı VLAN'ı (192.168.30.0/24)
+   ✓ pc-01 → ağ geçidi
+   ✓ pc-01 → pc-02 (aynı yayın alanı)
+   ✓ pc-01 → relay (VLAN'lar arası)
+
+━━ YAYIN ALANI AYRIMI — VLAN'lar gerçekten ayrı mı
+   Aynı VLAN doğrudan, farklı VLAN ağ geçidi üzerinden gider. TTL bunu kanıtlar.
+   ✓ pc-01 → pc-02 doğrudan, pc-01 → srv-01 ağ geçidi üzerinden
+     aynı VLAN : 192.168.30.32 dev eth1 src 192.168.30.31 uid 0 
+     farklı VLAN: 192.168.20.21 via 192.168.30.1 dev eth1 src 192.168.30.31 uid 0 
+   TTL: aynı VLAN=64  farklı VLAN=63  WAN ötesi=61
+   ✓ farklı VLAN'a giden paket yönlendiriciden geçiyor (TTL düştü)
+   ✓ WAN ötesine giden paket birden çok yönlendiriciden geçiyor
+   Çekirdek anahtardaki VLAN köprüleri:
+     br-mgmt          UP             192.168.10.1/24 fe80::2064:5ff:fed2:1d4c/64 
+     br-srv           UP             192.168.20.1/24 fe80::386e:38ff:fe3f:e74f/64 
+     br-usr           UP             192.168.30.1/24 fe80::109e:d1ff:fe95:4537/64 
+
+━━ YÖN KURALI — dışarıdan içeri kapalı
+   Tasarımın özü: müşteri ağına giden her bağlantı içeriden başlatılır.
+   ✓ içeriden dışarı: relay → HR platformu (izinli)
+   ✓ dışarıdan içeri: HR platformu → relay API'si (engellenmeli)
+   ✓ dışarıdan içeri: HR platformu → sunucu VLAN'ı (engellenmeli)
+
+━━ GÜVENLİK DUVARI KURAL SAYAÇLARI
+   	chain input {
+   		type filter hook input priority filter; policy drop;
+   		ip saddr 192.168.10.0/24 tcp dport 22 accept comment "yonetim VLAN'indan SSH"
+   		ip saddr 10.10.0.0/24 tcp dport 22 accept comment "HR kontrol duzleminden SSH"
+   	chain forward {
+   		type filter hook forward priority filter; policy drop;
+   		ip saddr 192.168.0.0/16 ip daddr 10.10.0.0/24 tcp dport { 443, 8000, 10051, 27199 } accept comment "musteri agindan HR kontrol duzlemine giden baglantilar"
+   		ip saddr 192.168.0.0/16 ip daddr 0.0.0.0/0 ct state new accept comment "internete cikis"
+   		ip saddr 192.168.20.0/24 ip daddr 10.10.0.13 tcp dport 10051 accept comment "izleme vekili trafigi"
+   		type filter hook output priority filter; policy accept;
+   		type nat hook postrouting priority srcnat; policy accept;
+
+━━ AJAN ÇALIŞTIRAMAYAN DÜĞÜMLER
+   ✓ cust-fw üzerinde ajan yok (yalnız uzaktan yapılandırılır — B şeridi)
+   ✓ cust-sw-access üzerinde ajan yok (yalnız uzaktan yapılandırılır — B şeridi)
+   ✓ srv-01 üzerinde ajan var (A şeridi)
+   ✓ pc-01 üzerinde ajan var (A şeridi)
+
+━━ SONUÇ
+   geçen: 28   düşen: 0
+   Altı bacak da doğrulandı.
+
+================
+
+
+━━ 1 · Kontrol düzlemi ayakta mı
+   HR Platformu yanıt veriyor (HTTP 200)
+   Katalogda 39 hizmet yüklü
+
+━━ 2 · Müşteri sahasından kontrol düzlemine erişim (içeriden dışarı)
+   Relay, HR'a kendisi bağlanır. Güvenlik duvarında gelen kural yoktur.
+   relay → HR platformu: HTTP 200 (dört bacak üzerinden)
+
+━━ 3 · Ters yön kapalı mı
+   HR → relay bağlantısı engellendi (beklenen)
+
+━━ 4 · Orkestratör: sözleşme → tanım → kasa → dağıtım
+   Orkestratör başlıyor · kiracı=acme · platform=http://10.10.0.10:8000
+   
+   ── 1. Sözleşme imzalandı — hak seti
+      4 hizmet: envanter-yonetim-sistemi, switch-management, firewall-management, windows-server-yonetimi
+   
+   ── 2. Erişim listesi üretiliyor (kuru çalıştırma)
+      4 hizmet → 23 görev
+      şeritlere dağılım: {'A': 3, 'B': 5, 'C': 0, 'D': 12, 'E': 3, 'F': 0}
+   
+   ── 3. Erişim bilgileri kasaya yazılıyor
+      ✓ envanter-yonetim-sistemi         → ['.env', 'ansible-vault', 'n8n-credentials']
+      ✓ firewall-management              → ['ansible-vault', 'n8n-credentials']
+      ✓ switch-management                → ['ansible-vault', 'n8n-credentials']
+      ✓ windows-server-yonetimi          → ['.env', 'ansible-vault', 'n8n-credentials']
+   
+   ── 4. Kiracı sınırı sınanıyor (başka kiracının alanı isteniyor)
+      ✓ kasa 403 döndü — kiracı ayrışması çalışıyor
+   
+   ── 5. Tanım uygulanıyor — görevler şeritlere dağıtılıyor
+      23 görev dağıtıldı: {'D': 12, 'A': 3, 'B': 5, 'E': 3}
+   
+   Orkestrasyon tamamlandı.
+
+━━ 5 · B şeridi: ajan çalıştıramayan cihaza uzaktan yapılandırma
+   Güvenlik duvarına ajan kurulamaz; kural yalnız SSH ile basılır.
+   ansible [core 2.21.0]
+   basımdan önce kural sayısı: 13
+   yeni kural basıldı (izleme trafiğine izin)
+   basımdan sonra kural sayısı: 14
+
+━━ 6 · A şeridi: ajan çalıştıran düğümler
+   srv-01 (192.168.20.21/24) → relay iş kuyruğu: HTTP 200
+   srv-02 (192.168.20.22/24) → relay iş kuyruğu: HTTP 200
+   pc-01 (192.168.30.31/24) → relay iş kuyruğu: HTTP 200
+   pc-02 (192.168.30.32/24) → relay iş kuyruğu: HTTP 200
+
+━━ 7 · Receptor mesh: yürütme düğümü dışa doğru bağlandı mı
+   Node ID: relay-acme
+   Version: 1.6.9
+   System CPU Count: 4
+   System Memory MiB: 7922
+   
+   Connection   Cost
+   hr-awx-hop   1
+   
+   Known Node   Known Connections
+   hr-awx-hop   relay-acme: 1 
+   relay-acme   hr-awx-hop: 1 
+   
+
+━━ 8 · İzleme vekili merkeze bağlanıyor mu
+
+━━ Senaryo tamamlandı

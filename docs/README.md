@@ -69,6 +69,42 @@ Betik, listelediği bir dosya depoda yoksa uyarır ve sıfırdan farklı çıkı
 böylece bir dosya taşındığında harita sessizce eskimez. Haritaya yeni dosya eklemek
 için `build.py` içindeki `FILES` listesine bir satır yazmak yeterlidir.
 
+
+## Emülasyon Demosu — topolojinin tamamı ayakta
+
+Platformun beş bileşeni, altı ağ bacağı ve 19 düğümü gerçek konteynerler ve gerçek ağ
+cihazlarıyla ayağa kaldırılır. Kutuların içinde deponun **gerçek kodu** koşar: platform
+39 hizmetlik kataloğu yükler, ajan relay'in iş kuyruğuna bağlanır, güvenlik duvarına
+kural basılır.
+
+| Dosya | Ne için |
+|-------|---------|
+| `demo/emulasyon.html` | Görsel demonstrasyon: topoloji şeması, bacak tabloları, ölçüm sonuçları |
+| `demo/emulasyon.pdf` | Aynı belgenin baskı sürümü |
+| `demo/build.py` | Belgeyi son koşunun çıktısından yeniden üretir |
+| `../demo/` | Emülasyon ortamının kendisi: topoloji, imajlar, betikler |
+
+### Üç komutla çalıştırma
+
+```bash
+cd demo
+./scripts/up.sh              # imajları derler, topolojiyi kurar
+./scripts/ag-dogrula.sh      # altı ağ bacağını kanıtlar
+./scripts/demo-uctan-uca.sh  # sözleşmeden çalışan hizmete senaryo
+```
+
+### Ölçülen sonuçlar
+
+Son koşuda **33 kontrolün 33'ü geçti, 0'ı düştü**. Öne çıkanlar:
+
+* Altı ağ bacağı da ayrı yayın alanı: aynı VLAN'da TTL 64, farklı VLAN'da 63, WAN ötesinde 61.
+* Yön kuralı ölçüldü: relay → HR platformu **HTTP 200**, HR → relay **engellendi**.
+* Receptor mesh dışa doğru kuruldu: `relay-acme ↔ hr-awx-hop`.
+* Kasa kiracı sınırını korudu: başka kiracının alanı istendiğinde **403**.
+* Ajan çalıştıramayan düğümlerde ajan bulunmadığı ayrıca denetlendi.
+
+Ayrıntı: [`../demo/README.md`](../demo/README.md)
+
 ## PDF'leri yeniden üretmek
 
 ```bash
@@ -81,4 +117,10 @@ chrome --headless=new --no-pdf-header-footer --virtual-time-budget=15000 \
 chrome --headless=new --no-pdf-header-footer --virtual-time-budget=20000 \
   --print-to-pdf=docs/kod-haritasi/kod-haritasi.pdf \
   file://$PWD/docs/kod-haritasi/baski-kaynagi.html
+
+# Emülasyon Demosu
+python3 docs/demo/build.py
+chrome --headless=new --no-pdf-header-footer --virtual-time-budget=20000 \
+  --print-to-pdf=docs/demo/emulasyon.pdf \
+  file://$PWD/docs/demo/baski-kaynagi.html
 ```

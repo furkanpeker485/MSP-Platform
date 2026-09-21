@@ -145,6 +145,26 @@ footer{padding-block:28px 56px;margin-top:26px;border-top:1px solid var(--rule);
   <div class="note"><h3>Etki sınırı</h3><p>Bir uygulama en fazla cihazların <code>%25</code>'ine dokunabilir; aşarsa <code>BlastRadiusExceeded</code> ile durur ve son sağlam sürüme dönülür.</p></div>
 </div>
 
+<div class="notes" id="emulasyon-notu" style="margin-top:34px">
+  <div class="note" style="grid-column:1/-1;border-left-color:var(--C)">
+    <h3>Bu haritadaki kod gerçekten koşuyor</h3>
+    <p>Aşağıdaki dosyalar <code>demo/</code> altındaki emülasyon ortamında, gerçek konteynerler ve
+    gerçek ağ cihazlarıyla kurulan 19 düğümlük bir topolojide çalıştırıldı. Altı ağ bacağı
+    (HR kontrol düzlemi, WAN, müşteri DMZ, yönetim · sunucu · kullanıcı VLAN'ları) ayrı ayrı emüle edildi.
+    Son koşuda <b>33 kontrolün 33'ü geçti</b>: platform 39 hizmetlik kataloğu yükledi,
+    ajan relay'in iş kuyruğuna bağlandı (HTTP 200), ters yön engellendi, receptor mesh
+    <code>relay-acme ↔ hr-awx-hop</code> olarak kuruldu ve kasa kiracı sınırında 403 döndü.
+    Görsel demonstrasyon: <code>docs/demo/emulasyon.html</code> · ortam: <code>demo/README.md</code>.</p>
+  </div>
+  <div class="note"><h3>Bir hata bu koşuda yakalandı</h3><p><code>relay/relay_api/</code> içindeki
+  iş kuyruğu modülü önce <code>queue.py</code> adındaydı ve Python'un standart kütüphanesindeki
+  <code>queue</code> modülüyle çakışıyordu; konteynerde stdlib kazandı ve relay 500 döndürdü.
+  <code>jobqueue.py</code> olarak yeniden adlandırıldı.</p></div>
+  <div class="note"><h3>Emülasyonun kendi kırılganlığı</h3><p>Bir düğüm tek başına yeniden
+  yaratıldığında sanal kablo yenilenir ve karşı uçtaki anahtar portu köprüden düşer.
+  <code>demo/scripts/ag-onar.sh</code> bunu tekrar çalıştırılabilir biçimde düzeltir.</p></div>
+</div>
+
 <footer id="foot"></footer>
 </div>
 

@@ -1,0 +1,96 @@
+---
+cust-core:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.32
+cust-fw:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.31
+cust-sw-access:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.33
+hr-awx:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.14
+hr-db:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.16
+hr-edge:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.21
+hr-n8n:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.13
+hr-platform:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.12
+hr-sw:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.11
+hr-vault:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.17
+hr-zabbix:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.15
+pc-01:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.61
+pc-02:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.62
+relay:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.41
+relay-cache:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.44
+relay-receptor:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.42
+relay-zbxproxy:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.43
+srv-01:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.51
+srv-02:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.28.28.52

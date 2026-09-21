@@ -56,3 +56,48 @@ bağımlılıklara göre sıralar, `services/dispatcher.py` her görevi kendi ş
 
 `services/drift.py` belirli aralıklarla mevcut durumu derlenmiş tanımla karşılaştırır.
 İlk gün ile 400. gün arasında fark yoktur: her ikisinde de aynı uzlaştırma çalışır.
+
+## Emülasyon: mimarinin ölçülmüş hâli
+
+Yukarıdaki her iddia `demo/` altındaki emülasyon ortamında çalıştırılarak doğrulanır.
+Topoloji containerlab ile kurulur; yönlendiriciler FRRouting, güvenlik duvarı ve erişim
+anahtarı nftables, yürütme düğümü gerçek receptor'dür. Uygulama katmanında deponun kendi
+kodu koşar.
+
+### Emüle edilen ağ bacakları
+
+| # | Bacak | Blok | Düğümler |
+|---|-------|------|----------|
+| 1 | hr-core | `10.10.0.0/24` | platform · orkestratör · hop düğümü · izleme · veritabanı · kasa |
+| 2 | wan | `100.64.0.0/30` | HR kenarı ↔ müşteri güvenlik duvarı |
+| 3 | cust-dmz | `172.31.0.0/29` | güvenlik duvarı ↔ çekirdek anahtar |
+| 4 | cust-mgmt | `192.168.10.0/24` | site relay · yürütme düğümü · izleme vekili · önbellek |
+| 5 | cust-srv | `192.168.20.0/24` | ajan çalıştıran sunucular |
+| 6 | cust-usr | `192.168.30.0/24` | ajan çalıştıran uç cihazlar |
+
+VLAN'lar çekirdek anahtarda ayrı köprü arayüzleridir (`br-mgmt`, `br-srv`, `br-usr`),
+dolayısıyla gerçekten ayrı yayın alanlarıdır.
+
+### Yön kuralının kanıtı
+
+| Yön | Ölçüm | Sonuç |
+|-----|-------|-------|
+| içeriden dışarı | relay → HR platformu | HTTP 200 |
+| içeriden dışarı | yürütme düğümü → hop düğümü | mesh kuruldu (`relay-acme ↔ hr-awx-hop`) |
+| dışarıdan içeri | HR platformu → relay API'si | engellendi |
+| dışarıdan içeri | HR platformu → sunucu VLAN'ı | engellendi |
+
+Güvenlik duvarının `forward` zincirinde `policy drop` vardır ve dışarıdan içeri tek bir
+kural yoktur. Bu, `relay/receptor/execution.conf` içinde `listener_port` bulunmamasının
+ağ üzerindeki karşılığıdır.
+
+### TTL ile yayın alanı kanıtı
+
+| Durum | Ölçüm | TTL |
+|-------|-------|-----|
+| aynı VLAN | pc-01 → pc-02 | 64 (yönlendirici yok) |
+| farklı VLAN | pc-01 → srv-01 | 63 (bir atlama) |
+| WAN ötesi | relay → hr-platform | 61 (üç atlama) |
+
+Görsel demonstrasyon: [`demo/emulasyon.html`](demo/emulasyon.html) ·
+Ortamın kendisi: [`../demo/README.md`](../demo/README.md)

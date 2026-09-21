@@ -68,7 +68,7 @@ FILES: list[tuple[str, str, list[str], str]] = [
     ("relay/receptor/receptor.conf", "relay", ["B"],
      "Yürütme düğümü: gelen bağlantı dinlemez, kendisi dışarı bağlanır"),
     ("relay/relay_api/main.py", "relay", ["A"], "Ajanların tek muhatabı"),
-    ("relay/relay_api/queue.py", "relay", ["A"], "İş kuyruğu; cihaz kimliğine göre bölümlenir"),
+    ("relay/relay_api/jobqueue.py", "relay", ["A"], "İş kuyruğu; cihaz kimliğine göre bölümlenir"),
     ("relay/ansible/ansible.cfg", "relay", ["B"], "Parolalar playbook'ta değil kasada"),
     ("relay/ansible/inventory/netbox.yml", "relay", ["B"],
      "Makine listesi elle tutulmaz; envanterden gelir"),
