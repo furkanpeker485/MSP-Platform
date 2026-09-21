@@ -2,7 +2,7 @@
 
 # MSP-Platform
 
-**Hisar Research Managed Service Provider Platform**
+**Managed Service Provider Platform**
 
 Yayındaki **39 yönetilen hizmeti** uçtan uca teslim eden otomasyon platformu.
 Sözleşme imzalanır, hak seti derlenir, işler altı yürütme şeridine dağıtılır — sahada kimse olmadan.
